@@ -39,7 +39,7 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour session timeout
+    cookie: { maxAge: 60 * 60 * 1000 }, 
 }));
 
 app.use(flash());
