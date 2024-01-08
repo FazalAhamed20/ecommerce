@@ -1,0 +1,270 @@
+<%- include('header') -%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Orders</title>
+    <style>
+        body {
+            background-size: cover;
+            margin: 0;
+            background-color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 20px;
+            color: black;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .add-product-button,
+        .edit-button,
+        .delete-button {
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .add-product-button {
+            background-color: #45a049;
+            color: black;
+            text-decoration: none;
+            border: none;
+        }
+
+        .edit-button,
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            text-decoration: none;
+        }
+
+        table {
+            width: 98%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-left: 10px;
+            margin-right: 50px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            color: black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        a {
+            color: white;
+            background-color: #45a049;
+        }
+
+        a:hover {
+            color: white;
+        }
+
+        @media only screen and (max-width: 768px) {
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 10px;
+            }
+
+            th,
+            td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+                width: 100%;
+                display: block;
+            }
+
+            td.description {
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            th,
+            td:before {
+                display: none;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pagination {
+    margin-top: 20px;
+    text-align: center;
+    margin-left: 38%;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    border: 1px solid #45a049;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+
+.pagination a.active {
+    background-color: #45a049;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #45a049;
+    color: white;
+}
+
+.pagination .disabled a {
+    pointer-events: none;
+    cursor: default;
+    color: #ccc;
+}
+
+.pagination .disabled a:hover {
+    background-color: transparent;
+}
+
+@media only screen and (max-width: 768px) {
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <h1>Admin Orders</h1>
+    <a href="/adhome">Home</a>
+  
+  
+        <!-- Your table code goes here -->
+    
+    
+        
+            <% orders.forEach(order => { %>
+                <table class="order-table">
+                    <form action="/updateOrderStatus" method="POST" id="orderStatusForm">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Order ID: <%= order.orderID %></th>
+                            <th colspan="1">Total Price: ₹<%= order.totals.grandTotal %></th>
+                            <th colspan="2">
+                                Status:
+                                <select class="orderStatusDropdown" name="orderStatus_<%= order.orderID %>" data-orderid="<%= order.orderID %>" <%= order.status === 'delivered' ? 'disabled' : '' %>>
+                                  <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                  <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
+                                  <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                                  <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                                </select>
+                                <button type="submit">Update Status</button>
+                              </th>
+                              
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.products.forEach(product => { %>
+                            <tr>
+                                <td>Product Name:</td>
+                                <td><%= product.product.name %></td>
+                                <td>Quantity:</td>
+                                <td><%= product.quantity %></td>
+                            </tr>
+                            <tr>
+                                <td>Delivery Time:</td>
+                                <td><%= order.deliveryTime %></td>
+                                <td>Delivery Date:</td>
+                                <td><%= order.deliveryDate %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <a href="?page=<%= currentPage - 1 %>" class="<%= currentPage === 1 ? 'disabled' : '' %>">Previous</a>
+                    <% for (let i = 1; i <= 3; i++) { %>
+                        <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+                    <% } %>
+                    <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
+                </div>
+            <% }); %>
+        </form>
+        
+
+       
+    <!-- Add this script tag in the head section of your HTML -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    document.getElementById('orderStatusForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        
+        const dropdowns = document.querySelectorAll('.orderStatusDropdown');
+        const formData = [];
+    
+        dropdowns.forEach(dropdown => {
+            formData.push({
+                orderID: dropdown.getAttribute('data-orderid'),
+                status: dropdown.value
+            });
+        });
+    
+        // Send formData to the server using AJAX (you can use fetch or any other library like axios)
+        fetch('/updateOrderStatus', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+    </script>
+    
+
+<%- include('footer') -%>
+</body>
+</html>
+
+
+<%- include('footer') -%>

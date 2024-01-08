@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Sidebar with Video Background</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; 
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px; 
+            background-color: rgba(17, 17, 17, 0.7);
+            padding-top: 20px;
+            transition: 0.5s; 
+        }
+
+        .sidebar a {
+            padding: 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #333; 
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 16px;
+            transition: margin-left 0.5s;
+        }
+        video1 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            cursor: pointer;
+            z-index: 2; 
+            color: white;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <a href="#home">Home</a>
+    <a href="/adlog">Users</a>
+    <a href="/product">Products</a>
+    <a href="/category">Categories</a>
+    <a href="/admin/userorder">Orders</a>
+    <a href="/adlogout">Logout</a>
+</div>
+
+<div class="content" id="content">
+</div>
+
+
+<div class="toggle-btn" onclick="toggleSidebar()">☰</div>
+
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+        sidebar.style.left = (sidebar.style.left === "0px" || sidebar.style.left === "") ? "-250px" : "0";
+        content.style.marginLeft = (sidebar.style.left === "0px") ? "250px" : "0";
+    }
+</script>
+
+</body>
+</html>

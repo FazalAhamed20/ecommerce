@@ -1,0 +1,759 @@
+<%- include('header') -%>
+<%- include('nav', { user, cartCount: cartCount }) -%>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root {
+    --main-color: #443;
+    --border-radius: 95% 4% 97% 5% / 4% 94% 3% 95%;
+    --border-radius-hover: 4% 95% 6% 95% / 95% 4% 92% 5%;
+    --border: .2rem solid var(--main-color);
+    --border-hover: .2rem dashed var(--main-color);
+}
+
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html {
+    font-size: 65%;
+    overflow-x: hidden;
+    scroll-padding-top: 7rem;
+    scroll-behavior: smooth;
+}
+
+
+.heading {
+    font-size: 9rem;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: .05rem var(--main-color);
+    letter-spacing: .2rem;
+    text-align: center;
+    pointer-events: none;
+    position: absolute;
+}
+
+.heading span {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    color: var(--main-color);
+    font-size: 3rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: .9rem 1.5rem;
+    border: var(--border);
+    border-radius: var(--border-radius);
+    color: var(--main-color);
+    background: none;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-size: 1.7rem;
+    margin-left: 40px;
+}
+
+.btn:hover {
+    border-radius: var(--border-radius-hover);
+    border: var(--border-hover);
+}
+
+    .home {
+    background: url(/assets/home-bg.jpg) no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin-top: -5px;
+}
+
+.home .row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.home .row .content {
+    flex: 1 1 42rem;
+}
+
+.home .row .image {
+    flex: 1 1 42rem;
+    padding-top: 10rem;
+    text-align: center;
+}
+
+.home .row .image img {
+    height: 35rem;
+    animation: float 4s linear infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0rem);
+    }
+
+    50% {
+        transform: translateY(-7rem);
+    }
+}
+
+.home .row .content h3 {
+    font-size: 6.5rem;
+    color: var(--main-color);
+    text-transform: uppercase;
+    margin-left: 40px;
+}
+
+.home .image-slider {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.home .image-slider img {
+    height: 9rem;
+    margin: 0 .5rem;
+    cursor: pointer;
+    margin-top: 5rem;
+}
+
+.home .image-slider img:hover {
+    transform: translateY(-2rem);
+}
+@media screen and (max-width: 1023px) {
+    .home {
+        padding-top: 6rem; /* Adjust as needed */
+    }
+
+    .home .row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .home .row .content,
+    .home .row .image {
+        flex: 1 1 100%; /* Full width on medium screens */
+        text-align: center;
+        margin: 0; /* Remove any margin */
+    }
+
+    .home .row .image img {
+        height: auto;
+        max-width: 100%;
+    }
+}
+
+/* Styles for small screens */
+@media screen and (max-width: 767px) {
+    .home {
+        padding-top: 6rem; /* Adjust as needed */
+    }
+
+    .home .image-slider img {
+        margin-top: 2rem;
+    }
+}
+
+
+
+.about .row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.about .row .image {
+    flex: 1 1 42rem;
+}
+
+.about .row .image img {
+    width: 92%;
+    animation: aboutImage 4s linear infinite;
+}
+
+@keyframes aboutImage {
+
+    0%,
+    100% {
+        transform: scale(.9);
+        border-radius: var(--border-radius-hover);
+    }
+
+    50% {
+        transform: scale(.8);
+        border-radius: var(--border-radius);
+    }
+}
+
+.about .row .content {
+    flex: 1 1 42rem;
+}
+
+.about .row .content .title {
+    color: var(--main-color);
+    font-size: 3rem;
+    line-height: 1.8;
+}
+
+.about .row .content p {
+    color: var(--main-color);
+    font-size: 1.5rem;
+    line-height: 1.8;
+    padding: 1rem 0;
+}
+
+.about .row .content .icons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 3rem;
+}
+
+.about .row .content .icons-container .icons {
+    flex: 1 1 15rem;
+    padding: 1.5rem;
+    text-align: center;
+    border: var(--border);
+    border-radius: var(--border-radius);
+}
+
+.about .row .content .icons-container .icons img {
+    height: 5rem;
+}
+
+.about .row .content .icons-container .icons h3 {
+    font-size: 1.7rem;
+    padding-top: 1rem;
+    color: var(--main-color);
+}
+/* Add this block to make the button centered on smaller screens */
+@media screen and (max-width: 767px) {
+    .home .row .content h3,
+    .btn {
+        margin-left: 0; /* Remove the left margin on smaller screens */
+    }
+}
+
+/* Add this block to adjust the padding on smaller screens */
+@media screen and (max-width: 600px) {
+    .home .row .content {
+        padding: 1rem; /* Adjust as needed */
+    }
+}
+
+/* Add this block to make the about section responsive */
+@media screen and (max-width: 1023px) {
+    .about .row .image,
+    .about .row .content {
+        flex: 1 1 100%;
+        text-align: center;
+        margin: 0;
+    }
+}
+
+/* Add this block to adjust the padding on smaller screens for the about section */
+@media screen and (max-width: 767px) {
+    .about .row .content,
+    .about .row .image {
+        padding: 1rem; /* Adjust as needed */
+    }
+}
+
+/* Add this block to adjust the icon container on smaller screens */
+@media screen and (max-width: 767px) {
+    .about .row .content .icons-container .icons {
+        flex: 1 1 100%;
+    }
+}
+.about {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.heading {
+    margin-top: 40px;
+    font-size: 9rem;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 0.05rem var(--main-color);
+    letter-spacing: .2rem;
+    pointer-events: none;
+    position: relative;
+}
+
+.heading span {
+    display: block;
+    margin-top: -58px; /* Adjust the negative margin as needed */
+}
+
+/* Optional: Adjust the margin or padding for spacing */
+.about .heading {
+    margin-bottom: 20px;
+}
+.content{
+    margin-right: 25px;
+}
+
+.menu {
+    background: url(/assets/menu-bg.jpg) no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.menu .box-container {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-left: 150px;
+    margin-right: 150px;
+    justify-content: center;
+   
+}
+
+.menu .box-container .box {
+    display: flex;
+    align-items: center;
+    margin-left: 6rem;
+    flex: 1 1 42rem;
+    padding: 0rem;
+    border: var(--border);
+    border-radius: var(--border-radius);
+    gap: 1.5rem;
+    margin-bottom: 20px;
+
+}
+
+
+.menu .box-container .box:hover {
+    border: var(--border-hover);
+    border-radius: var(--border-radius-hover);
+}
+
+.menu .box-container .box img {
+    height: 8rem;
+    margin-left: -6rem;
+}
+
+.menu .box-container .box .content h3 {
+    font-size: 2.2rem;
+    color: var(--main-color);
+    line-height: 1.8;
+}
+
+.menu .box-container .box .content p {
+    font-size: 1.6rem;
+    color: var(--main-color);
+    line-height: 1.8;
+    padding: 1rem 0;
+}
+
+.menu .box-container .box .content span {
+    font-size: 2rem;
+    color: var(--main-color);
+    line-height: 1.8;
+}
+
+
+
+
+/* REVIEW */
+
+.review .review-slider {
+    padding: 7rem 0;
+    margin-left: 30px;
+}
+
+.review .review-slider .box {
+   
+    border: var(--border);
+    border-radius: var(--border-radius);
+    text-align: center;
+    position: relative;
+    z-index: 0;
+  
+    padding: 1.5rem; /* Adjust padding for the box */
+    max-width: 500px; /* Set a maximum width for the box */
+    margin: 0 auto; /* Center the box horizontally */
+}
+
+.review .review-slider .box .fa-quote-left {
+    position: absolute;
+    top: 2rem;
+    left: 2.5rem;
+    font-size: 6rem;
+    color: #ccc;
+    z-index: -1;
+}
+
+.review .review-slider .box .fa-quote-right {
+    position: absolute;
+    bottom: 2rem;
+    right: 2.5rem;
+    font-size: 6rem;
+    color: #ccc;
+    z-index: -1;
+}
+
+.review .review-slider .box:hover .fa-quote-left {
+    top: -6.5rem;
+}
+
+.review .review-slider .box:hover .fa-quote-right {
+    bottom: -6.5rem;
+}
+
+.review .review-slider .box img {
+    height: 7rem;
+    width: 7rem;
+    border-radius: 50%;
+    margin-bottom: .7rem;
+}
+
+.review .review-slider .box .stars {
+    padding: .5rem 0
+}
+
+.review .review-slider .box .stars i {
+    font-size: 1.7rem;
+    color: var(--main-color);
+}
+
+.review .review-slider .box p {
+    font-size: 1.6rem;
+    color: var(--main-color);
+    padding: 1rem 0;
+    line-height: 1.8;
+}
+
+.review .review-slider .box h3 {
+    font-size: 2.2rem;
+    color: var(--main-color);
+    line-height: 1.8;
+}
+
+.review .review-slider .box span {
+    font-size: 1.5rem;
+    color: var(--main-color);
+}
+
+.swiper-pagination-bullet {
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 0;
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--main-color);
+}
+
+.swiper-container {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .swiper-wrapper {
+            display: flex;
+            justify-content: space-between; /* Adjust as needed */
+        }
+
+        .swiper-slide {
+            width: calc(33.333% - 20px); /* Adjust as needed */
+            box-sizing: border-box;
+        }
+
+
+        .footer .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr));
+    gap: 1.5rem;
+}
+
+.footer .box-container .box h3 {
+    margin-left: 10.5rem;
+    font-size: 2.5rem;
+    padding: 1rem 0;
+    color: var(--main-color);
+}
+
+.footer .box-container .box a {
+    display: block;
+    font-size: 1.5rem;
+    padding: 1rem 0;
+    color: var(--main-color);
+}
+
+.footer .box-container .box a i {
+    padding-right: .5rem;
+}
+
+.footer .box-container .box a:hover i {
+    padding-right: 2rem;
+}
+
+.footer .credit {
+    text-align: center;
+    font-size: 2rem;
+    padding: 2rem 1rem;
+    margin-top: 1rem;
+    color: var(--main-color);
+}
+
+.footer .credit span {
+    border-bottom: var(--border-hover);
+}
+#video-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+#video {
+  width: 100%;
+  height: auto;
+}
+
+
+</style>
+
+
+
+<div id="video-container">
+    <video id="video" autoplay muted loop>
+        <source src="/assets/coffee3.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="home" id="home">
+    <div class="row">
+        <div class="content">
+            <h3>fresh coffee in the morning</h3>
+            <a href="/user/product" class="btn">buy one now</a>
+        </div>
+
+        <div class="image">
+            <img src="/assets/home-img-1.png" class="main-home-image" alt="">
+        </div>
+    </div>
+
+    <div class="image-slider">
+        <img src="/assets/home-img-1.png" alt="">
+        <img src="/assets/home-img-2.png" alt="">
+        <img src="/assets/home-img-3.png" alt="">
+    </div>
+</div>
+<div class="about" id="about">
+    <h1 class="heading">about us <span>why choose us</span></h1>
+
+    <div class="row">
+        <div class="image">
+            <img src="/assets/about-img.png" alt="">
+        </div>
+
+        <div class="content">
+            <h3 class="title">what's make our coffee special!</h3>
+            <p>It's more than just a blend; it's a crafted experience. From the first sip to the cozy ambiance, we've designed every detail to make your visit extraordinary. Discover the magic in every cup. Welcome to your coffee escape. ✨</p>
+            <a href="/user/product" class="btn">Shop Now</a>
+            <div class="icons-container">
+                <div class="icons">
+                    <img src="/assets/about-icon-1.png" alt="">
+                    <h3>Quality coffee</h3>
+                </div>
+                <div class="icons">
+                    <img src="/assets/about-icon-2.png" alt="">
+                    <h3>Many branches</h3>
+                </div>
+                <div class="icons">
+                    <img src="/assets/about-icon-3.png" alt="">
+                    <h3>Fast delivery</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="menu" id="menu">
+    <h1 style="margin-top: 40px;" class="heading">our menu <span>popular menu</span></h1>
+    <% console.log(products); %>
+    <div class="box-container">
+      <% for (let i = 0; i < 6 && i < products.length; i++) { %>
+      <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
+        <img src="/assets/menu-<%= i + 1 %>.png" alt="">
+        <div class="content">
+          <h3><%= products[i].name %></h3>
+          <p><%= products[i].description %></p>
+          <span>₹<%= products[i].price.toFixed(2) %></span>
+        </div>
+      </a>
+      <% } %>
+    </div>
+  </section>
+
+<section class="review" id="review">
+    <h1 class="heading">reviews <span>what people says</span></h1>
+
+    <div class="swiper review-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide box">
+                <i class="fas fa-quote-left"></i>
+                <i class="fas fa-quote-right"></i>
+                <img src="/assets/pic-1.png" alt="">
+                <div class="stars">
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                </div>
+                <p>Elegance in every espresso shot! This place defines coffee sophistication. Impeccable service, chic decor, and the espresso—pure liquid gold. My taste buds are forever </p>
+                <h3>Vivek</h3>
+                <span>satisfied client</span>
+            </div>
+
+            <div class="swiper-slide box">
+                <i class="fas fa-quote-left"></i>
+                <i class="fas fa-quote-right"></i>
+                <img src="/assets/pic-2.png" alt="">
+                <div class="stars">
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                </div>
+                <p>This coffee spot is my happy place! The aroma, the taste—absolute perfection. The staff is incredibly welcoming, and the attention to detail is impressive. It's where coffee </p>
+                <h3>Ganga</h3>
+                <span>satisfied client</span>
+            </div>
+
+            <div class="swiper-slide box">
+                <i class="fas fa-quote-left"></i>
+                <i class="fas fa-quote-right"></i>
+                <img src="/assets/pic-3.png" alt="">
+                <div class="stars">
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                </div>
+                <p>Flavor explosion in every sip! This place takes coffee to a whole new level. Unique blends, friendly faces, and a trendy setup. Highly recommend for fellow coffee </p>
+                <h3>Varun</h3>
+                <span>satisfied client</span>
+            </div>
+
+            <div class="swiper-slide box">
+                <i class="fas fa-quote-left"></i>
+                <i class="fas fa-quote-right"></i>
+                <img src="/assets/pic-4.png" alt="">
+                <div class="stars">
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                    <i class="fas fa-star" style="color: goldenrod;"></i>
+                </div>
+                <p>Found my new sanctuary for a perfect cup! The vibe is super cozy, and the coffee is a game-changer. Friendly staff and a delightful menu. It's my daily escape now! </p>
+                <h3>Megna</h3>
+                <span>satisfied client</span>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+<section class="footer">
+    <div class="box-container">
+        <div class="box">
+            <h3>our branches</h3>
+            <a href="#"><i class="fas fa-arrow-right"></i> Palakkad</a>
+            <a href="#"><i class="fas fa-arrow-right"></i> Wayanad</a>
+            <a href="#"><i class="fas fa-arrow-right"></i> Kollam</a>
+            <a href="#"><i class="fas fa-arrow-right"></i> Kozhikode</a>
+            <a href="#"><i class="fas fa-arrow-right"></i> Kannur</a>
+        </div>
+
+        <div class="box">
+            <h3>quick links</h3>
+            <a href="#home"><i class="fas fa-arrow-right"></i> home</a>
+            <a href="#about"><i class="fas fa-arrow-right"></i> about</a>
+            <a href="#menu"><i class="fas fa-arrow-right"></i> menu</a>
+            <a href="#review"><i class="fas fa-arrow-right"></i> review</a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <a href="#"><i class="fas fa-phone"></i> +91-9360854754</a>
+            <a href="#"><i class="fas fa-envelope"></i> fazalahamed628@gmail.com</a>
+            <a href="#"><i class="fas fa-envelope"></i> Kozhikode,Kerala</a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <a href="#"><i class="fab fa-facebook-f"></i> facebook</a>
+            <a href="#"><i class="fab fa-twitter"></i> twitter</a>
+            <a href="#"><i class="fab fa-instagram"></i> instagram</a>
+            <a href="#"><i class="fab fa-linkedin"></i> linkedin</a>
+            <a href="#"><i class="fab fa-twitter"></i> twitter</a>
+        </div>
+    </div>
+    <div class="alan-btn"></div>
+
+    <div class="credit"> | all rights reserved</div>
+</section>
+
+
+
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script type="text/javascript"
+ src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script>
+var alanBtnInstance = alanBtn({
+  key: "09dcd2b62b77cc3233ceab58f8c78b692e956eca572e1d8b807a3e2338fdd0dc/stage",
+  onCommand: function (commandData) {
+    if (commandData.command === "product") {
+      console.log('Going to the product');
+      
+      // Try to navigate
+      try {
+        window.location.href = '/user/product';
+      } catch (error) {
+        console.error('Error navigating:', error.message);
+      }
+    }
+  },
+  rootEl: document.getElementById("alan-btn"),
+});
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mySwiper = new Swiper('.review-slider', {
+            slidesPerView: 'auto',
+            spaceBetween: 20,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    });
+</script>
+
+<%- include('footer') -%>

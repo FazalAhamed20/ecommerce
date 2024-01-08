@@ -1,0 +1,85 @@
+<!-- views/userprofile/addaddress.ejs -->
+
+<%- include('header') -%>
+<%- include('nav', { user: user }) -%>
+
+<style>
+  /* Add your responsive styles here */
+  body {
+    background-color: #EDC9A0;
+    margin: 0;
+    font-family: SoDoSans_Regular, Helvetica, sans-serif !important;
+    overflow-y: scroll;
+  }
+
+  .add-address-form {
+    max-width: 600px;
+    margin: 85px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #4A2617;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+
+<div class="add-address-form" id="addAddressForm">
+  <h2>Add New Address</h2>
+  <form action="/user/addaddressform/<%= user.id %>" method="post">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="mobile">Mobile</label>
+    <input type="text" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="pincode">Pincode</label>
+    <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" required>
+
+    <label for="houseName">House Name</label>
+    <input type="text" id="houseName" name="houseName" required>
+
+    <label for="locality">Locality</label>
+    <input type="text" id="locality" name="locality" required>
+
+    <label for="city">City</label>
+    <input type="text" id="city" name="city" required>
+
+    <label for="district">District</label>
+    <input type="text" id="district" name="district" required>
+
+    <label for="state">State</label>
+    <input type="text" id="state" name="state" required>
+
+    <!-- Add other address fields as needed -->
+
+    <button type="submit">Add Address</button>
+  </form>
+</div>
+
+<%- include('footer') -%>
+

@@ -1,0 +1,359 @@
+<!-- views/products.ejs -->
+
+<%- include('header') -%>
+<%- include('nav', { user: user }) -%>
+
+
+<style>
+  body {
+        background-color:#EDC9A0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; 
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+    }
+
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(12rem, 1fr));
+        margin: 40px;
+        margin-top: 70px;
+        gap: 22px;
+        justify-content: center;
+        margin-left: 250px;
+        width: 80%;
+    }
+
+    .card {
+        position: relative;
+        width: 250px;
+    height: 300px;
+        margin-left: 50px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        max-width: 100%;
+        max-height: 150px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .card-body {
+        flex: 1;
+        padding: 1rem;
+        background-color: #FFF9F1;
+        border-radius: 0 0 8px 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        color: #603809;
+        font-size: 22px;
+        font-family: Playfair Display;
+        font-weight: 700;
+        width: 100%;
+        height: 100%;
+    }
+
+    .card-text {
+        color: #1E1E1E;
+font-size: 16px;
+font-family: Playfair Display;
+font-weight: 400;
+text-align: center;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-primary {
+        background-color: #F9C06A;
+        color:black;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 24px;
+        display: inline-block;
+        font-size: 0.9rem;
+        margin-top: -0.5rem;
+    }
+    .btn-primary:hover{
+        background-color: #9B6B42;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .modal img {
+        max-width: 80%;
+        max-height: 80%;
+        border-radius: 8px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    .sidenav {
+        
+        width: 250px;
+        background-color: #9B6B42;
+        padding-top: 20px;
+        position: fixed;
+        height: 100%;
+        overflow-x: hidden;
+        transition: 0.5s;
+        margin-top: 70px; 
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+    }
+
+    .sidenav a {
+        padding: 15px 8px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #FFF9F1;
+        display: block;
+        transition: 0.3s;
+        border-bottom: 1px solid #8B5B33;
+        margin-bottom: 5px;
+    }
+
+    .sidenav a:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .sidenav a:hover {
+        color: #D2B48C;
+        background-color: #603809;
+    }
+    .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Add this line to center vertically */
+}
+
+.pagination {
+	position: relative;
+	display: flex;
+    margin-left: 10%;
+    align-items: center;
+	flex-direction: row;
+    justify-content: center;
+	--ddim: 10px;
+	--rd: 15px;
+	--rdim: calc(var(--rd)*2);
+	--pm: #ffff03;
+}
+
+label {
+	content: '';
+	margin: 0 10px;
+	height: var(--ddim);
+	width: var(--ddim);
+	background:#3e2723;;
+	cursor: pointer;
+}
+
+label:first-child {margin-left: 0;}
+label:last-child {margin-right: 0;}
+input {display: none;}
+
+.pacman {
+	content: '';
+	position: absolute;
+	top: calc(-1*var(--ddim));
+	left: calc(-1*var(--ddim)/2);
+	height: var(--rdim);
+	width: var(--rdim);
+	transition: transform 250ms linear;
+}
+
+.pacman:before,
+.pacman:after {
+	content: '';
+	position: absolute;
+	height: var(--rd);
+	width: var(--rdim);
+	left: 0;
+	background: var(--pm);
+	transition: inherit;
+}
+
+.pacman:before {
+	top: 0;
+	border-top-left-radius: var(--rdim);
+	border-top-right-radius: var(--rdim);
+	transform-origin: bottom center;
+	transform: rotate(-45deg);
+}
+
+.pacman:after {
+	bottom: 0;
+	border-bottom-left-radius: var(--rdim);
+	border-bottom-right-radius: var(--rdim);
+	transform-origin: top center;
+	transform: rotate(45deg);
+}
+
+@keyframes waka {
+	0% {}
+	50% {transform: rotate(0);}
+	100% {}
+}
+
+input[type="radio"]:hover ~ .pacman:before,
+input[type="radio"]:hover ~ .pacman:after {
+	animation: waka 500ms infinite;
+}
+
+input[id="dot-1"]:checked ~ .pacman {transform: translateX(var(--ddim));}
+input[id="dot-2"]:checked ~ .pacman {transform: translateX(calc(var(--ddim) + var(--rdim)));}
+input[id="dot-3"]:checked ~ .pacman {transform: translateX(calc(var(--ddim) + var(--rdim)*2));}
+input[id="dot-4"]:checked ~ .pacman {transform: translateX(calc(var(--ddim) + var(--rdim)*3));}
+input[id="dot-5"]:checked ~ .pacman {transform: translateX(calc(var(--ddim) + var(--rdim)*4));}
+input[id="dot-6"]:checked ~ .pacman {transform: translateX(calc(var(--ddim) + var(--rdim)*5));}
+input[id="dot-7"]:checked ~ .pacman {transform: translateX(calc(var(--ddim) + var(--rdim)*6));}
+input[id="dot-8"]:checked ~ .pacman {transform: translateX(calc(var(--ddim) + var(--rdim)*7));}
+</style>
+<div class="sidenav">
+    <a href="/user/product" class="nav-link" onclick="getAllProducts()">All Products</a>
+    <% categories.forEach(category => { %>
+        <a href="/products?category=<%= category._id %>" class="nav-link" onclick="getProductsByCategory('<%= category._id %>')"><%= category.name %></a>
+    <% }); %>
+</div>
+
+<div class="card-container">
+    <% products.forEach(product => { %>
+        <div class="card">
+            <img src="/product-images/<%= product.image %>" class="card-img-top" alt="<%= product.name %>" onclick="openModal('<%= product.image %>')">
+            <div class="card-body">
+                <h5 class="card-title"><%= product.name %></h5>
+                <p class="card-text"><%= product.ingredients %></p>
+                <div class="btn-container">
+                    <a href="/user/mainproduct/<%= product._id %>" class="btn btn-primary">Order Now</a>
+
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</div>
+
+<div id="myModal" class="modal" onclick="closeModal()">
+    <span class="close-btn">&times;</span>
+    <img id="modalImg" src="" alt="Modal Image">
+</div>
+<!-- ... Your existing code ... -->
+
+<!-- ... Existing code ... -->
+
+<div class="pagination-container">
+    <div class="pagination">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <input id="dot-<%= i %>" type="radio" name="dots" <%= i === currentPage ? 'checked' : '' %>>
+            <label for="dot-<%= i %>"></label>
+        <% } %>
+        <div class="pacman"></div>
+    </div>
+</div>
+
+<!-- ... Rest of your code ... -->
+
+<!-- ... Rest of your code ... -->
+
+
+
+<%- include('footer') -%>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const radioButtons = document.querySelectorAll('input[name="dots"]');
+    const pacman = document.querySelector('.pacman');
+    const categoryId = getCategoryIdFromUrl(); // Add this line to get the category ID
+
+    radioButtons.forEach((radioButton, index) => {
+        radioButton.addEventListener('change', function () {
+            const newUrl = `?category=${categoryId}&page=${index + 1}`; // Include category ID
+            window.location.href = newUrl;
+            getProductsByCategory(categoryId, index + 1); // Pass category ID to the function
+        });
+    });
+});
+
+function getCategoryIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('category');
+}
+
+function openModal(imageSrc) {
+    document.getElementById('modalImg').src = "/product-images/" + imageSrc;
+    document.getElementById('myModal').style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById('myModal').style.display = "none";
+}
+
+function getProductsByCategory(categoryId, page) {
+    fetch(`/api/products/category/${categoryId}?page=${page}`)
+        .then(response => response.json())
+        .then(products => {
+            const productsData = products;
+            const cardContainer = document.querySelector('.card-container');
+
+            productsData.forEach((product, index) => {
+                const card = cardContainer.children[index];
+                const img = card.querySelector('.card-img-top');
+                const title = card.querySelector('.card-title');
+                const text = card.querySelector('.card-text');
+
+                img.src = `/product-images/${product.image}`;
+                img.alt = product.name;
+                title.textContent = product.name;
+                text.textContent = product.ingredients;
+            });
+
+            while (cardContainer.children.length > productsData.length) {
+                cardContainer.removeChild(cardContainer.lastChild);
+            }
+        })
+        .catch(error => console.error('Error fetching products:', error));
+}
+
+
+
+    </script>
+    

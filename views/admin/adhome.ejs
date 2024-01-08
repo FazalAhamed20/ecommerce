@@ -1,0 +1,34 @@
+<%- include('header') -%>
+<%- include('nav') -%>
+
+<style>
+  body {
+    margin: 0;
+    overflow: hidden; /* Prevent any potential scrollbars */
+  }
+
+  #video-container1 {
+  position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+  #video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire container */
+  }
+</style>
+
+<div id="video-container1">
+  <video id="video" autoplay muted >
+    <source src="/assets/admin panel.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+<%- include('footer') -%>

@@ -1,0 +1,56 @@
+<%- include('header') -%>
+<style>
+  body{
+    background-color: #EDC9A0;
+  }
+  input:invalid{
+    animation:shake 300ms;
+  }
+  @keyframes shake {
+    0%,100% {transform: translate(0);}
+    25% {transform :translate(0.125rem);}
+    75% {transform: translate(-0.125rem);}
+  }
+</style>
+
+
+
+            <div class="container">
+            
+                <div class="img">
+                  <img src="/assets/pc.svg" />
+                </div>
+                <div class="login-container">
+                  <form  action="/login1" method="post">
+                    <img class="avator" src="/assets/avator.svg" />
+                    <h2>Welcome</h2>
+                    <% if (error) { %>
+                      <p style="color: red;"><%= error %></p>
+                  <% } %>
+                    <div class="input-div" one>
+                      <div class="i">
+                        <i class="fas fa-envelope"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Email" name="email" type="email" />
+                      </div>
+                    </div>
+                    <div class="input-div" two>
+                      <div class="i">
+                        <i class="fas fa-lock"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Password" name="password" type="password" />
+                      </div>
+                    </div>
+                    <a id="hai"  href="/user/forgot-password">Forgot password ?</a>
+                    <input type="submit" class="btn1" value="login" />
+                    <a href="/user/Signup" style="text-decoration: none;color:black;" id="signbtn" ><i>Don't have an account? </i><strong>Sign Up</strong></a>
+                  </form>
+                </div>
+              </div>
+              <footer>
+              </footer>
+              <script type="text/javascript" src="js/main.js"></script>
+
+<%- include('footer') -%>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            background: url('/assets/order.jpg') no-repeat;
+            background-size: 100% 110%;
+            color: #fff;
+            overflow-y: hidden;
+        }
+
+        .content {
+            text-align: left;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #eee;
+        }
+
+        img {
+            width: 80%;
+            max-width: 200px;
+            height: auto;
+            margin-top: 20px;
+        }
+        h2{
+            color: green;
+        }
+        .green-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: green;
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .green-button:hover {
+      background-color: darkgreen;
+    }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-end">
+            <div class="col-md-6">
+                <div class="content text-center">
+                    <img src="/assets/tick.png" alt="" class="img-fluid">
+                    <p style="color: black;">Thank you for your order! Your purchase is being processed.</p>
+                    <a href="/user/product" class="green-button">Back to products</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

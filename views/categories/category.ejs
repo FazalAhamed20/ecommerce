@@ -1,0 +1,133 @@
+<!-- categories.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category List</title>
+    <style>
+       
+        table {
+            width: 100%; 
+            margin: 5px auto; 
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center; 
+            margin-top: 20px;
+        }
+        .home-button, .edit-button, .delete-button, a[href="/createcat"] {
+            padding: 8px;
+            border-color: white;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .home-button {
+            background-color: #4CAF50; 
+            color: white;
+            margin-right: 10px;
+        }
+        a[href="/createcat"] {
+            background-color: #4CAF50; 
+            color: white;
+            margin-right: 10px;
+        }
+        .edit-button {
+            background-color: #4CAF50;
+            color: white;
+            margin-right: 10px;
+        }
+        .delete-button {
+            background-color: #FF0000; 
+            color: white;
+        }
+        .pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+    border: 1px solid #45a049;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+
+.pagination a.active {
+    background-color: #45a049;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #45a049;
+    color: white;
+}
+
+.pagination .disabled a {
+    pointer-events: none;
+    cursor: default;
+    color: #ccc;
+}
+
+.pagination .disabled a:hover {
+    background-color: transparent;
+}
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center;">Category List</h1>
+<% if (error) { %>
+    <p style="color: red;"><%= error %></p>
+<% } %>
+
+<div class="action-buttons">
+    <button class="home-button" onclick="window.location.href='/createcat'">Add Category</button>
+    <button class="home-button" onclick="window.location.href='/adhome'">Home</button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% categories.forEach(category => { %>
+            <tr>
+                <td><%= category._id %></td>
+                <td><%= category.name %></td>
+                <td>
+                    <button class="edit-button" onclick="window.location.href='/editform/<%= category._id %>'">Edit</button>
+                    <button class="delete-button" onclick="window.location.href='/confirmdel/<%= category._id %>'">Delete</button>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+<div class="pagination">
+    <a href="?page=<%= currentPage - 1 %>" class="<%= currentPage === 1 ? 'disabled' : '' %>">Previous</a>
+    <% for (let i = 1; i <= 3; i++) { %>
+        <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+    <% } %>
+    <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
+</div>
+
+</body>
+</html>

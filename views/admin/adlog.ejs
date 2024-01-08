@@ -1,0 +1,69 @@
+<%- include('header') -%>
+            <div class="container">
+                <div class="img">
+                  <img src="/assets/pc.svg" />
+                </div>
+                <div class="login-container">
+                  <form  action="/dashboard" method="post">
+                    <img class="avator" src="/assets/avator.svg" />
+                    <h2>Welcome Admin</h2>                  
+<% if (err) { %>
+  <p style="color: red;"><%= err %></p>
+<% } %>
+                    <div class="input-div" one>
+                      <div class="i">
+                        <i class="fas fa-envelope"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Email" name="email" type="email" id="email" />
+                      </div>
+                    </div>
+                    <div class="input-div" two>
+                      <div class="i">
+                        <i class="fas fa-lock"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Password" name="password" type="password" id="password" />
+                      </div>
+                    </div>
+                    <input type="submit" class="btn1" value="login" />
+                  </form>
+                </div>
+              </div>
+              <script>
+                function displayAlert(message, inputId) {
+                  const inputField = document.getElementById(inputId);
+                  const alertDiv = document.createElement('div');
+                  alertDiv.className = 'alert';
+                  alertDiv.textContent = message;
+                  alertDiv.style.color = 'red';
+                  const inputRect = inputField.getBoundingClientRect();
+                  alertDiv.style.position = 'absolute';
+                  alertDiv.style.top = inputRect.bottom + 'px';
+                  alertDiv.style.left = inputRect.left + 'px';
+                  document.body.appendChild(alertDiv);
+                  setTimeout(() => {
+                    alertDiv.remove();
+                  }, 3000);
+                }
+                function validateForm() {
+                  const email = document.getElementById('email').value;
+                  const password = document.getElementById('password').value;
+                  if (!email) {
+                    displayAlert("Email field is empty", 'email');
+                    return false;
+                  }
+                
+                  if (!password) {
+                    displayAlert("Password field is empty", 'password');
+                    return false;
+                  }
+                  return true;
+                }
+                </script>
+              <script type="text/javascript" src="js/main.js"></script>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('footer') -%>

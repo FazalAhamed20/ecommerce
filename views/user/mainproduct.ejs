@@ -1,0 +1,261 @@
+<%- include('header') -%>
+<%- include('nav', { user: user,cartItemCount: cartItemCount }) -%>
+
+
+
+<style>
+    body {
+        background-color: #d9ccae;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-product-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 132px;
+    }
+
+    .main-product {
+        display: flex;
+        max-width: 1000px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border-radius: 16px;
+        overflow: hidden;
+        background-color: #d9ccae;
+        text-align: center; 
+    }
+
+    .main-product-img {
+        max-width: 50%;
+        padding: 30px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .main-product-img img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 16px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        object-fit:cover;
+    }
+
+    .main-product-details {
+        padding: 30px;
+        flex: 1;
+        border-radius: 0 16px 16px 0;
+    }
+
+    .product-title {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: bold;
+    }
+
+ 
+.product-description {
+    font-size: 1.1rem; 
+    color: #555;
+    margin-bottom: 30px;
+    font-weight: bold; 
+    
+}
+
+
+    .product-price {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .btn-container {
+        display: flex;
+        gap: 20px;
+    }
+
+    .btn {
+        padding: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #f0c14b;
+        color: #111;
+        font-size: 1rem;
+    }
+
+    .btn-secondary {
+        background-color: #333;
+        color: #fff;
+        font-size: 1rem;
+    }
+
+    .btn:hover {
+        background-color: #9b6b42;
+    }
+
+.product-category,
+.product-ingredients {
+    font-size: 1.2rem;
+    color: #333; 
+    margin-bottom: 10px;
+    font-weight: bold; 
+}
+
+.product-ingredients {
+    font-style: italic;
+}
+
+
+
+    @media (max-width: 768px) {
+        .main-product {
+            flex-direction: column;
+            max-width: 100%;
+            border-radius: 16px;
+        }
+
+        .main-product-img {
+            max-width: 100%;
+            padding: 30px;
+            height: auto;
+        }
+    }
+    .coffee-shop-message {
+  background-color: #8B4513;
+  color: #FFF; 
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 10px;
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Add a smooth transition effect */
+.coffee-shop-message {
+  transition: top 0.5s ease;
+}
+#image-zoom{
+    z-index: 10;
+}
+
+</style>
+<div id="addedToCartMessage" class="alert alert-success coffee-shop-message" role="alert" style="display:none;">
+    Product has been added to your cart.
+</div>
+
+
+<div class="main-product-container">
+    <div class="main-product">
+        <div class="main-product-img" id="image-zoom">
+            <% if (product) { %>
+                <img src="/product-images/<%= product.image %>" alt="<%= product.name %>">
+            <% } else { %>
+                <p>No product found</p>
+            <% } %>
+        </div>
+        <div class="main-product-details">
+            <% if (product) { %>
+                <h1 class="product-title"><%= product.name %></h1>
+                <p class="product-description"><%= product.description %></p>
+                <p class="product-category">Category: <%= product.category.name %></p>
+                <p class="product-ingredients">Ingredients: <%= product.ingredients || "N/A" %></p>
+                <p class="product-price">Price: ₹<%= product.price.toFixed(2) %></p>
+                <% if (product.quantity > 0) { %>
+                    <% if (product.quantity < 5) { %>
+                        <div class="alert alert-warning" role="alert">
+                            Only a few left!
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <div class="alert alert-danger" role="alert">
+                        Out of stock
+                    </div>
+                <% } %>
+                <div class="btn-container">
+                    <% if (product.quantity > 0) { %>
+                    <a href="/user/addtocart/<%= product._id %>" id="addToCartLink" class="btn btn-primary" onclick="showAddedToCartMessage()">Add to Cart</a>
+                    <% } %>
+                    <a href="/user/checkout" class="btn btn-secondary">Checkout</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') -%>
+
+<script>
+
+
+  
+    var options = {
+        width: 400,
+        height:420,
+        innerHeight:500,
+        zoomWidth: 400,
+        offset: { vertical: 30, horizontal: 40 }
+    };
+    new ImageZoom(document.getElementById("image-zoom"), options);
+
+   
+</script>
+<script>
+    async function showAddedToCartMessage() {
+  // Change the text of the link to "Added"
+  var addToCartLink = document.getElementById('addToCartLink');
+  if (addToCartLink) {
+    addToCartLink.innerText = 'Added';
+  }
+  updateCartItemCount();
+
+  var addedToCartMessage = document.getElementById('addedToCartMessage');
+  if (addedToCartMessage) {
+    addedToCartMessage.style.display = 'block';
+
+    // Redirect to the main product page after a delay (adjust the delay as needed)
+    setTimeout(function () {
+      window.location.href = '/user/mainproduct/<%= product._id %>';
+    }, 1000); // 3000 milliseconds (3 seconds) delay
+
+    // Fetch and update the cart count after a delay
+    setTimeout(updateCartItemCount, 1000); // Adjust the delay as needed
+  }
+}
+
+async function updateCartItemCount() {
+  try {
+    console.log('Fetching cart item count...');
+    const response = await fetch('/api/usercart');
+    const data = await response.json();
+
+    if (data.success) {
+      document.getElementById('cart-item-count').innerText = data.cartItemCount;
+      console.log('Cart item count updated:', data.cartItemCount);
+    } else {
+      console.error('Error fetching user cart:', data.message || 'Unknown error');
+    }
+  } catch (error) {
+    console.error('Error fetching user cart:', error);
+  }
+}
+
+  </script>

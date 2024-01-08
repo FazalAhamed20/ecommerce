@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<style>
+     .summary-box {
+            /* Add your styles for the summary box if needed */
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .address-box {
+            /* Add your styles for each address box */
+            width: 48%; /* Adjust the width as needed */
+            margin: 1%; /* Adjust the margin as needed */
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .payment-option {
+            /* Add your styles for each payment option box */
+            width: 100%; /* Adjust the width as needed */
+            margin-bottom: 10px; /* Adjust the margin as needed */
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        /* Additional styles for payment option icons */
+        .payment-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .payment-checkbox {
+            margin-right: 10px;
+        }
+ 
+
+.btn-checkout {
+  color: #ffffff;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: bold;
+  background-color: #424242;
+  width: 210px;
+  height: 80px;
+  padding: 0;
+  border: 0;
+  margin: 10px;
+  margin-left: 200px;
+  outline: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.4);
+}
+
+.truck {
+  background-image: url("https://assets.codepen.io/430361/truck.svg");
+  width: 160px;
+  height: 100px;
+  display: block;
+  position: absolute;
+  top: calc(50% - 50px);
+  left: calc(50% - 80px);
+  opacity: 0;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.75));
+}
+
+.parcel {
+  background-color: #ffbc47;
+  width: 30px;
+  height: 30px;
+  display: block;
+  position: absolute;
+  bottom: calc(50% - 50px);
+  left: calc(50% - 15px);
+  opacity: 0;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.75));
+}
+
+.parcel > span {
+  height: 3px;
+  content: "";
+  background-color: #ffbc47;
+  width: 15px;
+  height: 3px;
+  position: absolute;
+  top: -3px;
+}
+
+.parcel > span:first-child {
+  left: 0;
+  transform-origin: bottom left;
+}
+
+.parcel > span:last-child {
+  right: 0;
+  transform-origin: bottom right;
+}
+
+.checkout,
+.thank-you {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: calc(50% - 25px);
+  left: 0;
+}
+
+.thank-you {
+  opacity: 0;
+}
+
+
+    .Orders {
+        text-align: left;
+    }
+
+   
+
+    p {
+        margin: 10px 0;
+    }
+
+
+.order_head {
+	
+	font-weight: 900;
+	font-size: 1.2rem;
+}
+
+hr {
+	border: none;
+	border-top: 0.5px solid black;
+}
+
+.order_price {
+	display: grid;
+	grid-template-columns: repeat(1, 4fr);
+	margin-top: 20px;
+}
+.price,
+.total_price {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.dark {
+	font-weight: bold;
+}
+h3{
+  align-items: center;
+}
+body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100%;
+    }
+
+    h3 {
+      margin: 0;
+    }
+    .flash-message.error {
+  color: red;
+}
+ 
+
+       
+</style>
+<body>
+    <div class="container">
+      <div>
+        <h3><% if (messages.error && messages.error.length > 0) { %>
+          <div class="flash-message error">
+            <%= messages.error[0] %>
+          </div>
+        <% } %></h3>
+      </div>
+     
+      <form id="checkoutForm" action="/create-order" method="POST">
+        
+        <div class="step-checkout">
+            <ul class="step-checkout_list" id="checkoutList">
+                <!-- Checkout items/tabs -->
+                <li role="button" class="step-checkout_item active" id="stepCheckoutItem1" tabindex="1"><span>Your details</span></li>
+                <li role="button" class="step-checkout_item" id="stepCheckoutItem2" tabindex="1"><span>Order Summary</span></li>
+                <li role="button" class="step-checkout_item" id="stepCheckoutItem3" tabindex="1"><span>Shipping address</span></li>
+                <li role="button" class="step-checkout_item" id="stepCheckoutItem4" tabindex="1"><span>Payment</span></li>
+                <li class="step-checkout_content">
+                    <!-- Split Checkout steps from the Summary -->
+                    <div class="grid-x">
+                        <!-- Checkout step content here -->
+                        <div class="col">
+                            <div class="step-checkout_item_content" id="stepCheckoutContent1">
+                                <div class="step-box">
+                                    <h2>Step 1</h2>
+                                </div>
+                            </div>
+                            <div class="step-checkout_item_content" id="stepCheckoutContent2">
+                                <div class="step-box">
+                                    <h2>Step 2</h2>
+                                </div>
+                            </div>
+                            <div class="step-checkout_item_content" id="stepCheckoutContent3">
+                                <div class="step-box">
+                                    <h2>Step 3</h2>
+                                </div>
+                            </div>
+                            <div class="step-checkout_item_content" id="stepCheckoutContent4">
+                                <div class="step-box">
+                                    <h2>Step 4</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Summary content here -->
+                        <div class="col">
+                            <div class="step-checkout_summary" id="stepCheckoutSummary1">
+                                <div class="summary-box">
+                                    <h2>Summary - Your Details</h2>
+                                    <br>
+                                    <% if (user && user.name) { %>
+                                        <div class="name-email-container">
+                                            <p><span class="field-label"><strong>Name:</strong></span> <%= user.name %></p>
+                                            <p><span class="field-label"><strong>Email:</strong></span> <%= user.email %></p>
+                                        </div>
+                                    <% } else { %>
+                                        <p>User not found</p>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="step-checkout_summary" id="stepCheckoutSummary2">
+                              <div class="summary-box">
+                                  <div class="Orders">
+                                    <section class="order_summary">
+                                      <h2 class="order_head">Order Summary</h2>
+                                      <div class="order_price">
+                                        <hr />
+                                          <strong>
+                                        <div class="price">
+                                          <p> Price:</p>
+                                          <p>₹<%= totals.subtotal %></p>
+                                        </div>
+                                        <div class="price">
+                                          <p>Shipping:</p>
+                                          <p>₹<%= totals.shipping %></p>
+                                        </div>
+                                        <div class="price">
+                                          <p>Tax:</p>
+                                          <p>₹<%= totals.tax %></p>
+                                        </div>
+                                        <br />
+                                        <hr />
+                                        <div class="total_price">
+                                          <p class="dark">Total:</p>
+                                          <p class="dark">₹<%= totals.grandTotal %></p>
+                                        </div>
+                                      </strong>
+                                      </div>
+                                    </section>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                            <div class="step-checkout_summary" id="stepCheckoutSummary3">
+                                <div class="summary-box">
+                                    <h2>Summary - Shipping Address</h2>
+                                    <% addresses.forEach(function(address, index) { %>
+                                        <div class="address-box">
+                                          <input type="radio" name="selectedAddressIndex" id="hiddenSelectedAddressIndex_<%= index %>" value="<%= index  %>">
+
+
+
+                                          <label style="font-size: large; font-weight: bold;" for="addressRadio_<%= index %>"> Address <%= index + 1 %></label>
+                                            <p><span class="field-label">Name:</span> <%= address.name %></p>
+                                            <p><span class="field-label">Mobile:</span> <%= address.mobile %></p>
+                                            <p><span class="field-label">Email:</span> <%= address.email %></p>
+                                            <p><span class="field-label">Pincode:</span> <%= address.pincode %></p>
+                                            <p><span class="field-label">House Name:</span> <%= address.houseName %></p>
+                                            <p><span class="field-label">Locality:</span> <%= address.locality %></p>
+                                            <p><span class="field-label">City:</span> <%= address.city %></p>
+                                            <p><span class="field-label">District:</span> <%= address.district %></p>
+                                            <p><span class="field-label">State:</span> <%= address.state %></p>
+                                        </div>
+                                        
+                                    <% }); %>
+                                </div>
+                            </div>
+                            
+                            <div class="step-checkout_summary" id="stepCheckoutSummary4">
+                                <div class="summary-box">
+                                    <h2>Summary - Payment </h2>
+                                   
+
+                                  <!-- Payment Option 2 -->
+                                  <div class="payment-option">
+                                      <input type="radio" class="payment-radio" name="paymentMethod" id="paypalRadio" value="RazorPay">
+                                      <i class="far fa-credit-card payment-icon"></i>
+                                      RazorPay
+                                  </div>
+
+                                  <!-- Payment Option 3 -->
+                                  <div class="payment-option">
+                                      <input type="radio" class="payment-radio" name="paymentMethod" id="codRadio" value="Cash on Delivery">
+                                      <i class="fas fa-money-bill-alt payment-icon"></i>
+                                      Cash on Delivery
+                                  </div>
+                            
+                                    
+                                </div>
+                                <button type="submit" id="btn_checkout" class="btn-checkout" onclick="submitForm()">
+                                  <span class="truck"></span>
+                                  <span class="product"></span>
+                                  <span class="parcel">
+                                      <span></span>
+                                      <span></span>
+                                  </span>
+                                  <span class="checkout">ORDER</span>
+                                  <span class="thank-you">THANK YOU!</span>
+                              </button>
+                                  
+                            </div>
+                        
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+      </form>
+    </div>
+    
+
+  
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  
+<script>
+  function chooseAddress(index) {
+      // Update the hidden input field with the selected address index
+      document.getElementById('hiddenSelectedAddressIndex').value = index;
+  }
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+  const radioButtons = document.querySelectorAll('.choose-radio');
+
+  radioButtons.forEach(function (radioButton) {
+    radioButton.addEventListener('change', function () {
+      const index = this.getAttribute('data-index');
+      chooseAddress(index);
+    });
+  });
+});
+
+function submitForm() {
+  document.getElementById('checkoutForm').submit();
+}
+
+</script>
+
+
+
+ 
+
+<script>
+    // Add active class to the current list item (highlight it)
+    const checkoutList = document.getElementById("checkoutList");
+
+    checkoutList.addEventListener('click', e => {
+        // select all checkout li items
+        const listItems = document.querySelectorAll('.step-checkout_item');
+        // get the current selected item
+        const listItem = e.target.closest('.step-checkout_item');
+        // check if item exists otherwise return
+        if (!listItem) return;
+        // Remove all active
+        listItems.forEach(item => item.classList.remove('active'));
+        // Add active to clicked element
+        listItem.classList.add('active');
+
+        // select all checkout summary items
+        const summaries = document.querySelectorAll('.step-checkout_summary');
+        // hide all summaries
+        summaries.forEach(summary => summary.style.display = 'none');
+        // get the id of the clicked item
+        const itemId = listItem.id.replace('Item', 'Summary');
+        // show the related summary
+        const relatedSummary = document.getElementById(itemId);
+        if (relatedSummary) {
+            relatedSummary.style.display = 'block';
+        }
+    });
+
+    // Set the default state to hide all summaries except the one related to the initially active item
+    window.onload = () => {
+        const defaultActiveItem = document.querySelector('.step-checkout_item.active');
+        if (defaultActiveItem) {
+            const itemId = defaultActiveItem.id.replace('Item', 'Summary');
+            const relatedSummary = document.getElementById(itemId);
+            // hide all summaries
+            document.querySelectorAll('.step-checkout_summary').forEach(summary => summary.style.display = 'none');
+            // show the related summary
+            if (relatedSummary) {
+                relatedSummary.style.display = 'block';
+            }
+        }
+    };
+</script>
+<script>
+    class CheckoutAnimation {
+  constructor(elm) {
+    this.elm = document.querySelector(elm);
+    this.tl = gsap.timeline();
+    this.truck = this.elm.querySelector('.truck');
+    this.parcel = this.elm.querySelector('.parcel');
+    this.coverLeft = this.parcel.querySelector("span:first-child");
+    this.coverRight = this.parcel.querySelector("span:last-child");
+    this.checkout = this.elm.querySelector('.checkout');
+    this.thankYou = this.elm.querySelector('.thank-you');
+    this.originalHeight = this.truck.clientHeight;
+  }
+
+  morphButton() {
+    const TIME = 0.3;
+
+    this.tl.fromTo(this.elm, {
+      height: this.originalHeight
+    }, {
+      height: this.elm.clientWidth,
+      duration: TIME,
+      ease: "elastic.out(1, " + TIME + ")"
+    });
+
+    this.tl.fromTo(this.thankYou, {
+      opacity: 0,
+      translateY: "100px",
+      duration: 0
+    }, {
+      opacity: 0,
+      translateY: "100px"
+    });
+
+    this.tl.fromTo(this.checkout, {
+      opacity: 1
+    }, {
+      opacity: 0,
+      duration: TIME,
+      ease: "power2.out"
+    }, "-=" + (TIME * 3));
+  }
+
+  truckEntrance() {
+    const TIME = 0.3;
+    const width = (this.elm.clientWidth / 2) + this.truck.clientWidth;
+
+    this.tl.fromTo(this.truck, {
+      opacity: 1,
+      translateX: (-width) + "px",
+      skewX: "45deg"
+    }, {
+      translateX: "0px",
+      skewX: "0deg",
+      duration: 0.5,
+      ease: "back.out"
+    }, "-=" + (TIME * 2));
+  }
+
+  parcelEntrance() {
+    const TIME = 0.65;
+    const OPEN_ANGLE = 210;
+
+    this.tl.fromTo(this.parcel, {
+      opacity: 0,
+      translateY: -(this.parcel.clientHeight * 3)
+    }, {
+      opacity: 1,
+      translateY: 0,
+      duration: TIME,
+      ease: "bounce.out"
+    }, "-=" + TIME);
+
+    this.tl.fromTo(this.coverLeft, {
+      rotate: "0deg"
+    }, {
+      rotate: -(OPEN_ANGLE) + "deg",
+      ease: "bounce.out",
+      duration: TIME
+    }, "-=" + (TIME / 2));
+
+    this.tl.fromTo(this.coverRight, {
+      rotate: "0deg"
+    }, {
+      rotate: OPEN_ANGLE + "deg",
+      ease: "bounce.out",
+      duration: TIME
+    }, "-=" + (TIME + 0.1));
+  }
+
+  parcelClose() {
+    const TIME = 0.25;
+
+    this.tl.to(this.coverLeft, {
+      rotate: "0deg",
+      ease: "bounce.out",
+      duration: TIME
+    });
+
+    this.tl.to(this.coverRight, {
+      rotate: "0deg",
+      ease: "bounce.out",
+      duration: TIME
+    }, "-=" + (TIME / 1.7));
+  }
+
+  parcelPutIn() {
+    const TIME = 0.2;
+    const parcelWidth = this.parcel.clientWidth / 2;
+    const truckWidth = this.truck.clientWidth / 2;
+
+    this.tl.fromTo(this.parcel, {
+      bottom: "calc(50% - " + (this.truck.clientHeight / 2) + "px)"
+    }, {
+      bottom: "calc(50% - " + (this.parcel.clientHeight / 2) + "px)",
+      ease: "power2.out",
+      duration: TIME
+    });
+
+    this.tl.fromTo(this.parcel, {
+      left: "calc(50% - " + parcelWidth + "px)"
+    }, {
+      left: "calc(50% + " + parcelWidth + "px)",
+      ease: "power2.out",
+      duration: TIME
+    });
+
+    this.tl.to(this.parcel, {
+      left: "calc(50% - " + (truckWidth + (parcelWidth * 4)) + "px)",
+      ease: "power2.out",
+      duration: TIME
+    });
+
+    this.tl.fromTo(this.parcel, {
+      scale: 1
+    }, {
+      left: "calc(50% - " + (truckWidth + parcelWidth) + "px)",
+      scale: 0,
+      ease: "power2.out",
+      duration: TIME
+    });
+  }
+
+  truckExit() {
+    const width = (this.elm.clientWidth / 2) + this.truck.clientWidth;
+
+    this.tl.to(this.truck, {
+      translateX: width + "px",
+      skewX: "-45deg",
+      duration: 0.5,
+      ease: "back.in"
+    });
+  }
+
+  returnButton() {
+    const TIME = 0.3;
+
+    this.tl.to(this.elm, {
+      height: this.originalHeight,
+      duration: TIME,
+      ease: "elastic.out(1, 0.3)",
+      delay: 0.5
+    }, "-=" + (TIME * 2));
+
+    this.tl.to(this.thankYou, {
+      translateY: "0px",
+      ease: "elastic.out(1, 0.3)",
+      duration: TIME,
+      delay: 0.3
+    }, "-=" + TIME);
+
+    this.tl.to(this.thankYou, {
+      opacity: 1,
+      ease: "power2.out",
+      duration: TIME
+    }, "-=" + TIME);
+  }
+
+  reset(resetTime) {
+    const TIME = 0.3;
+
+    this.tl.to(this.checkout, {
+      opacity: 1,
+      duration: TIME,
+      ease: "power2.out",
+      delay: resetTime
+    });
+
+    this.tl.to(this.thankYou, {
+      opacity: 0,
+      duration: TIME,
+      ease: "power2.out"
+    }, "-=" + TIME);
+
+    this.tl.to(this.thankYou, {
+      translateY: "100px",
+      duration: 0
+    });
+  }
+
+  start(resetTime) {
+    if (this.tl.isActive() === false) {
+      this.morphButton();
+      this.parcelEntrance();
+      this.parcelClose();
+      this.truckEntrance();
+      this.parcelPutIn();
+      this.truckExit();
+      this.returnButton();
+      this.reset(resetTime);
+    }
+  }
+}
+
+const checkout = new CheckoutAnimation("#btn_checkout");
+
+checkout.elm.addEventListener("click", (evt) => {
+  checkout.start(3);
+});
+
+</script>
+
+</html>

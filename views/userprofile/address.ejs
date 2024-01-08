@@ -1,0 +1,130 @@
+<!-- views/userprofile/address.ejs -->
+
+<%- include('header') -%>
+<%- include('nav', { user: user }) -%>
+
+<style>
+  body {
+    background-color: #EDC9A0;
+    font-family: 'Quicksand', sans-serif;
+    transition: background-color 0.5s ease;
+    margin: 0;
+    overflow: scroll;
+  }
+  .address-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    padding-left: 60px;
+    padding-top: 20px;
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+  .center-button {
+    margin-top: 55px;
+            padding: 15px 30px;
+            background-color: #4A90E2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+  .address-card {
+    position: relative;
+    width: 300px;
+    padding: 15px;
+    background-color: #ffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    text-align: left;
+    transition: transform 0.3s ease;
+    transform-origin: center bottom;
+  }
+
+  .address-card:hover {
+    transform: scale(1.05);
+  }
+
+  .field-label {
+    font-weight: bold;
+    color: #4A90E2;
+  }
+
+  .icons {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .edit-address-icon,
+  .delete-address-icon {
+    font-size: 20px;
+    color: #4A90E2;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-left: 10px; /* Adjust the margin-left for spacing */
+  }
+
+  .edit-address-icon:hover,
+  .delete-address-icon:hover {
+    color: #3568b4;
+  }
+
+  .coffee-cup {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .address-card:hover .coffee-cup {
+    opacity: 1;
+    transform: rotate(30deg);
+  }
+</style>
+
+<a href="/user/addaddress" class="center-button">Add Address</a>
+
+<div class="address-container">
+  <% addresses.forEach(function(address, index) { %>
+    <div class="address-card">
+      <div class="icons">
+        <!-- Edit Icon -->
+        <a href="/user/editaddressform/<%= address._id %>" class="edit-address-icon">
+          <i class="fas fa-pencil-alt"></i>
+        </a>
+
+        <!-- Delete Icon -->
+        <a href="/user/deleteaddress/<%= address._id %>" class="delete-address-icon">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+      </div>
+
+      <h2>Address <%= index + 1 %></h2>
+      <p><span class="field-label">Name:</span> <%= address.name %></p>
+      <p><span class="field-label">Mobile:</span> <%= address.mobile %></p>
+      <p><span class="field-label">Email:</span> <%= address.email %></p>
+      <p><span class="field-label">Pincode:</span> <%= address.pincode %></p>
+      <p><span class="field-label">House Name:</span> <%= address.houseName %></p>
+      <p><span class="field-label">Locality:</span> <%= address.locality %></p>
+      <p><span class="field-label">City:</span> <%= address.city %></p>
+      <p><span class="field-label">District:</span> <%= address.district %></p>
+      <p><span class="field-label">State:</span> <%= address.state %></p>
+    </div>
+  <% }); %>
+</div>
+
+<%- include('footer') -%>
