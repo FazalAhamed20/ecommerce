@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs/promises').unlink;
 const FS = require('fs');
+const sharp = require('sharp');
 //Product list in admin side------------------------------------------------------->
 const productList = async (req, res) => {
     const itemsPerPage = 3; // pagination
@@ -37,12 +38,25 @@ const addform = function(req, res) {
         });
 };
 //add product in admin side------------------------------------------------------->
-const addproduct = function(req, res) {
+const addproduct = async function (req, res) {
     const { name, description, category, price, ingredients, quantity } = req.body;
     let image;
+
     if (req.file) {
-        image = req.file.filename;
+        const imagePath = req.file.path;
+        const imageFilename = req.file.filename;
+    
+        // Use Sharp to resize the image (adjust the dimensions as needed)
+        const resizedImagePath = path.join(__dirname, '../public/assets/product-images', `resized_${imageFilename}`);
+    
+        await sharp(imagePath)
+            .resize(300, 200) // Set your desired dimensions here
+            .toFile(resizedImagePath);
+    
+            image = `resized_${imageFilename}`;
     }
+    
+
     const newProduct = new Product({
         name,
         description,
@@ -50,8 +64,9 @@ const addproduct = function(req, res) {
         image,
         price,
         ingredients,
-        quantity, // Add the quantity here
+        quantity,
     });
+
     newProduct.save()
         .then(() => {
             res.redirect('/product');
@@ -88,6 +103,8 @@ const updateproduct = async function (req, res) {
         if (!currentProduct) {
             return res.status(404).send('Product not found');
         }
+
+        // Delete existing image if specified
         if (deleteExistingImage === 'on' && currentProduct.image) {
             const imagePath = path.join(__dirname, '../public/assets/product-images', currentProduct.image);
             try {
@@ -102,16 +119,30 @@ const updateproduct = async function (req, res) {
                 console.log('File not found:', imagePath);
             }
         }
+
+        // Update image if a new one is provided
         if (req.file) {
-            const existingFilename = currentProduct.image ? path.basename(currentProduct.image) : undefined;
-            currentProduct.image = req.file ? req.file.filename : currentProduct.image;
+            const imagePath = req.file.path;
+            const imageFilename = req.file.filename;
+
+            // Use Sharp to resize the image (adjust the dimensions as needed)
+            const resizedImagePath = path.join(__dirname, '../public/assets/product-images', `resized_${imageFilename}`);
+
+            await sharp(imagePath)
+                .resize(300, 200) // Set your desired dimensions here
+                .toFile(resizedImagePath);
+
+            currentProduct.image = `resized_${imageFilename}`;
         }
+
+        // Update other product details
         currentProduct.name = name;
         currentProduct.description = description;
         currentProduct.category = category;
         currentProduct.price = price;
         currentProduct.ingredients = ingredients;
         currentProduct.quantity = quantity; // Add this line to update quantity
+
         await currentProduct.save();
         console.log('Updated Product:', currentProduct);
         res.redirect('/product');
@@ -120,7 +151,6 @@ const updateproduct = async function (req, res) {
         res.status(500).send('Internal Server Error');
     }
 };
-
 //delete product in admin side------------------------------------------------------->
 const deleteproduct = async function(req, res) {
     const productId = req.params.id;
