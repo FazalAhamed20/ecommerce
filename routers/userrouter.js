@@ -50,6 +50,7 @@ router.get('/user/confirm',verifyUser,controller5.confirm);
 router.get('/user/userOrder',verifyUser, controller5.userOrder);
 router.post('/create-order',verifyUser,controller5.createOrder);
 router.post('/process-payment', controller5.processPayment);
+router.post('/cancel-order',controller5.cancelorder )
 
 
 

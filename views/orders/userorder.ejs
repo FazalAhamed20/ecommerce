@@ -113,8 +113,42 @@ ul.timeline > li.active:before {
 </style>
 
 <body>
+    <div id="cancelledOrderAlert"></div>
+
+    
     <% orders.forEach(function(order) { %>
-    <section class="my-5">
+         <!-- Bootstrap Modal for Cancel Order -->
+         <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6><i class="fas fa-exclamation-triangle text-warning"></i> Before you cancel, please consider:</h6>
+                        <ul>
+                            <li>Your cancellation may be subject to our cancellation policy.</li>
+                            <li>Review our <a href="/cancellation-policy" target="_blank">cancellation policy</a>.</li>
+                        </ul>
+                        <p><i class="fas fa-info-circle text-info"></i> Are you sure you want to cancel this order?</p>
+                        <label for="cancelReason">Reason for cancellation:</label>
+                        <textarea class="form-control" id="cancelReason" rows="3" placeholder="Enter your reason"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmCancelOrder(event)" data-order-id="<%= order.orderID %>">
+                            Proceed with Cancellation
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="my-5" data-order-id="<%= order.orderID %>" data-order-status="<%= order.status %>">
         <div class="container">
             <div class="main-body">
                 <div class="row">
@@ -122,69 +156,97 @@ ul.timeline > li.active:before {
                         <div class="card">
                             <div class="card-body">
                                 <div class="top-status">
-                                    
-                                        <h5><%= order.orderID %></h5>
-                                    
-                                    <div></div>
+                                    <h5><%= order.orderID %></h5>
+                            
+                                    <div>
+                                        <!-- Invoice Download Button -->
+                                        <a href="/download/invoice/<%= order.orderID %>" class="btn btn-success mx-2">
+                                            Download Invoice
+                                        </a>
+                                
+                                        <!-- Cancel Order Button -->
+                                        <button class="btn btn-danger" data-toggle="modal" data-target="#cancelOrderModal">
+                                            Cancel Order
+                                        </button>
+                                        
+                                    </div>
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="card mt-4">
                             <div class="card-body p-0 table-responsive">
                                 <h4 class="p-3 mb-0">Product Description</h4>
-                                <% orders.forEach(function(order) { %>
-                                    <table class="table mb-0">
-                                        <thead>
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% order.products.forEach(function(product) { %>
                                             <tr>
-                                                <th scope="col">Arrive At</th>
-                                                <th scope="col"></th>
-                                                <th scope="col">Product</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Payment</th>
-                                                <th scope="col">Address</th>
+                                                <td><strong><%= product.product.name %></strong></td>
+                                                <td><span>Quantity: <%= product.quantity %></span></td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% order.products.forEach(function(product) { %>
-                                                <tr>
-                                                    <td>
-                                                        <h6>Date:</h6><%= order.deliveryDate %><br>
-                                                        <h6>Time:</h6><%= order.deliveryTime %>
-                                                    </td>
-                                                    <td></td>
-                                                    <td><strong><%= product.product.name %></strong></td>
-                                                    <td><span>Quantity: <%= product.quantity %></span></td>
-                                                    <td><%= order.paymentMethod %></td>
-                                                    <td>
-                                                        <%= order.address.houseName %><br>
-                                                        <%= order.address.locality %><br>
-                                                        <%= order.address.city %><br>
-                                                        <%= order.address.district %><br>
-                                                        <%= order.address.state %>, <%= order.address.pincode %>
-                                                    </td>
-                                                </tr>
-                                            <% }); %>
-                                            <tr>
-                                                <th colspan="2">
-                                                    <span>Total Price:</span>
-                                                    <span><strong>₹<%= order.totals.grandTotal %></strong></span>
-                                                </th>
-                                                <td>
-                                                    <span class="text-muted"><strong>Ordered Date</strong></span>
-                                                    <%= order.orderDate %>
-                                                </td>
-                                                <td>
-                                                    <span class="text-muted"><strong>Ordered Time</strong></span>
-                                                    <%= order.orderTime %>
-                                                </td>
-                                                <td colspan="2">
-                                                    <span>Status:</span>
-                                                    <span class="badge badge-success"><%= order.status %></span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                <% }); %>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <span>Status:</span>
+                                <span class="badge <%= order.status.toLowerCase() === 'cancelled' ? 'badge-danger' : (order.status.toLowerCase() === 'pending' ? 'badge-warning' : (order.status.toLowerCase() === 'processing' ? 'badge-info' : (order.status.toLowerCase() === 'shipped' ? 'badge-primary' : 'badge-success'))) %>">
+                                    <%= order.status %>
+                                </span>
+                                <!-- Progress Bar -->
+                             <!-- Progress Bar -->
+                             <% if (order.status.toLowerCase() !== 'cancelled') { %>
+                             <div class="progress mt-2">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
+                                    id="<%= order.orderID %>-pending-progress" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                    Pending
+                                </div>
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar"
+                                    id="<%= order.orderID %>-processing-progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                    Processing
+                                </div>
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar"
+                                    id="<%= order.orderID %>-shipped-progress" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                    Shipped
+                                </div>
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
+                                    id="<%= order.orderID %>-delivered-progress" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                    Delivered
+                                </div>
+                            </div>
+                            <% } %>
+                            
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <!-- Order Summary Card -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Order Summary</h5>
+                                <p>Total Price: ₹<%= order.totals.grandTotal %></p>
+                                <p>Ordered Date: <%= order.orderDate %></p>
+                                <p>Ordered Time: <%= order.orderTime %></p>
+                            </div>
+                        </div>
+                        <!-- Additional Card for Order Details -->
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <h5 class="card-title">Order Details</h5>
+                                <p>Delivery Date: <%= order.deliveryDate %></p>
+                                <p>Delivery Time: <%= order.deliveryTime %></p>
+                                <p>Payment Method: <%= order.paymentMethod %></p>
+                                <p>Address: <%= order.address.houseName %>, <%= order.address.locality %>, <%= order.address.city %>, <%= order.address.district %>, <%= order.address.state %>, <%= order.address.pincode %></p>
                             </div>
                         </div>
                     </div>
@@ -193,26 +255,157 @@ ul.timeline > li.active:before {
         </div>
     </section>
     <% }); %>
-    
-</body>
+    <!-- Add this toast at the end of your body tag -->
+
+
+    <div id="orders-data" data-orders="<%- JSON.stringify(orders) %>"></div>
+
+
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-    <!-- Add this script to your EJS file -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Your custom scripts go here -->
+
+<!-- jQuery -->
 
 
-    
 
-    <!-- Add this script to your EJS file -->
+<script>
+    window.onload = function () {
+    console.log('Window loaded successfully');
+    var orderSections = document.querySelectorAll('.my-5');
+
+    orderSections.forEach(function (section) {
+        var orderID = section.getAttribute('data-order-id');
+        var status = section.getAttribute('data-order-status');
+        console.log('Processing order ID:', orderID, 'with status:', status);
+        updateProgressBar(orderID, status.toLowerCase());
+        displayOrderStatus(orderID, status);
+    });
+};
+
+function updateProgressBar(orderID, status) {
+    console.log('Updating progress bar for order ID:', orderID, 'and status:', status);
+
+    // Display only the current status progress bar
+    const progressBar = document.getElementById(orderID + '-' + status + '-progress');
+
+    if (progressBar) {
+        progressBar.style.display = 'block';
+        progressBar.style.width = getStatusWidth(status);
+    }
+}
+
+
+    // Display only the current status progress bar
+    const progressBar = document.getElementById(orderID + '-' + status + '-progress');
+
+    if (progressBar) {
+        progressBar.style.display = 'block';
+        progressBar.style.width = getStatusWidth(status);
+    }
+
+
+function displayOrderStatus(orderID, status) {
+    console.log('Displaying order status for order ID:', orderID, 'and status:', status);
+    const statusElement = document.getElementById(orderID + '-status');
+
+    if (statusElement) {
+        statusElement.innerHTML = status;
+    }
+}
+
+function getStatusWidth(status) {
+    switch (status) {
+        case 'pending':
+            return '25%';
+        case 'processing':
+            return '50%';
+        case 'shipped':
+            return '75%';
+        case 'delivered':
+            return '100%';
+        default:
+            return '0%';
+    }
+}
+
+</script>
+<script>
+    function updateCancelledOrderUI(orderID) {
+    // Update the order status and hide the progress bar
+    const statusElement = document.getElementById(orderID + '-status');
+    const progressBar = document.getElementById(orderID + '-progress');
+
+    if (statusElement && progressBar) {
+        statusElement.innerHTML = 'Cancelled';
+        progressBar.style.display = 'none';
+
+        // Show the alert
+        const alertContainer = document.getElementById('cancelledOrderAlert');
+        const alertMessage = `Order ${orderID} Cancelled - Your order has been successfully cancelled.`;
+        alertContainer.innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>${alertMessage}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `;
+    }
+}
+
+</script>
+
+
+<script>
+    function confirmCancelOrder() {
+        const orderID = event.target.getAttribute('data-order-id');
+        const cancellationReason = document.getElementById('cancelReason').value;
+
+        if (cancellationReason.trim() !== '') {
+            fetch('/cancel-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    orderID: orderID,
+                    cancellationReason: cancellationReason,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Order canceled and reason saved:', data);
+
+                // Update the UI
+                updateCancelledOrderUI(orderID);
+                
+                // Show the popup and redirect after a delay
+               // Show the popup and redirect after a delay
+$('#orderCancelledToast').on('hidden.bs.toast', function () {
+    window.location.replace(window.location.href); // Redirect to the same page
+});
+
+            })
+            .catch(error => {
+                console.error('Error canceling order:', error);
+                // Handle the error appropriately
+            });
+        } else {
+            console.error('Cancellation reason cannot be empty.');
+            // You may want to show an error message to the user
+        }
+    }
+</script>
+
 
 
 

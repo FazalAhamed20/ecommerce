@@ -1,8 +1,13 @@
 const User = require('../models/userModel');
 const orderModels = require('../models/orderModel');
+
+const errorHandler = (err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).send('Internal Server Error');
+};
 //admin login------------------------------------------------------->
 const admin = (req, res) => {
-  if(req.session.user!=null){
+  if(req.session.admin!=null){
      res.redirect("/adhome");
   }
   res.render('./admin/adlog', { title: 'user login', err: false });
@@ -23,7 +28,7 @@ const dashboard = (req, res) => {
   };
 
   if (userInput.email === credential.email && userInput.password === credential.password) {
-    req.session.user = userInput.email;
+    req.session.admin = userInput.email;
     req.session.adLogged = true;
     res.redirect('/adhome');
   } else {

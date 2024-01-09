@@ -215,15 +215,16 @@
                         <% }); %>
                     </tbody>
                 </table>
-                <div class="pagination">
-                    <a href="?page=<%= currentPage - 1 %>" class="<%= currentPage === 1 ? 'disabled' : '' %>">Previous</a>
-                    <% for (let i = 1; i <= 3; i++) { %>
-                        <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
-                    <% } %>
-                    <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
-                </div>
-            <% }); %>
+                <% }); %>  
         </form>
+        <div class="pagination">
+            <a href="?page=<%= currentPage - 1 %>" class="<%= currentPage === 1 ? 'disabled' : '' %>">Previous</a>
+            <% for (let i = 1; i <= 3; i++) { %>
+                <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+            <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
+        </div>
+
         
 
        

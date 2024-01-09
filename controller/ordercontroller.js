@@ -6,6 +6,8 @@ const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const moment = require('moment');
+const CanceledOrder = require('../models/orderCancelModel');
 
 var instance = new Razorpay({
   key_id: 'rzp_test_YCxRFmZdRfF2Qw',
@@ -19,54 +21,49 @@ function generateOrderID() {
 }
 //order time------------------------------------------------------->
 function getCurrentTime() {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
+  return moment().format('HH:mm');
 }
 
 const createOrderData = async (userId, paymentMethod, selectedAddress) => {
   const orderID = generateOrderID();
-  const currentDate = new Date();
-  const orderDate = currentDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric' });
-  const orderDateTime = new Date();
+  const currentDate = moment();
+  const orderDate = currentDate.format('ddd MMM DD YYYY');
+  const orderDateTime = moment();
   const orderTime = getCurrentTime();
-  const orderDateTimeWithTime = new Date(orderDateTime);
-  orderDateTimeWithTime.setHours(orderTime.split(':')[0]);
-  orderDateTimeWithTime.setMinutes(orderTime.split(':')[1]);
-  const deliveryDateTime = new Date(orderDateTimeWithTime.getTime() + 40 * 60000);
-  const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
-  const deliveryDate = deliveryDateTime.toLocaleDateString(undefined, options);
-  const deliveryTime = deliveryDateTime.toTimeString().split(' ')[0];
+  const orderDateTimeWithTime = moment(orderDateTime).set('hour', orderTime.split(':')[0]).set('minute', orderTime.split(':')[1]);
+  const deliveryDateTime = moment(orderDateTimeWithTime).add(40, 'minutes');
+  const deliveryDate = deliveryDateTime.format('ddd MMM DD YYYY ');
+  const deliveryTime = deliveryDateTime.format('HH:mm');
+  console.log(`Ordered Date: ${orderDate}`);
 
   const cart = await cartModels.findOne({ userId });
   if (cart) {
-    await cart.populate('products.productId', 'name price description image');
+      await cart.populate('products.productId', 'name price description image');
   }
   const products = cart.products.map(cartItem => ({
-    product: cartItem.productId,
-    name: cartItem.productId && cartItem.productId.name,
-    quantity: cartItem.quantity,
+      product: cartItem.productId,
+      name: cartItem.productId && cartItem.productId.name,
+      quantity: cartItem.quantity,
   }));
   const totals = {
-    subtotal: cart.totals.subtotal,
-    tax: cart.totals.tax,
-    shipping: cart.totals.shipping,
-    grandTotal: cart.totals.grandTotal,
+      subtotal: cart.totals.subtotal,
+      tax: cart.totals.tax,
+      shipping: cart.totals.shipping,
+      grandTotal: cart.totals.grandTotal,
   };
 
   return {
-    orderID,
-    customer: userId,
-    products,
-    address: selectedAddress,
-    totals,
-    orderDate,
-    orderTime,
-    deliveryDate,
-    deliveryTime,
-    paymentMethod,
-    status: 'Pending',
+      orderID,
+      customer: userId,
+      products,
+      address: selectedAddress,
+      totals,
+      orderDate,
+      orderTime,
+      deliveryDate,
+      deliveryTime,
+      paymentMethod,
+      status: 'Pending',
   };
 };
 const confirm = async (req, res) => {
@@ -227,11 +224,39 @@ const processPayment = async (req, res) => {
   }
 };
 
+
+const cancelorder=async (req, res) => {
+  try {
+      // Extract order ID and cancellation reason from the request body
+      const { orderID, cancellationReason } = req.body;
+
+      console.log({orderID,cancellationReason});
+
+      // Create a new instance of the CanceledOrder model
+      const canceledOrder = new CanceledOrder({
+          orderID: orderID,
+          reason: cancellationReason,
+      });
+
+      // Save the canceled order to the database
+      const savedOrder = await canceledOrder.save();
+
+      // Update the order status in your main orders collection to 'canceled'
+      // Perform any other necessary actions
+
+      res.status(200).json({ message: 'Order canceled and reason saved', canceledOrder: savedOrder });
+  } catch (error) {
+      console.error('Error saving canceled order:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 //modules------------------------------------------------------->
  module.exports={
     checkout,
     createOrder,
     userOrder,
     processPayment,
-    confirm
+    confirm,
+    cancelorder
  }  
