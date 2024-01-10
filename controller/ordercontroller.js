@@ -1,13 +1,11 @@
 const orderModels = require('../models/orderModel');
 const cartModels = require('../models/cartModel');
 const Address = require('../models/addressModel');
-const Product = require('../models/productModel');
-const User = require('../models/userModel');
-const mongoose = require('mongoose');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const moment = require('moment');
 const CanceledOrder = require('../models/orderCancelModel');
+
 
 var instance = new Razorpay({
   key_id: 'rzp_test_YCxRFmZdRfF2Qw',
@@ -225,29 +223,43 @@ const processPayment = async (req, res) => {
 };
 
 
-const cancelorder=async (req, res) => {
+const cancelorder = async (req, res) => {
   try {
-      // Extract order ID and cancellation reason from the request body
-      const { orderID, cancellationReason } = req.body;
+    // Extract order ID and cancellation reason from the request body
+    const { orderID, cancellationReason } = req.body;
 
-      console.log({orderID,cancellationReason});
+    console.log({ orderID, cancellationReason });
 
-      // Create a new instance of the CanceledOrder model
-      const canceledOrder = new CanceledOrder({
-          orderID: orderID,
-          reason: cancellationReason,
-      });
+    // Create a new instance of the CanceledOrder model
+    const canceledOrder = new CanceledOrder({
+      orderID: orderID,
+      reason: cancellationReason,
+    });
 
-      // Save the canceled order to the database
-      const savedOrder = await canceledOrder.save();
+    // Save the canceled order to the database
+    const savedOrder = await canceledOrder.save();
 
-      // Update the order status in your main orders collection to 'canceled'
-      // Perform any other necessary actions
+    // Update the order status in your main orders collection to 'cancelled'
+    const updatedOrder = await orderModels.findOneAndUpdate(
+      { orderID: orderID },
+      { $set: { status: 'cancelled' } },
+      { new: true }
+    );
 
-      res.status(200).json({ message: 'Order canceled and reason saved', canceledOrder: savedOrder });
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Perform any other necessary actions
+
+    res.status(200).json({
+      message: 'Order canceled, reason saved, and main order status updated',
+      canceledOrder: savedOrder,
+      updatedOrder: updatedOrder,
+    });
   } catch (error) {
-      console.error('Error saving canceled order:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error saving canceled order:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -258,5 +270,6 @@ const cancelorder=async (req, res) => {
     userOrder,
     processPayment,
     confirm,
-    cancelorder
+    cancelorder,
+  
  }  
