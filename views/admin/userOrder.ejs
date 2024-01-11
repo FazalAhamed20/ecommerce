@@ -158,6 +158,55 @@
 .pagination .disabled a:hover {
     background-color: transparent;
 }
+.modal {
+            display: none;
+            position: fixed;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .modal-content {
+            margin-top: 20px;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        /* Animation for the modal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Apply animation to the modal */
+        .modal {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Button styles */
+        #confirmBtn {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #confirmBtn:hover {
+            background-color: #45a049;
+        }
 
 @media only screen and (max-width: 768px) {
     .pagination {
@@ -172,6 +221,8 @@
 <body>
     <h1>Admin Orders</h1>
     <a href="/adhome">Home</a>
+  <!-- Add this modal code before the closing </body> tag -->
+
   
   
         <!-- Your table code goes here -->
@@ -179,6 +230,13 @@
     
         
             <% orders.forEach(order => { %>
+                <div id="confirmationModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <p>Are you sure you want to update the order status?</p>
+                        <button id="confirmBtn">Confirm</button>
+                    </div>
+                </div>
                 <table class="order-table">
                     <form action="/updateOrderStatus" method="POST" id="orderStatusForm">
                     <thead>
@@ -230,37 +288,61 @@
        
     <!-- Add this script tag in the head section of your HTML -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Update the existing script tag with the following code -->
 <script>
     document.getElementById('orderStatusForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        
-        const dropdowns = document.querySelectorAll('.orderStatusDropdown');
-        const formData = [];
-    
-        dropdowns.forEach(dropdown => {
-            formData.push({
-                orderID: dropdown.getAttribute('data-orderid'),
-                status: dropdown.value
-            });
+      event.preventDefault();
+      openModal(); // Open the confirmation modal
+    });
+  
+    function openModal() {
+      const modal = document.getElementById('confirmationModal');
+      const confirmBtn = document.getElementById('confirmBtn');
+  
+      // Show the modal
+      modal.style.display = 'block';
+  
+      // Handle the confirm button click event
+      confirmBtn.addEventListener('click', function () {
+        closeModal(); // Close the modal
+        submitForm(); // Submit the form
+      });
+    }
+  
+    function closeModal() {
+      const modal = document.getElementById('confirmationModal');
+      modal.style.display = 'none';
+    }
+  
+    function submitForm() {
+      const dropdowns = document.querySelectorAll('.orderStatusDropdown');
+      const formData = [];
+  
+      dropdowns.forEach(dropdown => {
+        formData.push({
+          orderID: dropdown.getAttribute('data-orderid'),
+          status: dropdown.value
         });
-    
-        // Send formData to the server using AJAX (you can use fetch or any other library like axios)
-        fetch('/updateOrderStatus', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
+      });
+  
+      // Send formData to the server using AJAX (you can use fetch or any other library like axios)
+      fetch('/updateOrderStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
+          console.log('Success:', data);
         })
         .catch((error) => {
-            console.error('Error:', error);
+          console.error('Error:', error);
         });
-    });
-    </script>
+    }
+  </script>
+  
     
 
 <%- include('footer') -%>

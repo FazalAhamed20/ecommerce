@@ -5,6 +5,10 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const moment = require('moment');
 const CanceledOrder = require('../models/orderCancelModel');
+const mongoose = require('mongoose');
+const { ObjectId } = require('bson');
+const { log } = require('util');
+const Product = require('../models/productModel');
 
 
 var instance = new Razorpay({
@@ -263,6 +267,87 @@ const cancelorder = async (req, res) => {
   }
 };
 
+const cancelProduct = async (req, res) => {
+  const { orderId, productId } = req.body;
+
+  console.log("Cancel order", { orderId, productId });
+
+  try {
+    // Retrieve the order from the database based on orderID field
+    const order = await orderModels.findOne({ orderID: orderId }).populate('products.product');
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    // Find the product in the order with the specified productId
+    const productIndex = order.products.findIndex(
+      (product) => product.product._id.toString() === productId
+    );
+
+    if (productIndex === -1) {
+      return res.status(404).json({ success: false, message: 'Product not found in the order' });
+    }
+
+    // Log detailed information about the cancelled product
+    const cancelledProduct = order.products[productIndex];
+    console.log('Cancelled Product:', cancelledProduct);
+
+    // Log the product name and the total amount to be subtracted
+    const productName = cancelledProduct.product ? cancelledProduct.product.productName : 'Unknown Product';
+    const price = isNaN(cancelledProduct.product?.price) ? 0 : cancelledProduct.product.price;
+    const tax = isNaN(cancelledProduct.product?.tax) ? 0 : cancelledProduct.product.tax;
+    const cancelledAmount = (cancelledProduct.quantity * price) + tax;
+
+    // Log the product details and calculated amounts
+    console.log('Product Name:', productName);
+    console.log('Cancelled Amount:', cancelledAmount);
+    console.log('Cancelled Price:', price);
+
+    // Log the totals before the update
+    console.log('Before Update Totals:', order.totals);
+
+    // Update the product quantity
+    const updatedProductQuantity = cancelledProduct.product.quantity + cancelledProduct.quantity;
+
+    // Update the order in the database using $pull and $inc
+    const result = await orderModels.updateOne(
+      { orderID: orderId },
+      {
+        $pull: { products: { _id: cancelledProduct._id } },
+        $inc: {
+          'totals.subtotal': -price * cancelledProduct.quantity,
+          'totals.tax': -tax * cancelledProduct.quantity,
+          'totals.shipping': 0, // Adjust this based on your logic for shipping
+          'totals.grandTotal': -cancelledAmount,
+        },
+      }
+    );
+
+    // Update the product quantity in the database
+    await Product.updateOne(
+      { _id: productId },
+      { $set: { quantity: updatedProductQuantity } }
+    );
+
+    // Log the totals after the update
+    console.log('After Update Totals:', result);
+
+    if (result.modifiedCount > 0) {
+      res.json({ success: true, message: 'Product canceled successfully' });
+    } else {
+      res.status(404).json({ success: false, message: 'Order or product not found' });
+    }
+  } catch (error) {
+    console.error('MongoDB Error:', error.message);
+    res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
+  }
+};
+
+
+
+
+
 //modules------------------------------------------------------->
  module.exports={
     checkout,
@@ -271,5 +356,6 @@ const cancelorder = async (req, res) => {
     processPayment,
     confirm,
     cancelorder,
+    cancelProduct
   
  }  

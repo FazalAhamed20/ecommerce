@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>User Orders</title>
@@ -16,7 +12,6 @@
   .list-group-item.active {
     background: #ffc107;
 }
-/* end common class */
 .top-status ul {
     list-style: none;
     display: flex;
@@ -43,8 +38,6 @@
     border-color: #ffc107;
     box-shadow: 1px 1px 20px 1px #ffc107 inset;
 }
-/* end top status */
-
 ul.timeline {
     list-style-type: none;
     position: relative;
@@ -99,30 +92,41 @@ ul.timeline > li.active:before {
 }
 .order-status-btn {
     padding: 8px;
-    background-color: #007bff; /* Choose a color that fits your design */
+    background-color: #007bff; 
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .order-status-btn:hover {
-    background-color: #0056b3; /* Darker color on hover */
+    background-color: #0056b3; 
 }
-
-
 </style>
-
 <body>
-   
-
-    
     <% orders.forEach(function(order) { %>
-        
-        
         <section class="my-5" data-order-id="<%= order.orderID %>" data-order-status="<%= order.status %>">
             <div id="cancelledOrderAlert-<%= order.orderID %>"></div>
-
-         <!-- Bootstrap Modal for Cancel Order -->
+            <!-- Add this modal structure to your HTML -->
+<div class="modal fade" id="cancelProductConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="cancelProductConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cancelProductConfirmationModalLabel">Confirm Product Cancellation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to cancel this product?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" onclick="cancelProductConfirmed()">Proceed with Cancellation</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
          <div class="modal fade" id="cancelOrderModal-<%= order.orderID %>" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -147,9 +151,6 @@ ul.timeline > li.active:before {
                         <button type="button" class="btn btn-danger cancel-order-btn" onclick="confirmCancelOrder('<%= order.orderID %>')">
                             Proceed with Cancellation
                         </button>
-                        
-                        
-                        
                     </div>
                 </div>
             </div>
@@ -163,24 +164,22 @@ ul.timeline > li.active:before {
                                 <div class="top-status">
                                     <h5><%= order.orderID %></h5>
                                     <% if (order.status.toLowerCase() !== 'cancelled') { %>
-                                    <div>
-                                        <!-- Invoice Download Button -->
-                                        <a  class="btn btn-success mx-2 download-invoice-btn" data-order-id="<%= order.orderID %>" target="_blank" onclick="generatorPDF()">
-                                            Download Invoice
-                                        </a>
-                                        
-                                        
-                                        
-                                
-                                        <!-- Cancel Order Button -->
-                                        <button class="btn btn-danger cancel-order-btn" data-toggle="modal" data-target="#cancelOrderModal-<%= order.orderID %>" data-order-id="<%= order.orderID %>">
-                                            Cancel Order
-                                        </button>
-                                    </div>
+                                        <div>
+                                            <% if (order.status.toLowerCase() === 'delivered') { %>
+                                                <a class="btn btn-success mx-2 download-invoice-btn"
+                                                   data-order-id="<%= order.orderID %>"
+                                                   target="_blank"
+                                                   onclick="generatePDF('<%= order.orderID %>')">
+                                                   Download Invoice
+                                                </a>
+                                            <% } %>
+                                            <button class="btn btn-danger cancel-order-btn" data-toggle="modal" data-target="#cancelOrderModal-<%= order.orderID %>" data-order-id="<%= order.orderID %>">
+                                                Cancel Order
+                                            </button>
+                                        </div>
                                     <% } %>
                                 </div>
                             </div>
-                            
                         </div>
                         <div class="card mt-4">
                             <div class="card-body p-0 table-responsive">
@@ -197,9 +196,21 @@ ul.timeline > li.active:before {
                                             <tr>
                                                 <td><strong><%= product.product.name %></strong></td>
                                                 <td><span>Quantity: <%= product.quantity %></span></td>
+                                                <td>
+                                                    <% if (order.status.toLowerCase() !== 'cancelled' && order.products.length > 1) { %>
+                                                        <!-- Cancel Product Button -->
+                                                        <button class="btn btn-danger cancel-product-btn"
+                                                        data-order-id="<%= order.orderID %>"
+                                                        data-product-id="<%= product.product._id %>"
+                                                        onclick="showCancelProductConfirmationModal('<%= order.orderID %>', '<%= product.product._id %>')">
+                                                  Cancel Product
+                                                </button>
+                                                    <% } %>
+                                                </td>
                                             </tr>
                                         <% }); %>
                                     </tbody>
+                                    
                                 </table>
                             </div>
                         </div>
@@ -209,8 +220,6 @@ ul.timeline > li.active:before {
                                 <span class="badge <%= order.status.toLowerCase() === 'cancelled' ? 'badge-danger' : (order.status.toLowerCase() === 'pending' ? 'badge-warning' : (order.status.toLowerCase() === 'processing' ? 'badge-info' : (order.status.toLowerCase() === 'shipped' ? 'badge-primary' : 'badge-success'))) %>">
                                     <%= order.status %>
                                 </span>
-                                <!-- Progress Bar -->
-                             <!-- Progress Bar -->
                              <% if (order.status.toLowerCase() !== 'cancelled') { %>
                              <div class="progress mt-2">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
@@ -231,14 +240,10 @@ ul.timeline > li.active:before {
                                 </div>
                             </div>
                             <% } %>
-                            
-
-                                
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <!-- Order Summary Card -->
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Order Summary</h5>
@@ -247,50 +252,39 @@ ul.timeline > li.active:before {
                                 <p>Ordered Time: <%= order.orderTime %></p>
                             </div>
                         </div>
-                        <!-- Additional Card for Order Details -->
-                        <div class="card mt-2">
-                            <div class="card-body">
-                                <h5 class="card-title">Order Details</h5>
-                                <p>Delivery Date: <%= order.deliveryDate %></p>
-                                <p>Delivery Time: <%= order.deliveryTime %></p>
-                                <p>Payment Method: <%= order.paymentMethod %></p>
-                                <p>Address: <%= order.address.houseName %>, <%= order.address.locality %>, <%= order.address.city %>, <%= order.address.district %>, <%= order.address.state %>, <%= order.address.pincode %></p>
+                        <% if (order.status.toLowerCase() !== 'cancelled') { %>
+                            <div class="card mt-2">
+                                <div class="card-body">
+                                    <h5 class="card-title">Order Details</h5>
+                                    <p>Delivery Date: <%= order.deliveryDate %></p>
+                                    <p>Delivery Time: <%= order.deliveryTime %></p>
+                                    <p>Payment Method: <%= order.paymentMethod %></p>
+                                    <p>Address: <%= order.address.houseName %>, <%= order.address.locality %>, <%= order.address.city %>, <%= order.address.district %>, <%= order.address.state %>, <%= order.address.pincode %></p>
+                                </div>
                             </div>
-                        </div>
+                        <% } %>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <% }); %>
-    <!-- Add this toast at the end of your body tag -->
+    <!-- Add these script tags in the head section of your HTML -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
    
-
-
-
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://unpkg.com/jspdf-invoice-template@1.4.3/dist/index.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<!-- Your custom scripts go here -->
-
-<!-- jQuery -->
-
-
-
 <script>
     window.onload = function () {
     console.log('Window loaded successfully');
     var orderSections = document.querySelectorAll('.my-5');
-
     orderSections.forEach(function (section) {
         var orderID = section.getAttribute('data-order-id');
         var status = section.getAttribute('data-order-status');
@@ -299,38 +293,26 @@ ul.timeline > li.active:before {
         displayOrderStatus(orderID, status);
     });
 };
-
 function updateProgressBar(orderID, status) {
     console.log('Updating progress bar for order ID:', orderID, 'and status:', status);
-
-    // Display only the current status progress bar
     const progressBar = document.getElementById(orderID + '-' + status + '-progress');
-
     if (progressBar) {
         progressBar.style.display = 'block';
         progressBar.style.width = getStatusWidth(status);
     }
 }
-
-
-    // Display only the current status progress bar
     const progressBar = document.getElementById(orderID + '-' + status + '-progress');
-
     if (progressBar) {
         progressBar.style.display = 'block';
         progressBar.style.width = getStatusWidth(status);
     }
-
-
 function displayOrderStatus(orderID, status) {
     console.log('Displaying order status for order ID:', orderID, 'and status:', status);
     const statusElement = document.getElementById(orderID + '-status');
-
     if (statusElement) {
         statusElement.innerHTML = status;
     }
 }
-
 function getStatusWidth(status) {
     switch (status) {
         case 'pending':
@@ -345,223 +327,118 @@ function getStatusWidth(status) {
             return '0%';
     }
 }
-
 </script>
-<script>
-    function updateCancelledOrderUI(orderID) {
-    // Update the order status and hide the progress bar
-    const statusElement = document.getElementById(orderID + '-status');
-    const progressBar = document.getElementById(orderID + '-progress');
-    const downloadInvoiceButton = document.querySelector(`[data-order-id="${orderID}"] .download-invoice-btn`);
-    const cancelOrderButton = document.querySelector(`[data-order-id="${orderID}"] .cancel-order-btn`);
 
-    if (statusElement && progressBar && downloadInvoiceButton && cancelOrderButton) {
-        statusElement.innerHTML = 'Cancelled';
-        progressBar.style.display = 'none';
-        
-       
-        downloadInvoiceButton.style.display = 'none';
-        cancelOrderButton.style.display = 'none';
-
-        
-        const alertContainer = document.getElementById('cancelledOrderAlert');
-        const alertMessage = `Order ${orderID} Cancelled - Your order has been successfully cancelled.`;
-        alertContainer.innerHTML = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>${alertMessage}</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        `;
-    }
-}
-
-</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
 <script>
-function confirmCancelOrder(orderID) {
-    
-    const cancellationReasonElement = document.getElementById('cancelReason-' + orderID);
-    const cancellationReason = cancellationReasonElement.value.trim();
+    function confirmCancelOrder(orderID) {
+        const cancellationReasonElement = document.getElementById('cancelReason-' + orderID);
+        const cancellationReason = cancellationReasonElement.value.trim();
+        
+        if (cancellationReason !== '') {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cancel-order', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
 
-    if (cancellationReason !== '') {
-       
-        fetch('/cancel-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    console.log('Order canceled and reason saved:', data);
+
+                    // Manually hide the modal using JavaScript
+                    const modal = document.getElementById('cancelOrderModal-' + orderID);
+                    modal.style.display = 'none';
+
+                    // Refresh the page
+                    setTimeout(function () {
+                        // Refresh the page using window.location.reload()
+                        window.location.reload();
+                    }, 2000);
+
+                    const alertContainer = document.getElementById('cancelledOrderAlert-' + orderID);
+                    const alertMessage = `Order ${orderID} has been successfully canceled.`;
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>${alertMessage}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    console.error('Error canceling order. Server responded with:', xhr.status);
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error('Request failed');
+            };
+
+            xhr.send(JSON.stringify({
                 orderID: orderID,
                 cancellationReason: cancellationReason,
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Order canceled and reason saved:', data);
-
-           
-            updateCancelledOrderUI(orderID);
-
-            const modalElement = document.getElementById('cancelOrderModal-' + orderID);
-            $(modalElement).modal('hide');
-            
-            setTimeout(() => {
-                window.location.href = window.location.href + '?success=true';
-            }, 2000);
-            
-
-            
-            const alertContainer = document.getElementById('cancelledOrderAlert-' + orderID);
-            const alertMessage = `Order ${orderID} has been successfully canceled.`;
-            alertContainer.innerHTML = `
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>${alertMessage}</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            `;
-           
-        })
-        .catch(error => {
-            console.error('Error canceling order:', error);
-           
-        });
-    } else {
-        console.error('Cancellation reason cannot be empty.');
-        
+            }));
+        } else {
+            console.error('Cancellation reason cannot be empty.');
+        }
     }
-}
 </script>
-<script src="https://unpkg.com/jspdf-invoice-template@1.4.3/dist/index.js"></script>
+
+    
+
 <script>
-     var nextInvoiceNumber = 1;
-      var currentDate = new Date();
-    var formattedCurrentDate = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
+    function showCancelProductConfirmationModal(orderID, productID) {
+        // Set the orderID and productID as data attributes in the modal
+        document.getElementById('cancelProductConfirmationModal').setAttribute('data-order-id', orderID);
+        document.getElementById('cancelProductConfirmationModal').setAttribute('data-product-id', productID);
 
-    function generatorPDF(){
-        var pdfObject = jsPDFInvoiceTemplate.default(props); 
+        // Show the confirmation modal
+        var modal = new bootstrap.Modal(document.getElementById('cancelProductConfirmationModal'));
+        modal.show();
     }
-    var props = {
-    outputType: jsPDFInvoiceTemplate. OutputType.Save,
-    returnJsPDFDocObject: true,
-    fileName: "Coffee Land Invoice",
-    orientationLandscape: false,
-    compress: true,
-    logo: {
-        src: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAlAMBIgACEQEDEQH/xAAcAAEAAwEBAQEBAAAAAAAAAAAABAUGBwMCAQj/xAA/EAABAwIDBAcECAMJAAAAAAAAAQIDBAUGESEHEjFBEyJRYXGBoRRSkbEVIzJiksHR8EJyohYkJ0NGU1Vzk//EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAIBEBAQACAQQDAQAAAAAAAAAAAAECETESIUFRAzKBE//aAAwDAQACEQMRAD8A7KAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAClxXfVslDF7PE2evq5m09HAq5I+Ry8V55JxXLsJVFAtsoukr6l9RUu3enncmW89ckRGt4NTNckanqoXXZYAAIAAAAAAAAAAAAAAAAAAAAAOe4sn/wAV8HQzZ+zoyV7exXq16Z+OjTWYqpquosVQlv61ZCrKiBq6I98b0ejfPdyM9tUsFXc7bT3S1NctytcnTRozi5uiqid6ZIuXcW2B8U0uKrOyqic1tXGiNqYU4sfly+6vInl1v1liZhy/UeIbZHXUTss+rLE7R8L+bHJ2oWpzvGdmuGHLlJi/CretxuVHl1ZmJrvZfHPnrmnPPXYYxBR4ltEVxoXdV2j2L9qN3Nq/vVMlG/DNx7bi2ABWAAAAAAAAAAAAAAAAAAAFOf4mwjW2u6/2nwXkyuZm6poODKlOLsu9ddPhqdABLGsbpVYavdNiKzxV1O1zN/NksL060T00cxydqKYKggdgnak2ipurab2xVji5MfxyTwdmng/I3VotyUV9vc0LdyCrkikcicFk3Mnr5pumWxi1t02i4Xt8GTp6RXVU+7xjYioqZ+O76oSt43vZ4dCPwEaSvpYZ2wzzNhkeuTEl6qPX7qroq9yamnJJAAAAAAAAAAAAAAABQ0WJIKrF9xsKubHLRxRva12iy7ybzlTwRW+pfHGcV2OW7bX5aOKsfRTzU7J4Khiatc2PJO/i1eCl9HdNoeG06O6WyK+07NEnpV+sy7VRERf6fMz1O2WE1NOkn4c6g2vWZj9y62y6UEnBUfE1URfii+hZwbUMIzImVycz+enkT8i7jH88vTQ3KG7z5st9VR0bP958Tpn+Tc2oi+KqRcPYapLJJUVSSzVlxqlzqa6pVFkky4JpoiJ2J2Fc7aPhNEz+lmr4RPX8iHU7WMJ06LuVFVOqcoqZ2v4skG4sxz4kbgjXOGiqKCeK5shdRuYvSpNlu7vNVOaVW2NlRnHY7FUzyro3pnJn+Fma+pUVlv2h45+rroVoqF6plFN9RGidqt1c7zJclx+Kzns99mGMqyPEaWCaolrLbUSSNpJJnZvhRu85uq8UVreC8Dr0dXSyyLHFVQPkTixsjVcnkin82UWHK2sxZLYbdO2SeOeSJ0+rGojVVHvXiuWi/tTSYn2ZVWFrSt5obm2Z1MqOlVsXROZqibzFReS8iS3Tr8nx4XKaruoM9gC6z3rB9sr6xyuqHscyR/vOY5zN7z3czQm481mroAAQAAAAAAABznHzfovHuFb47JsUkvssjvFdPRzl8jo65ma2h2B2IsLVVJAn97i+vpnJxSRueWXiiqnmTcJ3ht+w7Q3Jq9eWNElb7siaORU7UVFJOW73xlWk0MU7d2eJkqdj2o75lbPhqw1Cqs1moH59tO39C1BWd1Rf2Mwx/wADbv8AwaSIMM2GnXOGz0DF7oG/oWoJpeq+3xDDDTt3YIY4k7GNRvyPG610dsttVXzuRI6eJ0js/upmSTmG2vETILfFh+meqzVW7JUI3i2NF0bp7zk4diC3S4Y3LLSs2H0clZebveZm6o1Gb2f+ZI7ed8k+JrdrVekOFvo6FN+rukzKeCLm9Vcir+SeaEnBdtp8G4LiW4ubA/dWoq3O/hc5E078kyb35HlYrTV3m/rim+QOh6Nqx2ujf9qCNf43ffd6EnDpllLn1el/hq1tslgoLY1UX2aFGOd2u4uXzVVLIA1rTjbsAAQAAAAAAAAM5S0bsO3yokiRG2i5ydI9E4U9Sumfc1/o7xNGfL2NkY5j2o5jkyc1UzRUCy6fQPh7khizRr3o1NEaiuX9VILL/Z1l6J10o4pk+1DNMkcjfFrslT4AWIUqa3E9goGb1Xe7dF3LUsVfJEVVMXfdq9Osi0WFKGa5Vi6JJ0bt1vgxOs70TvJtqYZVq8ZYqosK21aipVJKl+lPTIvWld+SJzU53s4w7W4mvr8WYgzfEkqvh300mk5Kie63l3p3EmwbPLtfrl9M45mkcr9fZHO67k5I5U0Y1PdT4nUOmore2KmWSGmjyRkTF6jV7Gt4J5E5u3S2YTWPL7qKOCplilqGJI6Jd6NHao13vZcM+xeR7jT9qDTiAAIAAAAAAAAAAAO/kOWRGloYZXb2csb/AHoZnM+S5BUkjV1vorjH0dfSU9SzhuzRtenqRX2uqTPoL3cIu5yRSJ/UzP1PF1tvGXUxE/xdRQr8kC/qOmBsKI7eTD1vRf8Ap0Leht1Db40ZQUdNTMTlDG1nyKt9pv7v9UPb/LQQ/oRpMNXeZc58Y3bXikUUMfyaRf1pnORjVc5Ua1NVVdEMXjbHGHaC2VVE+aG5VE0ax+yQqj0VV06y8ET9oh7S7OrPWKi3Wsu1x+7U1z934NyLi04XsNmy+jLTS07k4ORmbvxLmou6TpndktjkWIYrZU/TPTpQKjfY2VOe/nrvKmeqN4aKdEALEyy6rsAAZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB/9k=",
-        type: 'PNG', 
-        width: 53.33,
-        height: 26.66,
-        margin: {
-            top: 0, 
-            left: 0 
-        }
-    },
-    stamp: {
-        inAllPages: true, //by default = false, just in the last page
-        src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
-        type: 'JPG', 
-        width: 20, 
-        height: 20,
-        margin: {
-            top: 0, 
-            left: 0 
-        }
-    },
-    business: {
-        name: "COFFEE DAY",
-        address: "Kozhikode,Kerala",
-        phone: "91-XXXXXXXXXXXX",
-        email: "email@example.com",
-        email_1: "info@example.al",
-        website: "www.example.al",
-    },
-    contact: {
-        label: "Invoice issued for:",
-        name: "<%= user.name %>",
-        address: "<%= order.address.houseName %>, <%= order.address.locality %>, <%= order.address.city %>, <%= order.address.district %>, <%= order.address.state %>, <%= order.address.pincode %>",
-        email: "<%= user.email %>",
-    },
-    invoice: {
-        label: "Invoice #: ",
-        num: "${nextInvoiceNumber++}",
-        invDate: "Payment Method: <%= order.paymentMethod %>",
-        invGenDate: "Invoice Date: ${formattedCurrentDate}",
-        headerBorder: false,
-        tableBodyBorder: false,
-        header: [
-          {
-            title: "S.NO", 
-            style: { 
-              width: 10 
-            } 
-          }, 
-          { 
-            title: "PRODUCTS",
-            style: {
-              width: 30
-            } 
-          }, 
-          { 
-            title: "Description",
-            style: {
-              width: 80
-            } 
-          }, 
-          { title: "Price"},
-          { title: "Quantity"},
-          { title: "Unit"},
-          { title: "Total"}
-        ],
-        table: Array.from(Array(product.length), (item, index)=>([
-            index + 1,
-            "<%= product.name %> ",
-            "Lorem Ipsum is simply dummy text dummy text ",
-            200.5,
-            4.5,
-            "m2",
-            400.5
-        ])),
-        additionalRows: [{
-            col1: 'Total:',
-            col2: '145,250.50',
-            col3: 'ALL',
-            style: {
-                fontSize: 14 //optional, default 12
-            }
-        },
-        {
-            col1: 'VAT:',
-            col2: '20',
-            col3: '%',
-            style: {
-                fontSize: 10 //optional, default 12
-            }
-        },
-        {
-            col1: 'SubTotal:',
-            col2: '116,199.90',
-            col3: 'ALL',
-            style: {
-                fontSize: 10 //optional, default 12
-            }
-        }],
-        invDescLabel: "Invoice Note",
-        invDesc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
-    },
-    footer: {
-        text: "The invoice is created on a computer and is valid without the signature and stamp.",
-    },
-    pageEnable: true,
-    pageLabel: "Page ",
-};
 
+    function cancelProductConfirmed() {
+        const orderID = document.getElementById('cancelProductConfirmationModal').getAttribute('data-order-id');
+        const productID = document.getElementById('cancelProductConfirmationModal').getAttribute('data-product-id');
+
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Set up the request
+        xhr.open('POST', '/cancelProduct', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        // Set up the event handler for when the request is completed
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // Successful response
+                var data = JSON.parse(xhr.responseText);
+                console.log(data);
+
+                // Manually hide the product cancellation confirmation modal
+                var modal = new bootstrap.Modal(document.getElementById('cancelProductConfirmationModal'));
+                modal.hide();
+
+                // Refresh the page or update the UI as needed
+                window.location.reload(); // or any other logic
+            } else {
+                // Error handling
+                console.error('Error:', xhr.statusText);
+            }
+        };
+
+        // Set up the event handler for network errors
+        xhr.onerror = function () {
+            console.error('Network error occurred');
+        };
+
+        // Send the request with the JSON payload
+        xhr.send(JSON.stringify({ orderId: orderID, productId: productID }));
+    }
 </script>
-
+ 
 
 
 
