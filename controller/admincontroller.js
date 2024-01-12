@@ -13,9 +13,39 @@ const admin = (req, res) => {
   res.render('./admin/adlog', { title: 'user login', err: false });
 };
 //admin home------------------------------------------------------->
-const adhome = (req, res) => {
-  res.render('./admin/adhome', { title: 'admin home', err: false });
+const adhome = async (req, res) => {
+  try {
+    // Fetch the total number of orders
+    const totalOrders = await orderModels.countDocuments();
+
+    // Fetch the total product quantity
+    const totalProductQuantity = await orderModels.aggregate([
+      {
+        $unwind: '$products',
+      },
+      {
+        $group: {
+          _id: null,
+          totalProductQuantity: { $sum: '$products.quantity' },
+        },
+      },
+    ]).exec();
+
+    // Extract the total product quantity from the result
+    const productQuantity = totalProductQuantity.length > 0 ? totalProductQuantity[0].totalProductQuantity : 0;
+
+    const totalUsers = await User.countDocuments();
+
+    // Render the admin home view with the total number of orders and total product quantity
+    res.render('./admin/adhome', { title: 'Admin Home', totalOrders, productQuantity,totalUsers, err: false });
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+    res.status(500).send('Internal server error'); // Handle error appropriately
+  }
 };
+
+
+
 //checking email and password of admin------------------------------------------------------->
 const dashboard = (req, res) => {
   const credential = {
