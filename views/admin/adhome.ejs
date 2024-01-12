@@ -1,227 +1,215 @@
-<%- include('header') -%>
+
 <%- include('nav') -%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+
 
 <style>
-    body {
-        margin: 0;
-        overflow: hidden; /* Prevent any potential scrollbars */
-    }
+  body {
+    margin: 0;
+    overflow: hidden; /* Prevent any potential scrollbars */
+  }
 
-    #video-container1 {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        z-index: -1;
-        opacity: 1;
-        transition: opacity 1s ease-out;
-    }
+  #video-container1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+  }
 
-    #video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Cover the entire container */
-    }
+  #video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire container */
+  }
 </style>
 
 <div id="video-container1">
-    <video id="video" autoplay muted>
-        <source src="/assets/admin panel.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+  <video id="video" autoplay muted>
+    <source src="/assets/admin panel.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-        overflow-y: scroll;
-    }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    overflow-y: scroll;
+  }
 
-    header {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        background-color: #333;
-        color: white;
-        padding: 5px;
-        text-align: center;
-        z-index: 10;
-    }
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    font-size: smaller;
+    z-index: 10;
+    height: 60px;
+  }
 
-    nav {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
-    }
+  nav {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+  }
 
-    nav a {
-        color: white;
-        text-decoration: none;
-        padding: 10px;
-        margin: 0 10px;
-    }
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    margin: 0 10px;
+  }
 
-    .dashboard-container {
-        opacity: 0;
-        transition: opacity 1s ease-out;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        padding: 20px;
-        margin-top: 30px;
-    }
+  .dashboard-container {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    margin-top: 30px;
+  }
 
-    .dashboard-card {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 15px;
-        padding: 20px;
-        width: 300px;
-        text-align: center;
-        max-width: 100%;
-        text-align: center;
-    }
+  .dashboard-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    max-width: 100%;
+    text-align: center;
+  }
 
-    canvas {
-        max-width: 100%;
-        max-height: 100%;
-    }
+  canvas {
+    max-width: 100%;
+    max-height: 100%;
+  }
 
-    footer {
-        background-color: #333;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-    #monthlySalesChart {
-        width: 100%; /* Adjust the width as needed */
-        height: 400px; /* Set the desired height */
-    }
+  footer {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
 
-    /* Increase the size of the wavy graph */
-    #wavyGraph {
-        width: 100%; /* Adjust the width as needed */
-        height: 400px; /* Set the desired height */
-    }
-    .dashboard-card i {
-            font-size: 48px; /* Adjust the icon size */
-            margin-bottom: 10px; /* Add some spacing between icon and text */
-        }
+ 
+  .dashboard-card i {
+    font-size: 48px; /* Adjust the icon size */
+    margin-bottom: 10px; /* Add some spacing between icon and text */
+  }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
 </head>
 <body>
-    <header>
-        <h1>Admin Dashboard</h1>
-    </header>
+  <header>
+    <h1>Admin Dashboard</h1>
+  </header>
 
-    <div class="dashboard-container">
-        <div class="dashboard-card">
-            <i class="fas fa-shopping-cart"></i>
-            <h2>Total Orders</h2>
-            <p><%= totalOrders %></p>
-        </div>
-
-        <div class="dashboard-card">
-            <i class="fas fa-box"></i>
-            <h2>Total Products Sold</h2>
-            <p><%= productQuantity %></p>
-        </div>
-
-        <div class="dashboard-card">
-            <i class="fas fa-users"></i>
-            <h2>Total Users</h2>
-            <p><%= totalUsers %></p>
-        </div>
-
-        <div class="dashboard-graph-container">
-            <div class="dashboard-graph">
-                <h2>Monthly Sales</h2>
-                <canvas id="monthlySalesChart"></canvas>
-            </div>
-    
-            <div class="dashboard-graph">
-                <h2>Wavy Graph</h2>
-                <canvas id="wavyGraph"></canvas>
-            </div>
-        </div>
-
-        
+  <div class="dashboard-container">
+    <div class="dashboard-card">
+      <i class="fas fa-shopping-cart"></i>
+      <h2>Total Orders</h2>
+      <p><%= totalOrders %></p>
     </div>
+
+    <div class="dashboard-card">
+      <i class="fas fa-box"></i>
+      <h2>Total Products Sold</h2>
+      <p><%= productQuantity %></p>
+    </div>
+
+    <div class="dashboard-card">
+      <i class="fas fa-users"></i>
+      <h2>Total Users</h2>
+      <p><%= totalUsers %></p>
+    </div>
+
+    <div class="dashboard-graph-container">
+     
+
+        <canvas id="myChart" width="400" height="200"></canvas>
+
+     
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const video = document.getElementById('video');
+      const videoContainer = document.getElementById('video-container1');
+      const dashboardContainer = document.querySelector('.dashboard-container');
   
+      video.addEventListener('ended', () => {
+        // Fade out the video
+        videoContainer.style.opacity = 0;
+        // Show the admin content
+        setTimeout(() => {
+          dashboardContainer.style.opacity = 1;
+        }, 1000); // Adjust the delay as needed
+      });
+  
+     
+    });
 
-    <script>
-        // Chart.js code for the monthly sales bar chart
-        var ctxMonthlySales = document.getElementById('monthlySalesChart').getContext('2d');
-        var monthlySalesChart = new Chart(ctxMonthlySales, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-                datasets: [{
-                    label: 'Monthly Sales',
-                    data: [150, 200, 180, 220, 250, 200],
-                    backgroundColor: '#4CAF50',
-                    borderColor: '#45a049',
-                    borderWidth: 1
-                }]
+
+</script>
+
+<script>
+ document.addEventListener('DOMContentLoaded', function () {
+      const xValues = JSON.parse('<%- xValues %>');
+      const yValues = JSON.parse('<%- JSON.stringify(yValues) %>');
+
+      new Chart("myChart", {
+        type: "line",
+        data: {
+          labels: xValues,
+          datasets: [{
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "rgba(0,0,255,1.0)",
+            borderColor: "rgba(0,0,255,0.1)",
+            data: yValues
+          }]
+        },
+        options: {
+          legend: { display: false },
+          scales: {
+            yAxes: [{ ticks: { min: 0, stepSize: 1 } }],
+          },
+          elements: {
+            point: {
+              radius: 5, // Adjust the size of data points
             },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+          },
+        }
+      });
+    });
+  </script>
+  
+  
+  <!-- ... your existing HTML code ... -->
+  
+ 
 
-        // Custom code for wavy graph
-        var ctxWavyGraph = document.getElementById('wavyGraph').getContext('2d');
-        var wavyGraph = new Chart(ctxWavyGraph, {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 360 }, (_, i) => i),
-                datasets: [{
-                    data: Array.from({ length: 360 }, (_, i) => Math.sin(i * Math.PI / 180) * 50),
-                    borderColor: '#3498db',
-                    borderWidth: 2,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        suggestedMin: -50,
-                        suggestedMax: 50
-                    }
-                }
-            }
-        });
-
-        // Fade out the video and show the admin content after the video has ended
-        const video = document.getElementById('video');
-        const videoContainer = document.getElementById('video-container1');
-        const dashboardContainer = document.querySelector('.dashboard-container');
-
-        video.addEventListener('ended', () => {
-            // Fade out the video
-            videoContainer.style.opacity = 0;
-            // Show the admin content
-            setTimeout(() => {
-                dashboardContainer.style.opacity = 1;
-            }, 1000); // Adjust the delay as needed
-        });
-    </script>
-
-    <%- include('footer') -%>
+  <%- include('footer') -%>
 </body>
 </html>

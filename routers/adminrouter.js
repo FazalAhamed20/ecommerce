@@ -13,6 +13,7 @@ router.get("/adhome",verifyAdmin,controller2.adhome)
 router.all("/adlog",verifyAdmin,controller2.users)
 router.post("/block",verifyAdmin,controller2.block)
 router.post('/unblock',verifyAdmin,controller2.unblock)
+router.get('/api/sales',controller2.sales)
 router.get('/adlogout',verifyAdmin,controller2.logout)
 //category side------------------------------------------------------->
 router.get('/category',verifyAdmin,catagorycontroller.categoryList)

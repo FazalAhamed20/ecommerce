@@ -1,10 +1,9 @@
 const User = require('../models/userModel');
 const orderModels = require('../models/orderModel');
+const moment = require('moment');
+const Chart = require('chart.js');
 
-const errorHandler = (err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(500).send('Internal Server Error');
-};
+
 //admin login------------------------------------------------------->
 const admin = (req, res) => {
   if(req.session.admin!=null){
@@ -15,7 +14,6 @@ const admin = (req, res) => {
 //admin home------------------------------------------------------->
 const adhome = async (req, res) => {
   try {
-    // Fetch the total number of orders
     const totalOrders = await orderModels.countDocuments();
 
     // Fetch the total product quantity
@@ -35,16 +33,58 @@ const adhome = async (req, res) => {
     const productQuantity = totalProductQuantity.length > 0 ? totalProductQuantity[0].totalProductQuantity : 0;
 
     const totalUsers = await User.countDocuments();
+    const orders = await orderModels.find(); // Fetch orders from the database
 
-    // Render the admin home view with the total number of orders and total product quantity
-    res.render('./admin/adhome', { title: 'Admin Home', totalOrders, productQuantity,totalUsers, err: false });
+    // Aggregate orders by date and calculate count
+    const ordersWithDate = await orderModels.aggregate([
+      {
+        $match: { "orderDate": { $exists: true } }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          date: "$_id",
+          count: 1
+        }
+      }
+    ]).exec();
+
+    // Filter out entries with invalid dates
+    const validOrdersWithDate = ordersWithDate.filter(order => order.date && order.date !== 'null');
+
+    // Extract unique order dates
+    const xValues = validOrdersWithDate.map(order => order.date);
+    const yValues = validOrdersWithDate.map(order => order.count);
+
+    console.log('totalOrders:', totalOrders);
+    console.log('productQuantity:', productQuantity);
+    console.log('totalUsers:', totalUsers);
+    console.log('orders:', orders);
+    console.log('validOrdersWithDate:', validOrdersWithDate);
+    console.log('xValues:', xValues);
+    console.log('yValues:', yValues);
+
+    res.render('./admin/adhome', {
+      title: 'Admin Home',
+      totalOrders,
+      productQuantity,
+      totalUsers,
+      orders,
+      xValues: JSON.stringify(xValues),
+      yValues,
+      err: false,
+    });
   } catch (error) {
     console.error('Error fetching data:', error.message);
     res.status(500).send('Internal server error'); // Handle error appropriately
   }
 };
-
-
 
 //checking email and password of admin------------------------------------------------------->
 const dashboard = (req, res) => {
@@ -172,6 +212,78 @@ const logout = (req, res) => {
     }
   });
 };
+
+
+const sales=async (req, res) => {
+  try {
+      const selectedInterval = req.query.interval;
+
+      let pipeline = [];
+
+      switch (selectedInterval) {
+          case 'daily':
+              pipeline = [
+                  {
+                      $match: {
+                          // Match orders within the last 24 hours
+                          orderDate: { $gte: new Date(moment().subtract(1, 'days')) },
+                      },
+                  },
+                  {
+                      $group: {
+                          _id: { $dayOfMonth: '$orderDate' },
+                          sales: { $sum: '$totals.grandTotal' },
+                      },
+                  },
+              ];
+              break;
+
+          case 'weekly':
+              pipeline = [
+                  {
+                      $match: {
+                          // Match orders within the last 7 days
+                          orderDate: { $gte: new Date(moment().subtract(7, 'days')) },
+                      },
+                  },
+                  {
+                      $group: {
+                          _id: { $isoWeek: '$orderDate' },
+                          sales: { $sum: '$totals.grandTotal' },
+                      },
+                  },
+              ];
+              break;
+
+          case 'monthly':
+              pipeline = [
+                  {
+                      $match: {
+                          // Match orders within the last 30 days
+                          orderDate: { $gte: new Date(moment().subtract(30, 'days')) },
+                      },
+                  },
+                  {
+                      $group: {
+                          _id: { $month: '$orderDate' },
+                          sales: { $sum: '$totals.grandTotal' },
+                      },
+                  },
+              ];
+              break;
+
+          default:
+              return res.status(400).json({ success: false, error: 'Invalid interval' });
+      }
+
+      const monthlySalesData = await orderModels.aggregate(pipeline);
+
+      res.json({ success: true, data: monthlySalesData });
+  } catch (error) {
+      console.error('Error fetching sales data:', error.message);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+};
 //module exports------------------------------------------------------->
 module.exports = {
   admin,
@@ -182,5 +294,6 @@ module.exports = {
   unblock,
   logout,
   userOrder,
-  updateOrderstatus
+  updateOrderstatus,
+  sales
 };
