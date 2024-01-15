@@ -52,6 +52,7 @@ router.post('/create-order',verifyUser,controller5.createOrder);
 router.post('/process-payment', controller5.processPayment);
 router.post('/cancel-order',controller5.cancelorder )
 router.post('/cancelProduct',controller5.cancelProduct)
+router.get('/download-invoice/:orderId',controller5.downloadInvoice)
 
 
 

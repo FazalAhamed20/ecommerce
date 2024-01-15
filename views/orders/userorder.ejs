@@ -166,16 +166,23 @@ ul.timeline > li.active:before {
                                     <% if (order.status.toLowerCase() !== 'cancelled') { %>
                                         <div>
                                             <% if (order.status.toLowerCase() === 'delivered') { %>
-                                                <a class="btn btn-success mx-2 download-invoice-btn"
+                                                <a  href="/download-invoice/<%= encodeURIComponent(order.orderID) %>" class="btn btn-success mx-2 download-invoice-btn"
                                                    data-order-id="<%= order.orderID %>"
                                                    target="_blank"
                                                    onclick="generatePDF('<%= order.orderID %>')">
                                                    Download Invoice
                                                 </a>
                                             <% } %>
-                                            <button class="btn btn-danger cancel-order-btn" data-toggle="modal" data-target="#cancelOrderModal-<%= order.orderID %>" data-order-id="<%= order.orderID %>">
-                                                Cancel Order
-                                            </button>
+                                            <% if (order.status === 'delivered') { %>
+                                                <button class="btn btn-warning return-order-btn" data-toggle="modal" data-target="#returnOrderModal-<%= order.orderID %>" data-order-id="<%= order.orderID %>">
+                                                    Return Order
+                                                </button>
+                                            <% } else { %>
+                                                <button class="btn btn-danger cancel-order-btn" data-toggle="modal" data-target="#cancelOrderModal-<%= order.orderID %>" data-order-id="<%= order.orderID %>">
+                                                    Cancel Order
+                                                </button>
+                                            <% } %>
+                                            
                                         </div>
                                     <% } %>
                                 </div>
@@ -197,15 +204,16 @@ ul.timeline > li.active:before {
                                                 <td><strong><%= product.product.name %></strong></td>
                                                 <td><span>Quantity: <%= product.quantity %></span></td>
                                                 <td>
-                                                    <% if (order.status.toLowerCase() !== 'cancelled' && order.products.length > 1) { %>
+                                                    <% if (order.status.toLowerCase() !== 'cancelled' && order.products.length > 1 && order.status.toLowerCase() !== 'delivered') { %>
                                                         <!-- Cancel Product Button -->
                                                         <button class="btn btn-danger cancel-product-btn"
-                                                        data-order-id="<%= order.orderID %>"
-                                                        data-product-id="<%= product.product._id %>"
-                                                        onclick="showCancelProductConfirmationModal('<%= order.orderID %>', '<%= product.product._id %>')">
-                                                  Cancel Product
-                                                </button>
+                                                            data-order-id="<%= order.orderID %>"
+                                                            data-product-id="<%= product.product._id %>"
+                                                            onclick="showCancelProductConfirmationModal('<%= order.orderID %>', '<%= product.product._id %>')">
+                                                            Cancel Product
+                                                        </button>
                                                     <% } %>
+                                                    
                                                 </td>
                                             </tr>
                                         <% }); %>

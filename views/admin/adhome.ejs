@@ -115,6 +115,9 @@
     font-size: 48px; /* Adjust the icon size */
     margin-bottom: 10px; /* Add some spacing between icon and text */
   }
+  .time-interval-selector {
+    margin-bottom: 20px;
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <body>
@@ -142,15 +145,50 @@
       <h2>Total Users</h2>
       <p><%= totalUsers %></p>
     </div>
-
+   
     <div class="dashboard-graph-container">
-     
+     <!-- Add the following code to your HTML template -->
+<div class="time-interval-selector">
+  <label for="time-interval">Select Time Interval: </label>
+  <select id="time-interval" onchange="updateChart()">
+    <option value="daily">Daily</option>
+    <option value="weekly">Weekly</option>
+    <option value="monthly">Monthly</option>
+    <option value="yearly">Yearly</option>
+  </select>
+</div>
 
-        <canvas id="myChart" width="400" height="200"></canvas>
-
-     
+      
+      <canvas id="myChart" width="800" height="400"></canvas>
     </div>
+    <div>
+      <h2>Recently Placed Orders</h2>
+      <table class="recent-orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Order Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (const order of recentlyPlacedOrders) { %>
+            <tr>
+              <td><%= order.orderID %></td>
+              <td><%= order.products[0].name %></td>
+              <td><%= order.products[0].quantity %></td>
+              <td><%= order.orderDate.toISOString().split('T')[0] %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+    
+    
   </div>
+ 
+  
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -174,15 +212,46 @@
 </script>
 
 <script>
- document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    let selectedTimeInterval = 'daily'; // Default to daily
+
+    function updateChart() {
+      selectedTimeInterval = document.getElementById('time-interval').value;
+      updateChartData(selectedTimeInterval);
+    }
+
+    function updateChartData(timeInterval) {
+      let timeUnit, unitStepSize, tooltipFormat;
+
+      if (timeInterval === 'weekly') {
+        timeUnit = 'week';
+        unitStepSize = 1; // Display every week
+        tooltipFormat = 'W YYYY'; // Week and year
+      } else if (timeInterval === 'monthly') {
+        timeUnit = 'month';
+        unitStepSize = 1; // Display every month
+        tooltipFormat = 'MMM YYYY'; // Month and year
+      } else if (timeInterval === 'yearly') {
+        timeUnit = 'year';
+        unitStepSize = 1; // Display every year
+        tooltipFormat = 'YYYY'; // Year
+      } else {
+        timeUnit = 'day';
+        unitStepSize = 1; // Display every day
+        tooltipFormat = 'MMM DD, YYYY'; // Month, day, and year
+      }
+
       const xValues = JSON.parse('<%- xValues %>');
       const yValues = JSON.parse('<%- JSON.stringify(yValues) %>');
+      
+      const formattedXValues = xValues.map(dateString => formatXLabel(dateString, timeInterval));
 
       new Chart("myChart", {
         type: "line",
         data: {
-          labels: xValues,
+          labels: formattedXValues,
           datasets: [{
+            label: 'Number of Orders',
             fill: false,
             lineTension: 0,
             backgroundColor: "rgba(0,0,255,1.0)",
@@ -191,19 +260,88 @@
           }]
         },
         options: {
-          legend: { display: false },
           scales: {
-            yAxes: [{ ticks: { min: 0, stepSize: 1 } }],
+            xAxes: [{
+              type: 'time',
+              time: {
+                unit: timeUnit,
+                unitStepSize: unitStepSize,
+                tooltipFormat: tooltipFormat,
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Date'
+              }
+            }],
+            yAxes: [{
+              ticks: { min: 0, stepSize: 1 },
+              scaleLabel: {
+                display: true,
+                labelString: 'Number of Orders'
+              }
+            }]
           },
           elements: {
             point: {
-              radius: 5, // Adjust the size of data points
+              radius: 5,
             },
+          },
+          tooltips: {
+            intersect: false,
+            mode: 'index',
           },
         }
       });
+    }
+
+    function formatXLabel(dateString, timeInterval) {
+      const date = new Date(dateString);
+
+      if (timeInterval === 'weekly') {
+        const weekNumber = getISOWeek(date);
+        return `${getOrdinal(weekNumber)} week ${date.getFullYear()}`;
+      } else if (timeInterval === 'monthly') {
+        return `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
+      } else if (timeInterval === 'yearly') {
+        return `${date.getFullYear()}`;
+      } else {
+        return `${getMonthName(date.getMonth())} ${date.getDate()}, ${date.getFullYear()}`;
+      }
+    }
+
+    function getMonthName(monthIndex) {
+      const months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      return months[monthIndex];
+    }
+
+    function getISOWeek(date) {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+      const yearStart = new Date(d.getFullYear(), 0, 1);
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    }
+
+    function getOrdinal(number) {
+      const suffixes = ['st', 'nd', 'rd'];
+      const v = number % 100;
+      return number + (suffixes[(v - 20) % 10] || suffixes[v] || 'th');
+    }
+
+    document.getElementById('time-interval').addEventListener('change', function() {
+      updateChart();
     });
-  </script>
+
+    updateChartData(selectedTimeInterval); // Initial chart rendering
+  });
+</script>
+
+
+
+
   
   
   <!-- ... your existing HTML code ... -->

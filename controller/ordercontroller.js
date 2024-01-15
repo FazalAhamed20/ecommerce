@@ -5,11 +5,8 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const moment = require('moment');
 const CanceledOrder = require('../models/orderCancelModel');
-const mongoose = require('mongoose');
-const { ObjectId } = require('bson');
-const { log } = require('util');
 const Product = require('../models/productModel');
-
+const easyinvoice = require('easyinvoice');
 
 var instance = new Razorpay({
   key_id: 'rzp_test_YCxRFmZdRfF2Qw',
@@ -344,6 +341,81 @@ const cancelProduct = async (req, res) => {
   }
 };
 
+const downloadInvoice = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+
+    // Fetch order details from the database
+    const orderDetails = await orderModels.findOne({ orderID: orderId });
+
+    // Check if the order exists
+    if (!orderDetails) {
+      console.log('Order not found');
+      return res.status(404).send('Order not found');
+    }
+
+    console.log('Order Details:', orderDetails);
+
+    // Fetch product details for each product in the order
+    const products = await Promise.all(orderDetails.products.map(async (product) => {
+      const productDetails = await Product.findById(product.product);
+    
+      return {
+        quantity: product.quantity,
+        description: productDetails ? productDetails.name : 'N/A',
+        'tax-rate': 5, // Assuming tax is at the order level
+        price: productDetails ? productDetails.price : 0,
+        'shipping-charge': orderDetails.totals.shipping, // Assuming shipping charge is at the order level
+        'total-price': (productDetails ? productDetails.price : 0) * product.quantity,
+      };
+    }));
+
+    // Set up the invoice data with order details, tax, and shipping charges
+    const data = {
+      sender: {
+        company: 'COFFEE LAND',
+        address: 'THEERVEDU ROAD',
+        zip: '12345',
+        city: 'CALICUT, KERALA',
+        country: 'INDIA',
+      },
+      client: {
+        name: req.session.user.name,
+        address: `${orderDetails.address.houseName}, ${orderDetails.address.locality}, ${orderDetails.address.city}, ${orderDetails.address.state} - ${orderDetails.address.pincode}`,
+      },
+      information: {
+        Invoice: `${orderDetails.orderID}`,
+        date: new Date(orderDetails.orderDate).toLocaleDateString(),
+      },
+      products: products,
+      'bottom-notice': 'Thank you for your business!',
+      settings: {
+        currency: 'INR',
+      },
+      totals: {
+        subtotal: orderDetails.totals.subtotal,
+        tax: orderDetails.totals.tax,
+        shipping: orderDetails.totals.shipping,
+        grandTotal: orderDetails.totals.grandTotal,
+      },
+    };
+
+    console.log('Data:', data);
+
+    // Generate the invoice PDF
+    easyinvoice.createInvoice(data, function (result) {
+      // Set response headers for PDF download
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=invoice_${orderId}.pdf`);
+      res.send(Buffer.from(result.pdf, 'base64'));
+    });
+
+  } catch (error) {
+    console.error('Error in downloadInvoice:', error);
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+};
+
 
 
 
@@ -356,6 +428,7 @@ const cancelProduct = async (req, res) => {
     processPayment,
     confirm,
     cancelorder,
-    cancelProduct
+    cancelProduct,
+    downloadInvoice
   
  }  

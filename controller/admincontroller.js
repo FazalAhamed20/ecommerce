@@ -14,6 +14,7 @@ const admin = (req, res) => {
 //admin home------------------------------------------------------->
 const adhome = async (req, res) => {
   try {
+    // Fetch the total number of orders
     const totalOrders = await orderModels.countDocuments();
 
     // Fetch the total product quantity
@@ -32,17 +33,39 @@ const adhome = async (req, res) => {
     // Extract the total product quantity from the result
     const productQuantity = totalProductQuantity.length > 0 ? totalProductQuantity[0].totalProductQuantity : 0;
 
+    // Fetch the total number of users
     const totalUsers = await User.countDocuments();
-    const orders = await orderModels.find(); // Fetch orders from the database
 
-    // Aggregate orders by date and calculate count
+    // Fetch all orders from the database
+    const orders = await orderModels.find();
+
+    // Define the time interval based on the user's selection (daily, monthly, yearly)
+    const selectedTimeInterval = req.query.interval || 'daily';
+
+    // Set the time format and unit based on the selected time interval
+    let timeFormat, timeUnit, dateFormat;
+    if (selectedTimeInterval === 'monthly') {
+      timeFormat = '%Y-%m';
+      timeUnit = '$month';
+      dateFormat = 'MMMM YYYY';
+    } else if (selectedTimeInterval === 'yearly') {
+      timeFormat = '%Y';
+      timeUnit = '$year';
+      dateFormat = 'YYYY';
+    } else {
+      timeFormat = '%Y-%m-%d';
+      timeUnit = '$dayOfMonth';
+      dateFormat = 'MMMM DD, YYYY';
+    }
+
+    // Aggregate orders based on the selected time interval and calculate the count for each period
     const ordersWithDate = await orderModels.aggregate([
       {
         $match: { "orderDate": { $exists: true } }
       },
       {
         $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+          _id: { $dateToString: { format: timeFormat, date: "$orderDate", timezone: "+0530" } },
           count: { $sum: 1 }
         }
       },
@@ -52,8 +75,13 @@ const adhome = async (req, res) => {
           date: "$_id",
           count: 1
         }
+      },
+      {
+        $sort: { date: 1 } // Sort by date in ascending order
       }
     ]).exec();
+
+    console.log("ordersWithDate", ordersWithDate);
 
     // Filter out entries with invalid dates
     const validOrdersWithDate = ordersWithDate.filter(order => order.date && order.date !== 'null');
@@ -62,22 +90,22 @@ const adhome = async (req, res) => {
     const xValues = validOrdersWithDate.map(order => order.date);
     const yValues = validOrdersWithDate.map(order => order.count);
 
-    console.log('totalOrders:', totalOrders);
-    console.log('productQuantity:', productQuantity);
-    console.log('totalUsers:', totalUsers);
-    console.log('orders:', orders);
-    console.log('validOrdersWithDate:', validOrdersWithDate);
-    console.log('xValues:', xValues);
-    console.log('yValues:', yValues);
+    // Fetch recently placed orders
+    const recentlyPlacedOrders = await orderModels.find().sort({ orderDate: -1 }).limit(5);
+    console.log("recent orders", recentlyPlacedOrders);
 
+    // Pass data to the EJS template
     res.render('./admin/adhome', {
       title: 'Admin Home',
       totalOrders,
       productQuantity,
       totalUsers,
       orders,
-      xValues: JSON.stringify(xValues),
+      xValues: JSON.stringify(xValues), // Convert to JSON string for passing to client-side script
       yValues,
+      recentlyPlacedOrders,
+      selectedTimeInterval,
+      dateFormat,
       err: false,
     });
   } catch (error) {

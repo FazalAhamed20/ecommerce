@@ -244,14 +244,20 @@
                             <th colspan="2">Order ID: <%= order.orderID %></th>
                             <th colspan="1">Total Price: ₹<%= order.totals.grandTotal %></th>
                             <th colspan="2">
-                                Status:
-                                <select class="orderStatusDropdown" name="orderStatus_<%= order.orderID %>" data-orderid="<%= order.orderID %>" <%= order.status === 'delivered' ? 'disabled' : '' %>>
-                                  <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
-                                  <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
-                                  <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
-                                  <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
-                                </select>
-                                <button type="submit">Update Status</button>
+                                <% if (order.status === 'delivered') { %>
+                                    <div id="successMessage" class="text-success">Successfully Delivered</div>
+                                <% } else { %>
+                                    Status:
+                                    <select class="orderStatusDropdown" name="orderStatus_<%= order.orderID %>" data-orderid="<%= order.orderID %>" <%= order.status === 'delivered' ? 'disabled' : '' %>>
+                                        <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                        <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
+                                        <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                                        <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                                    </select>
+                                    <button type="submit" class="updateStatusBtn">Update Status</button>
+                                <% } %>
+                                
+                               
                               </th>
                               
                         </tr>
@@ -291,57 +297,63 @@
 <!-- Update the existing script tag with the following code -->
 <script>
     document.getElementById('orderStatusForm').addEventListener('submit', function (event) {
-      event.preventDefault();
-      openModal(); // Open the confirmation modal
+        event.preventDefault();
+        openModal(); // Open the confirmation modal
     });
-  
+
     function openModal() {
-      const modal = document.getElementById('confirmationModal');
-      const confirmBtn = document.getElementById('confirmBtn');
-  
-      // Show the modal
-      modal.style.display = 'block';
-  
-      // Handle the confirm button click event
-      confirmBtn.addEventListener('click', function () {
-        closeModal(); // Close the modal
-        submitForm(); // Submit the form
-      });
-    }
-  
-    function closeModal() {
-      const modal = document.getElementById('confirmationModal');
-      modal.style.display = 'none';
-    }
-  
-    function submitForm() {
-      const dropdowns = document.querySelectorAll('.orderStatusDropdown');
-      const formData = [];
-  
-      dropdowns.forEach(dropdown => {
-        formData.push({
-          orderID: dropdown.getAttribute('data-orderid'),
-          status: dropdown.value
+        const modal = document.getElementById('confirmationModal');
+        const confirmBtn = document.getElementById('confirmBtn');
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Handle the confirm button click event
+        confirmBtn.addEventListener('click', function () {
+            closeModal(); // Close the modal
+            submitForm(); // Submit the form
         });
-      });
-  
-      // Send formData to the server using AJAX (you can use fetch or any other library like axios)
-      fetch('/updateOrderStatus', {
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('confirmationModal');
+        modal.style.display = 'none';
+    }
+
+    function submitForm() {
+    const dropdowns = document.querySelectorAll('.orderStatusDropdown');
+    const formData = [];
+
+    dropdowns.forEach(dropdown => {
+        formData.push({
+            orderID: dropdown.getAttribute('data-orderid'),
+            status: dropdown.value
+        });
+    });
+
+    // Send formData to the server using AJAX (you can use fetch or any other library like axios)
+    fetch('/updateOrderStatus', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }
-  </script>
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        if (data.success) {
+            closeModal(); // Close the modal after successful update
+            location.reload(); // Reload the page after successful update
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+</script>
+
   
     
 
