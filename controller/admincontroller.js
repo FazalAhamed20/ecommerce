@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const orderModels = require('../models/orderModel');
 const moment = require('moment');
 const Chart = require('chart.js');
-const PDFDocument = require('jspdf');
+const PDFDocument = require('pdfkit'); 
 
 
 //admin login------------------------------------------------------->

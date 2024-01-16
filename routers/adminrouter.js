@@ -32,6 +32,7 @@ router.get('/product/deleteproduct/:id',verifyAdmin,productcontroller.deleteprod
 //order side------------------------------------------------------->
 router.get("/admin/userorder",verifyAdmin,controller2.userOrder);
 router.post("/updateOrderStatus",verifyAdmin,controller2.updateOrderstatus);
+router.get('/download-sales-report', verifyAdmin, controller2.generateSalesReport);
 
 
 
