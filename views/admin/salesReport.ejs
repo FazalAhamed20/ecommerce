@@ -1,0 +1,50 @@
+<!-- salesReport.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Report</title>
+  <style>
+    body {
+      font-family: 'Helvetica', sans-serif;
+    }
+    .title {
+      font-size: 16px;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">Sales Report (<%= startDate %> to <%= endDate %>)</div>
+  <table>
+    <tr>
+      <th>Order ID</th>
+      <th>Customer</th>
+      <th>Order Date</th>
+      <th>Product</th>
+      <th>Quantity</th>
+    </tr>
+    <% orders.forEach(order => { %>
+      <tr>
+        <td><%= order.orderID %></td>
+        <td><%= order.customer.name %></td>
+        <td><%= order.orderDate %></td>
+        <td><%= order.products.map(product => product.product.name).join('<br>') %></td>
+        <td><%= order.products.map(product => product.quantity).join('<br>') %></td>
+      </tr>
+    <% }); %>
+  </table>
+</body>
+</html>

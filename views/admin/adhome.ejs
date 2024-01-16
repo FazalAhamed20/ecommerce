@@ -168,11 +168,17 @@
     <div>
      <!-- Include this in your EJS template where you want to trigger the download -->
 <!-- Include this in your EJS template where you want to trigger the download -->
-<a href="/download-sales-report" target="_blank">Download Sales Report</a>
+<h1>Sales Report</h1>
 
+<form id="dateSelectionForm">
+  <label for="startDate">Start Date:</label>
+  <input type="date" id="startDate" name="startDate" required>
 
-      
-      <button id="download-pdf-button">Download PDF Report</button>
+  <label for="endDate">End Date:</label>
+  <input type="date" id="endDate" name="endDate" required>
+
+  <button type="button" onclick="downloadSalesReport()">Download Sales Report</button>
+</form>
       <h2>Recently Placed Orders</h2>
       <table class="recent-orders-table">
         <thead>
@@ -348,6 +354,24 @@
 
     updateChartData(selectedTimeInterval); // Initial chart rendering
   });
+</script>
+<script>
+  function downloadSalesReport() {
+    var startDate = document.getElementById('startDate').value;
+    var endDate = document.getElementById('endDate').value;
+
+    // Perform validation if needed
+    if (startDate === "" || endDate === "") {
+      alert("Please select both start and end dates.");
+      return;
+    }
+
+    // Construct the download URL with selected dates
+    var downloadURL = '/download-sales-report?startDate=' + startDate + '&endDate=' + endDate;
+
+    // Open the URL in a new tab
+    window.open(downloadURL, '_blank');
+  }
 </script>
 
 

@@ -3,6 +3,9 @@ const orderModels = require('../models/orderModel');
 const moment = require('moment');
 const Chart = require('chart.js');
 const PDFDocument = require('pdfkit'); 
+const pdf = require('html-pdf');
+const fs = require('fs');
+const ejs = require('ejs');
 
 
 //admin login------------------------------------------------------->
@@ -246,52 +249,51 @@ const logout = (req, res) => {
 
 const generateSalesReport = async (req, res) => {
   try {
-    console.log('Inside generateSalesReport function');
-    const selectedTimeInterval = req.query.timeInterval || 'daily';
-    console.log(selectedTimeInterval);
-
-    let startDate, endDate;
-
-    if (selectedTimeInterval === 'daily') {
-      startDate = moment().startOf('day');
-      endDate = moment().endOf('day');
-    } else if (selectedTimeInterval === 'weekly') {
-      startDate = moment().startOf('week');
-      endDate = moment().endOf('week');
-    } else if (selectedTimeInterval === 'yearly') {
-      startDate = moment().startOf('year');
-      endDate = moment().endOf('year');
-    } else {
-      // Handle additional time intervals if needed
-    }
+    // Extract start and end dates from the request query parameters
+    const startDate = req.query.startDate ? moment(req.query.startDate).startOf('day') : moment().startOf('day');
+    const endDate = req.query.endDate ? moment(req.query.endDate).endOf('day') : moment().endOf('day');
 
     // Fetch orders within the specified date range
     const orders = await orderModels.find({
-      orderDate: { $gte: startDate, $lte: endDate },
-      status: 'Delivered',
+      orderDate: { $gte: startDate.toDate(), $lte: endDate.toDate() },
+      status: 'delivered',
     }).populate('customer products.product');
 
-    // Create a PDF document
-    const pdf = new PDFDocument();
-    pdf.text(`Sales Report (${selectedTimeInterval})`, 20, 20);
-    // Add more content to the PDF as needed...
+    console.log("admin order",orders);
 
-    // Set response headers for file download
-    res.setHeader('Content-Disposition', `attachment; filename=SalesReport_${selectedTimeInterval}_${moment().format('YYYY-MM-DD')}.pdf`);
-    res.setHeader('Content-Type', 'application/pdf');
+    // Format date on the server side
+    const formattedStartDate = startDate.format('YYYY-MM-DD HH:mm:ss');
+    const formattedEndDate = endDate.format('YYYY-MM-DD HH:mm:ss');
 
-    // Stream the PDF directly to the response object
-    pdf.pipe(res);
-    pdf.end();
+    // Read the EJS template from the file
+    const templatePath = 'views/admin/salesReport.ejs';
+    const templateContent = fs.readFileSync(templatePath, 'utf-8');
+
+    // Render the EJS template
+    const renderedHTML = ejs.render(templateContent, { startDate: formattedStartDate, endDate: formattedEndDate, orders });
+
+    // Generate PDF from HTML
+    const pdfOptions = { format: 'Letter' }; // You can adjust the format as needed
+    pdf.create(renderedHTML, pdfOptions).toStream((err, stream) => {
+      if (err) {
+        console.error('Error generating PDF:', err);
+        res.status(500).send('Internal server error');
+        return;
+      }
+
+      // Set response headers for file download
+      res.setHeader('Content-Disposition', `attachment; filename=SalesReport_${formattedStartDate}_to_${formattedEndDate}.pdf`);
+      res.setHeader('Content-Type', 'application/pdf');
+
+      // Stream the PDF directly to the response object
+      stream.pipe(res);
+    });
 
   } catch (error) {
     console.error('Error generating sales report:', error.message);
     res.status(500).send('Internal server error');
   }
 };
-
-
-
 
 
 
