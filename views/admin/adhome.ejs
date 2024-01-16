@@ -2,6 +2,8 @@
 <%- include('nav') -%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
 
 
 
@@ -158,10 +160,19 @@
   </select>
 </div>
 
+
       
       <canvas id="myChart" width="800" height="400"></canvas>
     </div>
+    
     <div>
+     <!-- Include this in your EJS template where you want to trigger the download -->
+<!-- Include this in your EJS template where you want to trigger the download -->
+<a href="/download-sales-report" target="_blank">Download Sales Report</a>
+
+
+      
+      <button id="download-pdf-button">Download PDF Report</button>
       <h2>Recently Placed Orders</h2>
       <table class="recent-orders-table">
         <thead>

@@ -356,7 +356,7 @@ const downloadInvoice = async (req, res) => {
 
     console.log('Order Details:', orderDetails);
 
-    // Fetch product details for each product in the order
+   
     const products = await Promise.all(orderDetails.products.map(async (product) => {
       const productDetails = await Product.findById(product.product);
     
@@ -370,7 +370,7 @@ const downloadInvoice = async (req, res) => {
       };
     }));
 
-    // Set up the invoice data with order details, tax, and shipping charges
+   
     const data = {
       sender: {
         company: 'COFFEE LAND',
@@ -380,24 +380,20 @@ const downloadInvoice = async (req, res) => {
         country: 'INDIA',
       },
       client: {
-        name: req.session.user.name,
+        company: req.session.user.name,
         address: `${orderDetails.address.houseName}, ${orderDetails.address.locality}, ${orderDetails.address.city}, ${orderDetails.address.state} - ${orderDetails.address.pincode}`,
       },
       information: {
-        Invoice: `${orderDetails.orderID}`,
+        number: `${orderDetails.orderID}`,
         date: new Date(orderDetails.orderDate).toLocaleDateString(),
+        "due-date": new Date(orderDetails.deliveryDate).toLocaleDateString(),
       },
       products: products,
       'bottom-notice': 'Thank you for your business!',
       settings: {
         currency: 'INR',
       },
-      totals: {
-        subtotal: orderDetails.totals.subtotal,
-        tax: orderDetails.totals.tax,
-        shipping: orderDetails.totals.shipping,
-        grandTotal: orderDetails.totals.grandTotal,
-      },
+      
     };
 
     console.log('Data:', data);

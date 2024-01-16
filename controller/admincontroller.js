@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const orderModels = require('../models/orderModel');
 const moment = require('moment');
 const Chart = require('chart.js');
+const PDFDocument = require('jspdf');
 
 
 //admin login------------------------------------------------------->
@@ -14,10 +15,10 @@ const admin = (req, res) => {
 //admin home------------------------------------------------------->
 const adhome = async (req, res) => {
   try {
-    // Fetch the total number of orders
+    
     const totalOrders = await orderModels.countDocuments();
 
-    // Fetch the total product quantity
+   
     const totalProductQuantity = await orderModels.aggregate([
       {
         $unwind: '$products',
@@ -30,19 +31,19 @@ const adhome = async (req, res) => {
       },
     ]).exec();
 
-    // Extract the total product quantity from the result
+   
     const productQuantity = totalProductQuantity.length > 0 ? totalProductQuantity[0].totalProductQuantity : 0;
 
-    // Fetch the total number of users
+    
     const totalUsers = await User.countDocuments();
 
-    // Fetch all orders from the database
+   
     const orders = await orderModels.find();
 
-    // Define the time interval based on the user's selection (daily, monthly, yearly)
+   
     const selectedTimeInterval = req.query.interval || 'daily';
 
-    // Set the time format and unit based on the selected time interval
+    
     let timeFormat, timeUnit, dateFormat;
     if (selectedTimeInterval === 'monthly') {
       timeFormat = '%Y-%m';
@@ -242,76 +243,60 @@ const logout = (req, res) => {
 };
 
 
-const sales=async (req, res) => {
+
+const generateSalesReport = async (req, res) => {
   try {
-      const selectedInterval = req.query.interval;
+    console.log('Inside generateSalesReport function');
+    const selectedTimeInterval = req.query.timeInterval || 'daily';
+    console.log(selectedTimeInterval);
 
-      let pipeline = [];
+    let startDate, endDate;
 
-      switch (selectedInterval) {
-          case 'daily':
-              pipeline = [
-                  {
-                      $match: {
-                          // Match orders within the last 24 hours
-                          orderDate: { $gte: new Date(moment().subtract(1, 'days')) },
-                      },
-                  },
-                  {
-                      $group: {
-                          _id: { $dayOfMonth: '$orderDate' },
-                          sales: { $sum: '$totals.grandTotal' },
-                      },
-                  },
-              ];
-              break;
+    if (selectedTimeInterval === 'daily') {
+      startDate = moment().startOf('day');
+      endDate = moment().endOf('day');
+    } else if (selectedTimeInterval === 'weekly') {
+      startDate = moment().startOf('week');
+      endDate = moment().endOf('week');
+    } else if (selectedTimeInterval === 'yearly') {
+      startDate = moment().startOf('year');
+      endDate = moment().endOf('year');
+    } else {
+      // Handle additional time intervals if needed
+    }
 
-          case 'weekly':
-              pipeline = [
-                  {
-                      $match: {
-                          // Match orders within the last 7 days
-                          orderDate: { $gte: new Date(moment().subtract(7, 'days')) },
-                      },
-                  },
-                  {
-                      $group: {
-                          _id: { $isoWeek: '$orderDate' },
-                          sales: { $sum: '$totals.grandTotal' },
-                      },
-                  },
-              ];
-              break;
+    // Fetch orders within the specified date range
+    const orders = await orderModels.find({
+      orderDate: { $gte: startDate, $lte: endDate },
+      status: 'Delivered',
+    }).populate('customer products.product');
 
-          case 'monthly':
-              pipeline = [
-                  {
-                      $match: {
-                          // Match orders within the last 30 days
-                          orderDate: { $gte: new Date(moment().subtract(30, 'days')) },
-                      },
-                  },
-                  {
-                      $group: {
-                          _id: { $month: '$orderDate' },
-                          sales: { $sum: '$totals.grandTotal' },
-                      },
-                  },
-              ];
-              break;
+    // Create a PDF document
+    const pdf = new PDFDocument();
+    pdf.text(`Sales Report (${selectedTimeInterval})`, 20, 20);
+    // Add more content to the PDF as needed...
 
-          default:
-              return res.status(400).json({ success: false, error: 'Invalid interval' });
-      }
+    // Set response headers for file download
+    res.setHeader('Content-Disposition', `attachment; filename=SalesReport_${selectedTimeInterval}_${moment().format('YYYY-MM-DD')}.pdf`);
+    res.setHeader('Content-Type', 'application/pdf');
 
-      const monthlySalesData = await orderModels.aggregate(pipeline);
+    // Stream the PDF directly to the response object
+    pdf.pipe(res);
+    pdf.end();
 
-      res.json({ success: true, data: monthlySalesData });
   } catch (error) {
-      console.error('Error fetching sales data:', error.message);
-      res.status(500).json({ success: false, error: 'Internal server error' });
+    console.error('Error generating sales report:', error.message);
+    res.status(500).send('Internal server error');
   }
 };
+
+
+
+
+
+
+
+
 //module exports------------------------------------------------------->
 module.exports = {
   admin,
@@ -323,5 +308,6 @@ module.exports = {
   logout,
   userOrder,
   updateOrderstatus,
-  sales
+  generateSalesReport
+  
 };
