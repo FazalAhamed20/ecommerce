@@ -169,19 +169,30 @@ const createOrder = async (req, res) => {
 //user orders------------------------------------------------------->  
 const userOrder = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.render('./orders/userorder', { pageTitle: 'userorder', user: null, orders: [] });
-    }
-    const userId = req.session.user._id;
-    const orders = await orderModels.find({ customer: userId }).populate({
-      path: 'products.product',
-      model: 'Product',
-      select: 'name price description image', 
-    }).exec();
-    res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders });
+      if (!req.session.user) {
+          return res.render('./orders/userorder', { pageTitle: 'userorder', user: null, orders: [] });
+      }
+
+      const userId = req.session.user._id;
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 3; // You can adjust the default limit
+
+      const skip = (page - 1) * limit;
+
+      const orders = await orderModels.find({ customer: userId })
+          .populate({
+              path: 'products.product',
+              model: 'Product',
+              select: 'name price description image',
+          })
+          .skip(skip)
+          .limit(limit)
+          .exec();
+
+      res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders, page, limit });
   } catch (error) {
-    console.error('Error fetching user orders:', error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+      console.error('Error fetching user orders:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
 

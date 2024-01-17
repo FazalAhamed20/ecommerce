@@ -35,14 +35,24 @@
       <th>Order Date</th>
       <th>Product</th>
       <th>Quantity</th>
+      <th>Grand Total</th>
     </tr>
     <% orders.forEach(order => { %>
       <tr>
         <td><%= order.orderID %></td>
         <td><%= order.customer.name %></td>
         <td><%= order.orderDate %></td>
-        <td><%= order.products.map(product => product.product.name).join('<br>') %></td>
-        <td><%= order.products.map(product => product.quantity).join('<br>') %></td>
+        <td>
+          <% order.products.forEach(product => { %>
+            <%= product.product.name %><br>
+          <% }); %>
+        </td>
+        <td>
+          <% order.products.forEach(product => { %>
+            <%= product.quantity %><br>
+          <% }); %>
+        </td>
+        <td><%= order.totals.grandTotal %></td>
       </tr>
     <% }); %>
   </table>

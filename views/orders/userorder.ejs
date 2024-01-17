@@ -101,6 +101,33 @@ ul.timeline > li.active:before {
 .order-status-btn:hover {
     background-color: #0056b3; 
 }
+.pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination a, .pagination span {
+        margin: 0 5px;  
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .pagination a:hover {
+        background-color: #0056b3;  
+    }
+
+    .pagination span {
+        background-color: #0056b3;  
+    }
+
+
+
+
+
 </style>
 <body>
     <% orders.forEach(function(order) { %>
@@ -136,12 +163,70 @@ ul.timeline > li.active:before {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <h2>Cancellation Policy</h2>
+
+                            <p>We understand that circumstances may arise, and you may need to cancel your coffee shop delivery order. Please take note of our cancellation policy outlined below:</p>
+                            
+                            <ol>
+                                <!-- Cancellation Window -->
+                                <li>
+                                    <strong>Cancellation Window:</strong>
+                                    <ul>
+                                        <li>Orders can be canceled within 30 minutes of placing the order.</li>
+                                        <li>Once the order is in the processing stage, cancellations may not be possible.</li>
+                                    </ul>
+                                </li>
+                            
+                                <!-- Cancellation Process -->
+                                <li>
+                                    <strong>Cancellation Process:</strong>
+                                    <ul>
+                                        <li>To cancel an order, log in to your account and navigate to the order history section.</li>
+                                        <li>Click on the respective order and follow the cancellation instructions.</li>
+                                    </ul>
+                                </li>
+                            
+                                <!-- Refund Policy -->
+                                <li>
+                                    <strong>Refund Policy:</strong>
+                                    <ul>
+                                        <li>Orders canceled within the allowed time frame will be eligible for a full refund.</li>
+                                        <li>Refunds will be processed within 3-5 business days.</li>
+                                    </ul>
+                                </li>
+                            
+                                <!-- Exceptions -->
+                                <li>
+                                    <strong>Exceptions:</strong>
+                                    <ul>
+                                        <li>We reserve the right to refuse cancellations for orders that are already in the preparation or delivery stage.</li>
+                                        <li>Special circumstances may be considered; please contact our customer support for assistance.</li>
+                                    </ul>
+                                </li>
+                            
+                                <!-- Contact Information -->
+                                <li>
+                                    <strong>Contact Information:</strong>
+                                    <ul>
+                                        <li>For cancellation inquiries or assistance, please reach out to our customer support team at <a href="mailto:support@yourcoffeeshop.com">support@yourcoffeeshop.com</a> or call (123) 456-7890.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            
+                            <p>By placing an order with us, you acknowledge and agree to abide by our cancellation policy.</p>
+                            
+                        </div>
+                      </div>
                     <div class="modal-body">
                         <h6><i class="fas fa-exclamation-triangle text-warning"></i> Before you cancel, please consider:</h6>
                         <ul>
                             <li>Your cancellation may be subject to our cancellation policy.</li>
-                            <li>Review our <a href="/cancellation-policy" target="_blank">cancellation policy</a>.</li>
+                            <li>Review our <a class="" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Cancellation Policy</a>.</li>
                         </ul>
+                       
                         <p><i class="fas fa-info-circle text-info"></i> Are you sure you want to cancel this order?</p>
                         <label for="cancelReason">Reason for cancellation:</label>
                         <textarea class="form-control" id="cancelReason-<%= order.orderID %>" rows="3" placeholder="Enter your reason"></textarea>
@@ -174,9 +259,7 @@ ul.timeline > li.active:before {
                                                 </a>
                                             <% } %>
                                             <% if (order.status === 'delivered') { %>
-                                                <button class="btn btn-warning return-order-btn" data-toggle="modal" data-target="#returnOrderModal-<%= order.orderID %>" data-order-id="<%= order.orderID %>">
-                                                    Return Order
-                                                </button>
+                                                
                                             <% } else { %>
                                                 <button class="btn btn-danger cancel-order-btn" data-toggle="modal" data-target="#cancelOrderModal-<%= order.orderID %>" data-order-id="<%= order.orderID %>">
                                                     Cancel Order
@@ -278,6 +361,14 @@ ul.timeline > li.active:before {
         </div>
     </section>
     <% }); %>
+    <div class="pagination">
+        <% if (page > 1) { %>
+            <a href="?page=<%= page - 1 %>&limit=<%= limit %>" class="btn btn-primary">Previous</a>
+        <% } %>
+        <span>Page <%= page %></span>
+        <a href="?page=<%= page + 1 %>&limit=<%= limit %>" class="btn btn-primary">Next</a>
+    </div>
+    
     <!-- Add these script tags in the head section of your HTML -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
@@ -309,11 +400,7 @@ function updateProgressBar(orderID, status) {
         progressBar.style.width = getStatusWidth(status);
     }
 }
-    const progressBar = document.getElementById(orderID + '-' + status + '-progress');
-    if (progressBar) {
-        progressBar.style.display = 'block';
-        progressBar.style.width = getStatusWidth(status);
-    }
+    
 function displayOrderStatus(orderID, status) {
     console.log('Displaying order status for order ID:', orderID, 'and status:', status);
     const statusElement = document.getElementById(orderID + '-status');
@@ -444,6 +531,17 @@ function getStatusWidth(status) {
 
         // Send the request with the JSON payload
         xhr.send(JSON.stringify({ orderId: orderID, productId: productID }));
+    }
+</script>
+<script>
+    // JavaScript to show the modal when clicking the link
+    document.getElementById('showCancellationPolicy').addEventListener('click', function() {
+        document.getElementById('cancellationPolicyModal').style.display = 'block';
+    });
+
+    // JavaScript to close the modal
+    function closeCancellationPolicyModal() {
+        document.getElementById('cancellationPolicyModal').style.display = 'none';
     }
 </script>
  

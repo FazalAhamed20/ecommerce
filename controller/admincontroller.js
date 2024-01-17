@@ -6,6 +6,7 @@ const PDFDocument = require('pdfkit');
 const pdf = require('html-pdf');
 const fs = require('fs');
 const ejs = require('ejs');
+const CanceledOrder=require('../models/orderCancelModel')
 
 
 //admin login------------------------------------------------------->
@@ -46,7 +47,6 @@ const adhome = async (req, res) => {
    
     const selectedTimeInterval = req.query.interval || 'daily';
 
-    
     let timeFormat, timeUnit, dateFormat;
     if (selectedTimeInterval === 'monthly') {
       timeFormat = '%Y-%m';
@@ -61,6 +61,7 @@ const adhome = async (req, res) => {
       timeUnit = '$dayOfMonth';
       dateFormat = 'MMMM DD, YYYY';
     }
+
 
     // Aggregate orders based on the selected time interval and calculate the count for each period
     const ordersWithDate = await orderModels.aggregate([
@@ -81,31 +82,32 @@ const adhome = async (req, res) => {
         }
       },
       {
-        $sort: { date: 1 } // Sort by date in ascending order
+        $sort: { date: 1 } 
       }
     ]).exec();
 
-    console.log("ordersWithDate", ordersWithDate);
-
-    // Filter out entries with invalid dates
+    // Filter out null or undefined dates
     const validOrdersWithDate = ordersWithDate.filter(order => order.date && order.date !== 'null');
 
-    // Extract unique order dates
+    // Set xValues and yValues based on the selected time interval
     const xValues = validOrdersWithDate.map(order => order.date);
     const yValues = validOrdersWithDate.map(order => order.count);
+   
 
-    // Fetch recently placed orders
-    const recentlyPlacedOrders = await orderModels.find().sort({ orderDate: -1 }).limit(5);
-    console.log("recent orders", recentlyPlacedOrders);
-
-    // Pass data to the EJS template
+  
+    const recentlyPlacedOrders = await orderModels
+    .find()
+    .sort({ orderDate: -1 })
+    .populate('products.product')
+    .limit(5);
     res.render('./admin/adhome', {
       title: 'Admin Home',
       totalOrders,
       productQuantity,
       totalUsers,
       orders,
-      xValues: JSON.stringify(xValues), // Convert to JSON string for passing to client-side script
+     
+      xValues: JSON.stringify(xValues), 
       yValues,
       recentlyPlacedOrders,
       selectedTimeInterval,
@@ -114,7 +116,7 @@ const adhome = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching data:', error.message);
-    res.status(500).send('Internal server error'); // Handle error appropriately
+    res.status(500).send('Internal server error');
   }
 };
 
@@ -198,21 +200,35 @@ const unblock=async (req, res) => {
 const userOrder = async (req, res) => {
   const itemsPerPage = 3;
   const page = parseInt(req.query.page) || 1;
+
   try {
     const totalOrders = await orderModels.countDocuments();
     const totalPages = Math.ceil(totalOrders / itemsPerPage);
-    const orders = await orderModels.find()
+
+    // Fetch user orders
+    const orders = await orderModels
+      .find()
       .skip((page - 1) * itemsPerPage)
       .limit(itemsPerPage)
       .populate({
         path: 'products.product',
-        model: 'Product', 
+        model: 'Product',
         select: 'name price description image',
       })
       .exec();
+
+    // Fetch canceled orders for each user order
+    const canceledOrders = await Promise.all(
+      orders.map(async (order) => {
+        const canceledOrder = await CanceledOrder.findOne({ orderID: order.orderID });
+        return canceledOrder || null;
+      })
+    );
+
     res.render('./admin/userOrder', {
       title: 'User Orders',
       orders,
+      canceledOrders, // Add canceledOrders to the rendered data
       totalPages,
       currentPage: page,
     });
@@ -221,6 +237,9 @@ const userOrder = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
+
+
 //update order status------------------------------------------------------->
 const updateOrderstatus = async (req, res) => {
   try {

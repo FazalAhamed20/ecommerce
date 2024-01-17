@@ -48,14 +48,12 @@
 <div class="add-address-form" id="addAddressForm">
   <h2>Add New Address</h2>
   <form action="/user/addaddressform/<%= user.id %>" method="post">
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" required>
 
     <label for="mobile">Mobile</label>
-    <input type="text" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+    <input type="text" id="mobile" name="mobile"  required>
 
     <label for="email">Email</label>
-    <input type="email" id="email" name="email" required>
+    <input type="email" id="email" name="email"  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
 
     <label for="pincode">Pincode</label>
     <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" required>

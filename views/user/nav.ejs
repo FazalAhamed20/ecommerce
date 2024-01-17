@@ -83,7 +83,33 @@
       margin-left: 0; /* Reset margin for small screens */
     }
   }
+  @media (max-width: 767px) {
+      .navbar-nav {
+        margin-left: 0;
+      }
 
+      .navbar-brand {
+        margin-right: auto; /* Align brand to the left on small screens */
+      }
+
+      .navbar-collapse {
+        flex-grow: 1; /* Allow the search form to take remaining space */
+      }
+
+      .navbar-toggler {
+        order: -1; /* Move toggler to the left on small screens */
+      }
+
+      .navbar-nav .nav-item {
+        margin: 0;
+      }
+
+      .navbar-nav .dropdown-menu {
+        left: auto; /* Remove left positioning */
+        right: 0; /* Align dropdown to the right on small screens */
+        transform: translateX(0);
+      }
+    }
 
     
   </style>

@@ -9,12 +9,35 @@ const sharp = require('sharp');
 const productList = async (req, res) => {
     const itemsPerPage = 3; // pagination
     const page = parseInt(req.query.page) || 1;
+    const searchQuery = req.query.search || ''; // Get search query from the request
+   
+
     try {
-        const totalProducts = await Product.countDocuments();
+        let query = {};
+
+        if (searchQuery) {
+            query = {
+                $or: [
+                    { name: { $regex: searchQuery, $options: 'i' } },
+                    { description: { $regex: searchQuery, $options: 'i' } },
+                    { ingredients: { $regex: searchQuery, $options: 'i' } },
+                    // Check if searchQuery is a number before searching by price
+                    !isNaN(searchQuery) && { price: searchQuery },
+                    { 'category.name': { $regex: searchQuery, $options: 'i' } },
+                    // Add additional fields for searching if needed
+                ].filter(Boolean), // Filter out falsy values (e.g., if searchQuery is not a number)
+            };
+        }
+
+        const totalProducts = await Product.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / itemsPerPage);
-        const products = await Product.find().sort({ _id: -1 }).populate('category')
+
+        const products = await Product.find(query)
+            .sort({ _id: -1 })
+            .populate('category')
             .skip((page - 1) * itemsPerPage)
             .limit(itemsPerPage);
+
         res.render('./product/products', {
             title: 'Products',
             products,
@@ -26,6 +49,7 @@ const productList = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
 //add product with categories that stored in database------------------------------------------------------->
 const addform = function(req, res) {
     Category.find({}).exec()

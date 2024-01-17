@@ -294,7 +294,91 @@ button {
 .flash-message.error {
   color: red;
 }
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f2eb;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-y: scroll;
+  }
 
+  /* ... (existing styles) */
+
+  .cart-container {
+    width: 80%;
+    background-color: #f9f5f2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    animation: slideIn 0.5s ease;
+    margin: 20px;
+  }
+
+  @media screen and (max-width: 768px) {
+    /* Adjust styles for smaller screens */
+    .cart-container {
+      width: 90%;
+    }
+
+    .totals-item {
+      flex-direction: column;
+    }
+  }
+
+  .cart-item {
+    display: flex;
+    border-bottom: 1px solid #e0dedc;
+    padding: 15px;
+    transition: background-color 0.3s ease;
+  }
+
+  /* ... (existing styles) */
+
+  .totals {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f5f2;
+    border-top: 1px solid #e0dedc;
+    display: flex;
+    flex-direction: column; /* Display totals line by line */
+    align-items: center;
+    animation: fadeInTotals 1s ease;
+  }
+
+  @keyframes fadeInTotals {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .totals-item {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: flex; /* Make the totals items flex containers */
+    justify-content: space-between;
+    width: 100%; /* Ensure full width for line by line display */
+  }
+
+  .totals-label {
+    color: #5c3d2e;
+    flex-grow: 1; /* Allow label to take available space */
+  }
+
+  .totals-value {
+    font-weight: bold;
+    color: #5c3d2e;
+  }
+
+  .checkout:hover {
+    background-color: #3c271f;
+  }
 
 </style>
 

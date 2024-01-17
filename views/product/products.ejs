@@ -160,6 +160,44 @@
 .pagination .disabled a:hover {
     background-color: transparent;
 }
+/* Search Container Styles */
+.search-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Search Input Styles */
+.search-input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 300px;
+    font-size: 14px;
+}
+
+/* Search Button Styles */
+button {
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 8px;
+    background-color: #45a049;
+    color: white;
+    border: none;
+    font-size: 14px;
+}
+
+/* Hover and Focus Styles for Search Input */
+.search-input:hover,
+.search-input:focus {
+    border-color: #45a049;
+}
+
+/* Hover and Focus Styles for Search Button */
+button:hover,
+.button:focus {
+    background-color: #388e3c;
+}
 
 
 
@@ -168,6 +206,10 @@
 <body>
     <div id="background-animation"></div>
     <h1>Product List</h1>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search products">
+        <button onclick="searchProducts()">Search</button>
+    </div>
     <div class="action-buttons">
         <a href="/adhome" class="add-product-button">Home</a>
         <a href="/addform" class="add-product-button">Add Product</a>
@@ -222,4 +264,11 @@
     </div>
     
 </body>
+<script>
+    function searchProducts() {
+        const searchQuery = document.getElementById('searchInput').value;
+        const url = `/product?page=1&search=${encodeURIComponent(searchQuery)}`;
+        window.location.href = url;
+    }
+</script>
 </html>

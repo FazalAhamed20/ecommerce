@@ -3,24 +3,39 @@ const Category = require('../models/categoryModel');
 const categoryList = async (req, res) => {
     const itemsPerPage = 3; //pagination
     const page = parseInt(req.query.page) || 1;
+    const searchQuery = req.query.search || '';
+    console.log('Search Query:', searchQuery); // Add this line to log the search query
+
     try {
-      const totalCategories = await Category.countDocuments();
-      const totalPages = Math.ceil(totalCategories / itemsPerPage);
-      const categories = await Category.find()
-        .skip((page - 1) * itemsPerPage)
-        .limit(itemsPerPage);
-      res.render('./categories/category', {
-        title: 'categories',
-        categories,
-        totalPages,
-        currentPage: page,
-        error:''
-      });
+        let query = {};
+
+        if (searchQuery) {
+            query = {
+                $or: [
+                    { name: { $regex: searchQuery, $options: 'i' } },
+                ].filter(Boolean),
+            };
+        }
+
+        const totalCategories = await Category.countDocuments(query);
+        const totalPages = Math.ceil(totalCategories / itemsPerPage);
+        const categories = await Category.find(query)
+            .skip((page - 1) * itemsPerPage)
+            .limit(itemsPerPage);
+
+        res.render('./categories/category', {
+            title: 'categories',
+            categories,
+            totalPages,
+            currentPage: page,
+            error: '',
+        });
     } catch (error) {
-      console.error('Error fetching categories:', error);
-      res.status(500).send('Internal Server Error');
+        console.error('Error fetching categories:', error);
+        res.status(500).send('Internal Server Error');
     }
-  };
+};
+
 // create category in admin side------------------------------------------------------->
   const createcat = function(req, res) {
     const error= req.flash('error');

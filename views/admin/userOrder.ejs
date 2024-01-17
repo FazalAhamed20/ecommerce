@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Orders</title>
+    <!-- Add these links before your existing script tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+
     <style>
         body {
             background-size: cover;
@@ -215,6 +221,10 @@
         align-items: center;
     }
 }
+.updateStatusBtn{
+    background-color: #4caf50;
+    color: white;
+}
 
     </style>
 </head>
@@ -246,6 +256,12 @@
                             <th colspan="2">
                                 <% if (order.status === 'delivered') { %>
                                     <div id="successMessage" class="text-success">Successfully Delivered</div>
+                                <% } else if (order.status === 'cancelled') { %>
+                                    <div id="cancelledMessage" class="text-danger">
+                                        Order Cancelled
+                                    </div>
+                                    
+                                    
                                 <% } else { %>
                                     Status:
                                     <select class="orderStatusDropdown" name="orderStatus_<%= order.orderID %>" data-orderid="<%= order.orderID %>" <%= order.status === 'delivered' ? 'disabled' : '' %>>
@@ -256,9 +272,9 @@
                                     </select>
                                     <button type="submit" class="updateStatusBtn">Update Status</button>
                                 <% } %>
-                                
-                               
-                              </th>
+                            </th>
+                            
+                            
                               
                         </tr>
                     </thead>
@@ -294,7 +310,7 @@
        
     <!-- Add this script tag in the head section of your HTML -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<!-- Update the existing script tag with the following code -->
+
 <script>
     document.getElementById('orderStatusForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -353,6 +369,21 @@
 }
 
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Existing script to initialize popovers
+        $('[data-toggle="popover"]').popover();
+
+        document.getElementById('orderStatusForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            openModal(); // Open the confirmation modal
+        });
+
+        // Other functions...
+    });
+</script>
+
+
 
   
     

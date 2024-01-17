@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 
 const addressSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId },
-  name: { type: String },
   mobile: { type: String },
   email: { type: String },
   pincode: { type: String },

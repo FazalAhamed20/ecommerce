@@ -114,12 +114,65 @@
 
  
   .dashboard-card i {
-    font-size: 48px; /* Adjust the icon size */
-    margin-bottom: 10px; /* Add some spacing between icon and text */
+    font-size: 48px; 
+    margin-bottom: 10px;
   }
   .time-interval-selector {
     margin-bottom: 20px;
   }
+  .recent-orders-table {
+  width: 100%;
+  border-collapse: collapse; 
+  margin-top: 20px; 
+}
+
+.recent-orders-table th, .recent-orders-table td {
+  border: 1px solid #ddd; 
+  padding: 8px; 
+  text-align: left; 
+}
+
+.recent-orders-table th {
+  background-color: #f2f2f2;
+}
+
+.recent-orders-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; 
+}
+.badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .badge-danger {
+    background-color: #dc3545; 
+    color: #fff;
+  }
+
+  .badge-warning {
+    background-color: #ffc107; 
+    color: #000;
+  }
+
+  .badge-info {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+
+  .badge-primary {
+    background-color: #007bff; 
+    color: #fff;
+  }
+
+  .badge-success {
+    background-color: #28a745;
+    color: #fff;
+  }
+
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <body>
@@ -147,38 +200,32 @@
       <h2>Total Users</h2>
       <p><%= totalUsers %></p>
     </div>
-   
-    <div class="dashboard-graph-container">
-     <!-- Add the following code to your HTML template -->
-<div class="time-interval-selector">
-  <label for="time-interval">Select Time Interval: </label>
-  <select id="time-interval" onchange="updateChart()">
-    <option value="daily">Daily</option>
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
-    <option value="yearly">Yearly</option>
-  </select>
-</div>
 
+    <div style="width: 80%;" class="dashboard-graph-container">
+      <div class="time-interval-selector">
+        <label for="time-interval">Select Time Interval: </label>
+        <select id="time-interval" onchange="updateChart()">
+          <option value="daily">Daily</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
 
-      
       <canvas id="myChart" width="800" height="400"></canvas>
     </div>
-    
+
     <div>
-     <!-- Include this in your EJS template where you want to trigger the download -->
-<!-- Include this in your EJS template where you want to trigger the download -->
-<h1>Sales Report</h1>
+      <h1>Sales Report</h1>
+      <form id="dateSelectionForm">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" required>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" required>
+        <button type="button" onclick="downloadSalesReport()">Download Sales Report</button>
+      </form>
+    </div>
 
-<form id="dateSelectionForm">
-  <label for="startDate">Start Date:</label>
-  <input type="date" id="startDate" name="startDate" required>
-
-  <label for="endDate">End Date:</label>
-  <input type="date" id="endDate" name="endDate" required>
-
-  <button type="button" onclick="downloadSalesReport()">Download Sales Report</button>
-</form>
+    <div style="width: 100%;"> 
       <h2>Recently Placed Orders</h2>
       <table class="recent-orders-table">
         <thead>
@@ -187,24 +234,30 @@
             <th>Product</th>
             <th>Quantity</th>
             <th>Order Date</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <% for (const order of recentlyPlacedOrders) { %>
-            <tr>
-              <td><%= order.orderID %></td>
-              <td><%= order.products[0].name %></td>
-              <td><%= order.products[0].quantity %></td>
-              <td><%= order.orderDate.toISOString().split('T')[0] %></td>
-            </tr>
+            <% for (const product of order.products) { %>
+              <tr>
+                <td><%= order.orderID %></td>
+                <td><%= product.product.name || 'N/A' %></td>
+                <td><%= product.quantity %></td>
+                <td><%= order.orderDate.toISOString().split('T')[0] %></td>
+                <td>
+                  <span class="badge <%= order.status.toLowerCase() === 'cancelled' ? 'badge-danger' : (order.status.toLowerCase() === 'pending' ? 'badge-warning' : (order.status.toLowerCase() === 'processing' ? 'badge-info' : (order.status.toLowerCase() === 'shipped' ? 'badge-primary' : 'badge-success'))) %>">
+                    <%= order.status %>
+                  </span>
+                </td>
+              </tr>
+            <% } %>
           <% } %>
         </tbody>
+        
       </table>
     </div>
-    
-    
   </div>
- 
   
 
   <script>
@@ -322,6 +375,7 @@
       } else if (timeInterval === 'yearly') {
         return `${date.getFullYear()}`;
       } else {
+        // Default to daily
         return `${getMonthName(date.getMonth())} ${date.getDate()}, ${date.getFullYear()}`;
       }
     }
@@ -355,6 +409,7 @@
     updateChartData(selectedTimeInterval); // Initial chart rendering
   });
 </script>
+
 <script>
   function downloadSalesReport() {
     var startDate = document.getElementById('startDate').value;
