@@ -278,7 +278,7 @@ const generateSalesReport = async (req, res) => {
       status: 'delivered',
     }).populate('customer products.product');
 
-    console.log("admin order",orders);
+    
 
     // Format date on the server side
     const formattedStartDate = startDate.format('YYYY-MM-DD HH:mm:ss');

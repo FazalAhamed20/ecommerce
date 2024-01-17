@@ -1,0 +1,134 @@
+<!-- views/orders/invoice.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-csQxof0V5PqylqzFfFGx3+97FBEe3L5gA5iVXzy4u21GYw7ksP+FSYBktmAUUfo3" crossorigin="anonymous">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h2 {
+      color: #333;
+      text-align: center;
+    }
+    p {
+      color: #555;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .total-row {
+      font-weight: bold;
+    }
+    .icon {
+      margin-right: 5px;
+    }
+    .thanks-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+    .subtotal {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <h2><i class="fas fa-shopping-bag icon"></i> COFFEE LAND Invoice for Order ID: <%= orderDetails.orderID %></h2>
+    <p>Status: <%= orderDetails.status %></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orderDetails.products.forEach(function(product) { %>
+          <tr>
+            <td><i class="fas fa-star icon"></i> <%= product.product.name %></td> <!-- Assuming you have a property like name in Product model -->
+            <td><%= product.quantity %></td>
+            <td>₹<%= product.product.price %></td> <!-- Assuming you have a property like price in Product model -->
+            <td class="subtotal">₹<%= product.quantity * product.product.price %></td>
+          </tr>
+        <% }); %>
+        
+      </tbody>
+    </table>
+
+    <table>
+      <tr>
+        <th>Shop Name:</th>
+        <td>COFFEE LAND</td>
+      </tr>
+      <tr>
+        <th>Shop Address:</th>
+        <td>CALICUT, KERALA</td>
+      </tr>
+      <tr>
+        <th>User Name:</th>
+        <td><%= user.name%></td> <!-- Assuming you have a property like name in User model -->
+      </tr>
+      <tr>
+        <th>User Address:</th>
+        <td><%= orderDetails.address.houseName %>, <%= orderDetails.address.locality %>, <%= orderDetails.address.city %>, <%= orderDetails.address.state %>, <%= orderDetails.address.pincode %></td>
+      </tr>
+      <tr>
+        <th>Ordered Date:</th>
+        <td><%= orderDetails.orderDate.toISOString().split('T')[0] %></td>
+      </tr>
+      
+    </table>
+
+    <table>
+        <tr>
+            <th>Subtotal:</th>
+            <td>₹<%= orderDetails.totals.subtotal %></td>
+          </tr>
+      <tr>
+        <th>Tax:</th>
+        <td>₹<%= orderDetails.totals.tax %></td>
+      </tr>
+      <tr>
+        <th>Shipping:</th>
+        <td>₹<%= orderDetails.totals.shipping %></td>
+      </tr>
+      <tr class="total-row">
+        <th>Grand Total:</th>
+        <td>₹<%= orderDetails.totals.grandTotal %></td>
+      </tr>
+    </table>
+
+    <p class="thanks-message">Thanks for Shopping!</p>
+
+  </div>
+</body>
+</html>

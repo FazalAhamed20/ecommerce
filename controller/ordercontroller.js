@@ -7,6 +7,9 @@ const moment = require('moment');
 const CanceledOrder = require('../models/orderCancelModel');
 const Product = require('../models/productModel');
 const easyinvoice = require('easyinvoice');
+const pdf = require('html-pdf');
+const fs = require('fs');
+const ejs = require('ejs');
 
 var instance = new Razorpay({
   key_id: 'rzp_test_YCxRFmZdRfF2Qw',
@@ -356,8 +359,15 @@ const downloadInvoice = async (req, res) => {
   try {
     const orderId = req.params.orderId;
 
+    console.log(orderId);
+
     // Fetch order details from the database
-    const orderDetails = await orderModels.findOne({ orderID: orderId });
+    const orderDetails = await orderModels.findOne({ orderID: orderId })
+    .populate({
+      path: 'products.product', // Assuming 'product' field in 'products' array references the Product model
+      select: 'name price', // Specify the fields you want to populate
+    })
+    .exec();
 
     // Check if the order exists
     if (!orderDetails) {
@@ -367,54 +377,31 @@ const downloadInvoice = async (req, res) => {
 
     console.log('Order Details:', orderDetails);
 
-   
-    const products = await Promise.all(orderDetails.products.map(async (product) => {
-      const productDetails = await Product.findById(product.product);
-    
-      return {
-        quantity: product.quantity,
-        description: productDetails ? productDetails.name : 'N/A',
-        'tax-rate': 5, // Assuming tax is at the order level
-        price: productDetails ? productDetails.price : 0,
-        'shipping-charge': orderDetails.totals.shipping, // Assuming shipping charge is at the order level
-        'total-price': (productDetails ? productDetails.price : 0) * product.quantity,
-      };
-    }));
+    // Read the EJS template from the file
+    const templatePath = 'views/orders/invoice.ejs';
+    const templateContent = fs.readFileSync(templatePath, 'utf-8');
 
-   
-    const data = {
-      sender: {
-        company: 'COFFEE LAND',
-        address: 'THEERVEDU ROAD',
-        zip: '12345',
-        city: 'CALICUT, KERALA',
-        country: 'INDIA',
-      },
-      client: {
-        company: req.session.user.name,
-        address: `${orderDetails.address.houseName}, ${orderDetails.address.locality}, ${orderDetails.address.city}, ${orderDetails.address.state} - ${orderDetails.address.pincode}`,
-      },
-      information: {
-        number: `${orderDetails.orderID}`,
-        date: new Date(orderDetails.orderDate).toLocaleDateString(),
-        "due-date": new Date(orderDetails.deliveryDate).toLocaleDateString(),
-      },
-      products: products,
-      'bottom-notice': 'Thank you for your business!',
-      settings: {
-        currency: 'INR',
-      },
-      
-    };
+    // Render the EJS template
+    const renderedHTML = ejs.render(templateContent, { orderDetails,user:req.session.user });
 
-    console.log('Data:', data);
+    // Generate PDF from HTML
+    const pdfOptions = { format: 'Letter' }; // You can adjust the format as needed
+    pdf.create(renderedHTML, pdfOptions).toStream((err, stream) => {
+      if (err) {
+        console.error('Error generating PDF:', err);
+        res.status(500).send('Internal server error');
+        return;
+      }
 
-    // Generate the invoice PDF
-    easyinvoice.createInvoice(data, function (result) {
-      // Set response headers for PDF download
+      const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().slice(0, 10);
+
+      // Set response headers for file download
+      res.setHeader('Content-Disposition', `attachment; filename=invoice_${formattedDate}.pdf`);
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=invoice_${orderId}.pdf`);
-      res.send(Buffer.from(result.pdf, 'base64'));
+
+      // Stream the PDF directly to the response object
+      stream.pipe(res);
     });
 
   } catch (error) {

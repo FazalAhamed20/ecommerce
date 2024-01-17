@@ -544,6 +544,31 @@ function getStatusWidth(status) {
         document.getElementById('cancellationPolicyModal').style.display = 'none';
     }
 </script>
+<script>
+    // Function to prompt for the order ID and initiate PDF generation
+    function generatePDF(orderID) {
+        const confirmed = confirm('Are you sure you want to download the invoice for Order ID ' + orderID + '?');
+
+        if (confirmed) {
+            // Make an AJAX request to the server to generate and download the PDF
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/download-invoice/' + encodeURIComponent(orderID), true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Optionally handle success, for example, show a success message
+                        console.log('Invoice generated and downloaded successfully');
+                    } else {
+                        // Handle any errors
+                        console.error('Error generating or downloading the invoice:', xhr.statusText);
+                    }
+                }
+            };
+            xhr.send();
+        }
+    }
+</script>
+
  
 
 
