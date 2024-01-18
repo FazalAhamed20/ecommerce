@@ -185,7 +185,6 @@
             cursor: pointer;
         }
 
-        /* Animation for the modal */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -195,12 +194,9 @@
             }
         }
 
-        /* Apply animation to the modal */
         .modal {
             animation: fadeIn 0.3s ease-in-out;
         }
-
-        /* Button styles */
         #confirmBtn {
             padding: 10px 20px;
             background-color: #4caf50;
@@ -231,14 +227,6 @@
 <body>
     <h1>Admin Orders</h1>
     <a href="/adhome">Home</a>
-  <!-- Add this modal code before the closing </body> tag -->
-
-  
-  
-        <!-- Your table code goes here -->
-    
-    
-        
             <% orders.forEach(order => { %>
                 <div id="confirmationModal" class="modal">
                     <div class="modal-content">
@@ -260,8 +248,6 @@
                                     <div id="cancelledMessage" class="text-danger">
                                         Order Cancelled
                                     </div>
-                                    
-                                    
                                 <% } else { %>
                                     Status:
                                     <select class="orderStatusDropdown" name="orderStatus_<%= order.orderID %>" data-orderid="<%= order.orderID %>" <%= order.status === 'delivered' ? 'disabled' : '' %>>
@@ -273,9 +259,6 @@
                                     <button type="submit" class="updateStatusBtn">Update Status</button>
                                 <% } %>
                             </th>
-                            
-                            
-                              
                         </tr>
                     </thead>
                     <tbody>
@@ -304,50 +287,35 @@
             <% } %>
             <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
         </div>
-
-        
-
-       
-    <!-- Add this script tag in the head section of your HTML -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>
     document.getElementById('orderStatusForm').addEventListener('submit', function (event) {
         event.preventDefault();
-        openModal(); // Open the confirmation modal
+        openModal(); 
     });
-
     function openModal() {
         const modal = document.getElementById('confirmationModal');
         const confirmBtn = document.getElementById('confirmBtn');
-
-        // Show the modal
         modal.style.display = 'block';
-
-        // Handle the confirm button click event
         confirmBtn.addEventListener('click', function () {
-            closeModal(); // Close the modal
-            submitForm(); // Submit the form
+            closeModal(); 
+            submitForm(); 
         });
     }
-
     function closeModal() {
         const modal = document.getElementById('confirmationModal');
         modal.style.display = 'none';
     }
-
     function submitForm() {
     const dropdowns = document.querySelectorAll('.orderStatusDropdown');
     const formData = [];
-
     dropdowns.forEach(dropdown => {
         formData.push({
             orderID: dropdown.getAttribute('data-orderid'),
             status: dropdown.value
         });
     });
-
-    // Send formData to the server using AJAX (you can use fetch or any other library like axios)
     fetch('/updateOrderStatus', {
         method: 'POST',
         headers: {
@@ -359,8 +327,8 @@
     .then(data => {
         console.log('Success:', data);
         if (data.success) {
-            closeModal(); // Close the modal after successful update
-            location.reload(); // Reload the page after successful update
+            closeModal(); 
+            location.reload(); 
         }
     })
     .catch((error) => {
@@ -371,15 +339,11 @@
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Existing script to initialize popovers
         $('[data-toggle="popover"]').popover();
-
         document.getElementById('orderStatusForm').addEventListener('submit', function (event) {
             event.preventDefault();
-            openModal(); // Open the confirmation modal
+            openModal(); 
         });
-
-        // Other functions...
     });
 </script>
 
@@ -391,6 +355,4 @@
 <%- include('footer') -%>
 </body>
 </html>
-
-
 <%- include('footer') -%>

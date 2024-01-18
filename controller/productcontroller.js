@@ -9,35 +9,27 @@ const sharp = require('sharp');
 const productList = async (req, res) => {
     const itemsPerPage = 3; // pagination
     const page = parseInt(req.query.page) || 1;
-    const searchQuery = req.query.search || ''; // Get search query from the request
-   
-
+    const searchQuery = req.query.search || ''; 
     try {
         let query = {};
-
         if (searchQuery) {
             query = {
                 $or: [
                     { name: { $regex: searchQuery, $options: 'i' } },
                     { description: { $regex: searchQuery, $options: 'i' } },
                     { ingredients: { $regex: searchQuery, $options: 'i' } },
-                    // Check if searchQuery is a number before searching by price
                     !isNaN(searchQuery) && { price: searchQuery },
                     { 'category.name': { $regex: searchQuery, $options: 'i' } },
-                    // Add additional fields for searching if needed
-                ].filter(Boolean), // Filter out falsy values (e.g., if searchQuery is not a number)
+                ].filter(Boolean),
             };
         }
-
         const totalProducts = await Product.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / itemsPerPage);
-
         const products = await Product.find(query)
             .sort({ _id: -1 })
             .populate('category')
             .skip((page - 1) * itemsPerPage)
             .limit(itemsPerPage);
-
         res.render('./product/products', {
             title: 'Products',
             products,
@@ -49,7 +41,6 @@ const productList = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
 //add product with categories that stored in database------------------------------------------------------->
 const addform = function(req, res) {
     Category.find({}).exec()
@@ -65,22 +56,15 @@ const addform = function(req, res) {
 const addproduct = async function (req, res) {
     const { name, description, category, price, ingredients, quantity } = req.body;
     let image;
-
     if (req.file) {
         const imagePath = req.file.path;
         const imageFilename = req.file.filename;
-    
-        // Use Sharp to resize the image (adjust the dimensions as needed)
         const resizedImagePath = path.join(__dirname, '../public/assets/product-images', `resized_${imageFilename}`);
-    
         await sharp(imagePath)
-            .resize(300, 200) // Set your desired dimensions here
+            .resize(300, 200) 
             .toFile(resizedImagePath);
-    
             image = `resized_${imageFilename}`;
     }
-    
-
     const newProduct = new Product({
         name,
         description,
@@ -90,7 +74,6 @@ const addproduct = async function (req, res) {
         ingredients,
         quantity,
     });
-
     newProduct.save()
         .then(() => {
             res.redirect('/product');
@@ -127,8 +110,6 @@ const updateproduct = async function (req, res) {
         if (!currentProduct) {
             return res.status(404).send('Product not found');
         }
-
-        // Delete existing image if specified
         if (deleteExistingImage === 'on' && currentProduct.image) {
             const imagePath = path.join(__dirname, '../public/assets/product-images', currentProduct.image);
             try {
@@ -143,30 +124,21 @@ const updateproduct = async function (req, res) {
                 console.log('File not found:', imagePath);
             }
         }
-
-        // Update image if a new one is provided
         if (req.file) {
             const imagePath = req.file.path;
             const imageFilename = req.file.filename;
-
-            // Use Sharp to resize the image (adjust the dimensions as needed)
             const resizedImagePath = path.join(__dirname, '../public/assets/product-images', `resized_${imageFilename}`);
-
             await sharp(imagePath)
-                .resize(300, 200) // Set your desired dimensions here
+                .resize(300, 200) 
                 .toFile(resizedImagePath);
-
             currentProduct.image = `resized_${imageFilename}`;
         }
-
-        // Update other product details
         currentProduct.name = name;
         currentProduct.description = description;
         currentProduct.category = category;
         currentProduct.price = price;
         currentProduct.ingredients = ingredients;
-        currentProduct.quantity = quantity; // Add this line to update quantity
-
+        currentProduct.quantity = quantity; 
         await currentProduct.save();
         console.log('Updated Product:', currentProduct);
         res.redirect('/product');

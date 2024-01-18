@@ -124,16 +124,11 @@ ul.timeline > li.active:before {
         background-color: #0056b3;  
     }
 
-
-
-
-
 </style>
 <body>
     <% orders.forEach(function(order) { %>
         <section class="my-5" data-order-id="<%= order.orderID %>" data-order-status="<%= order.status %>">
             <div id="cancelledOrderAlert-<%= order.orderID %>"></div>
-            <!-- Add this modal structure to your HTML -->
 <div class="modal fade" id="cancelProductConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="cancelProductConfirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -153,7 +148,6 @@ ul.timeline > li.active:before {
       </div>
     </div>
   </div>
-  
          <div class="modal fade" id="cancelOrderModal-<%= order.orderID %>" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -166,11 +160,8 @@ ul.timeline > li.active:before {
                     <div class="collapse" id="collapseExample">
                         <div class="card card-body">
                             <h2>Cancellation Policy</h2>
-
                             <p>We understand that circumstances may arise, and you may need to cancel your coffee shop delivery order. Please take note of our cancellation policy outlined below:</p>
-                            
                             <ol>
-                                <!-- Cancellation Window -->
                                 <li>
                                     <strong>Cancellation Window:</strong>
                                     <ul>
@@ -178,8 +169,6 @@ ul.timeline > li.active:before {
                                         <li>Once the order is in the processing stage, cancellations may not be possible.</li>
                                     </ul>
                                 </li>
-                            
-                                <!-- Cancellation Process -->
                                 <li>
                                     <strong>Cancellation Process:</strong>
                                     <ul>
@@ -187,8 +176,6 @@ ul.timeline > li.active:before {
                                         <li>Click on the respective order and follow the cancellation instructions.</li>
                                     </ul>
                                 </li>
-                            
-                                <!-- Refund Policy -->
                                 <li>
                                     <strong>Refund Policy:</strong>
                                     <ul>
@@ -196,8 +183,6 @@ ul.timeline > li.active:before {
                                         <li>Refunds will be processed within 3-5 business days.</li>
                                     </ul>
                                 </li>
-                            
-                                <!-- Exceptions -->
                                 <li>
                                     <strong>Exceptions:</strong>
                                     <ul>
@@ -205,8 +190,6 @@ ul.timeline > li.active:before {
                                         <li>Special circumstances may be considered; please contact our customer support for assistance.</li>
                                     </ul>
                                 </li>
-                            
-                                <!-- Contact Information -->
                                 <li>
                                     <strong>Contact Information:</strong>
                                     <ul>
@@ -214,9 +197,7 @@ ul.timeline > li.active:before {
                                     </ul>
                                 </li>
                             </ol>
-                            
                             <p>By placing an order with us, you acknowledge and agree to abide by our cancellation policy.</p>
-                            
                         </div>
                       </div>
                     <div class="modal-body">
@@ -226,7 +207,6 @@ ul.timeline > li.active:before {
                             <li>Review our <a class="" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Cancellation Policy</a>.</li>
                         </ul>
-                       
                         <p><i class="fas fa-info-circle text-info"></i> Are you sure you want to cancel this order?</p>
                         <label for="cancelReason">Reason for cancellation:</label>
                         <textarea class="form-control" id="cancelReason-<%= order.orderID %>" rows="3" placeholder="Enter your reason"></textarea>
@@ -288,7 +268,6 @@ ul.timeline > li.active:before {
                                                 <td><span>Quantity: <%= product.quantity %></span></td>
                                                 <td>
                                                     <% if (order.status.toLowerCase() !== 'cancelled' && order.products.length > 1 && order.status.toLowerCase() !== 'delivered') { %>
-                                                        <!-- Cancel Product Button -->
                                                         <button class="btn btn-danger cancel-product-btn"
                                                             data-order-id="<%= order.orderID %>"
                                                             data-product-id="<%= product.product._id %>"
@@ -368,14 +347,10 @@ ul.timeline > li.active:before {
         <span>Page <%= page %></span>
         <a href="?page=<%= page + 1 %>&limit=<%= limit %>" class="btn btn-primary">Next</a>
     </div>
-    
-    <!-- Add these script tags in the head section of your HTML -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
-   
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>  
 <script src="https://unpkg.com/jspdf-invoice-template@1.4.3/dist/index.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -423,10 +398,7 @@ function getStatusWidth(status) {
     }
 }
 </script>
-
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
 <script>
     function confirmCancelOrder(orderID) {
         const cancellationReasonElement = document.getElementById('cancelReason-' + orderID);
@@ -441,17 +413,11 @@ function getStatusWidth(status) {
                 if (xhr.status === 200) {
                     const data = JSON.parse(xhr.responseText);
                     console.log('Order canceled and reason saved:', data);
-
-                    // Manually hide the modal using JavaScript
                     const modal = document.getElementById('cancelOrderModal-' + orderID);
                     modal.style.display = 'none';
-
-                    // Refresh the page
                     setTimeout(function () {
-                        // Refresh the page using window.location.reload()
                         window.location.reload();
                     }, 2000);
-
                     const alertContainer = document.getElementById('cancelledOrderAlert-' + orderID);
                     const alertMessage = `Order ${orderID} has been successfully canceled.`;
                     alertContainer.innerHTML = `
@@ -466,11 +432,9 @@ function getStatusWidth(status) {
                     console.error('Error canceling order. Server responded with:', xhr.status);
                 }
             };
-
             xhr.onerror = function () {
                 console.error('Request failed');
             };
-
             xhr.send(JSON.stringify({
                 orderID: orderID,
                 cancellationReason: cancellationReason,
@@ -480,86 +444,55 @@ function getStatusWidth(status) {
         }
     }
 </script>
-
-    
-
 <script>
     function showCancelProductConfirmationModal(orderID, productID) {
-        // Set the orderID and productID as data attributes in the modal
         document.getElementById('cancelProductConfirmationModal').setAttribute('data-order-id', orderID);
         document.getElementById('cancelProductConfirmationModal').setAttribute('data-product-id', productID);
-
-        // Show the confirmation modal
         var modal = new bootstrap.Modal(document.getElementById('cancelProductConfirmationModal'));
         modal.show();
     }
-
     function cancelProductConfirmed() {
         const orderID = document.getElementById('cancelProductConfirmationModal').getAttribute('data-order-id');
         const productID = document.getElementById('cancelProductConfirmationModal').getAttribute('data-product-id');
-
-        // Create a new XMLHttpRequest object
         var xhr = new XMLHttpRequest();
-
-        // Set up the request
         xhr.open('POST', '/cancelProduct', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-
-        // Set up the event handler for when the request is completed
         xhr.onload = function () {
             if (xhr.status === 200) {
-                // Successful response
                 var data = JSON.parse(xhr.responseText);
                 console.log(data);
-
-                // Manually hide the product cancellation confirmation modal
                 var modal = new bootstrap.Modal(document.getElementById('cancelProductConfirmationModal'));
                 modal.hide();
-
-                // Refresh the page or update the UI as needed
-                window.location.reload(); // or any other logic
+                window.location.reload(); 
             } else {
-                // Error handling
                 console.error('Error:', xhr.statusText);
             }
         };
-
-        // Set up the event handler for network errors
         xhr.onerror = function () {
             console.error('Network error occurred');
         };
-
-        // Send the request with the JSON payload
         xhr.send(JSON.stringify({ orderId: orderID, productId: productID }));
     }
 </script>
 <script>
-    // JavaScript to show the modal when clicking the link
     document.getElementById('showCancellationPolicy').addEventListener('click', function() {
         document.getElementById('cancellationPolicyModal').style.display = 'block';
     });
-
-    // JavaScript to close the modal
     function closeCancellationPolicyModal() {
         document.getElementById('cancellationPolicyModal').style.display = 'none';
     }
 </script>
 <script>
-    // Function to prompt for the order ID and initiate PDF generation
     function generatePDF(orderID) {
         const confirmed = confirm('Are you sure you want to download the invoice for Order ID ' + orderID + '?');
-
         if (confirmed) {
-            // Make an AJAX request to the server to generate and download the PDF
             const xhr = new XMLHttpRequest();
             xhr.open('GET', '/download-invoice/' + encodeURIComponent(orderID), true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        // Optionally handle success, for example, show a success message
                         console.log('Invoice generated and downloaded successfully');
                     } else {
-                        // Handle any errors
                         console.error('Error generating or downloading the invoice:', xhr.statusText);
                     }
                 }
@@ -568,9 +501,4 @@ function getStatusWidth(status) {
         }
     }
 </script>
-
- 
-
-
-
 </html>

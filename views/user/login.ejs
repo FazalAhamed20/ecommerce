@@ -3,14 +3,7 @@
   body{
     background-color: #EDC9A0;
   }
-  input:invalid{
-    animation:shake 300ms;
-  }
-  @keyframes shake {
-    0%,100% {transform: translate(0);}
-    25% {transform :translate(0.125rem);}
-    75% {transform: translate(-0.125rem);}
-  }
+  
 </style>
 
 
@@ -24,8 +17,8 @@
                   <form  action="/login1" method="post">
                     <img class="avator" src="/assets/avator.svg" />
                     <h2>Welcome</h2>
-                    <% if (error) { %>
-                      <p style="color: red;"><%= error %></p>
+                    <% if (error1) { %>
+                      <p style="color: red;"><%= error1 %></p>
                   <% } %>
                     <div class="input-div" one>
                       <div class="i">
@@ -49,8 +42,7 @@
                   </form>
                 </div>
               </div>
-              <footer>
-              </footer>
+             
               <script type="text/javascript" src="js/main.js"></script>
 
 <%- include('footer') -%>

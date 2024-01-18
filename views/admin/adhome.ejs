@@ -1,4 +1,4 @@
-
+<%- include('header') -%>
 <%- include('nav') -%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -10,7 +10,7 @@
 <style>
   body {
     margin: 0;
-    overflow: hidden; /* Prevent any potential scrollbars */
+    overflow: hidden; 
   }
 
   #video-container1 {
@@ -28,7 +28,7 @@
   #video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Cover the entire container */
+    object-fit: cover; 
   }
 </style>
 
@@ -171,10 +171,30 @@
     background-color: #28a745;
     color: #fff;
   }
+  .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    #dateSelectionForm {
+      display: flex;
+      flex-direction: row;
+      gap: 10px; 
+      margin-top: 10px; 
+    }
+
+    #dateSelectionForm label,
+    #dateSelectionForm input,
+    #dateSelectionForm button {
+      margin-bottom: 5px; 
+    }
 
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 <body>
 </head>
 <body>
@@ -215,15 +235,18 @@
     </div>
 
     <div>
-      <h1>Sales Report</h1>
-      <form id="dateSelectionForm">
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" required>
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" required>
-        <button type="button" onclick="downloadSalesReport()">Download Sales Report</button>
-      </form>
+      <div class="card">
+        <h1>Sales Report</h1>
+        <form id="dateSelectionForm">
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="startDate" required>
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="endDate" required>
+          <button type="button" onclick="downloadSalesReport()">Download Sales Report</button>
+        </form>
+      </div>
     </div>
+    
 
     <div style="width: 100%;"> 
       <h2>Recently Placed Orders</h2>
@@ -265,57 +288,44 @@
       const video = document.getElementById('video');
       const videoContainer = document.getElementById('video-container1');
       const dashboardContainer = document.querySelector('.dashboard-container');
-  
       video.addEventListener('ended', () => {
-        // Fade out the video
         videoContainer.style.opacity = 0;
-        // Show the admin content
         setTimeout(() => {
           dashboardContainer.style.opacity = 1;
-        }, 1000); // Adjust the delay as needed
+        }, 1000); 
       });
-  
-     
     });
-
-
 </script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    let selectedTimeInterval = 'daily'; // Default to daily
-
+    let selectedTimeInterval = 'daily'; 
     function updateChart() {
       selectedTimeInterval = document.getElementById('time-interval').value;
       updateChartData(selectedTimeInterval);
     }
-
     function updateChartData(timeInterval) {
       let timeUnit, unitStepSize, tooltipFormat;
-
       if (timeInterval === 'weekly') {
         timeUnit = 'week';
-        unitStepSize = 1; // Display every week
-        tooltipFormat = 'W YYYY'; // Week and year
+        unitStepSize = 1; 
+        tooltipFormat = 'W YYYY';
       } else if (timeInterval === 'monthly') {
         timeUnit = 'month';
-        unitStepSize = 1; // Display every month
-        tooltipFormat = 'MMM YYYY'; // Month and year
+        unitStepSize = 1; 
+        tooltipFormat = 'MMM YYYY'; 
       } else if (timeInterval === 'yearly') {
         timeUnit = 'year';
-        unitStepSize = 1; // Display every year
-        tooltipFormat = 'YYYY'; // Year
+        unitStepSize = 1; 
+        tooltipFormat = 'YYYY';
       } else {
         timeUnit = 'day';
-        unitStepSize = 1; // Display every day
-        tooltipFormat = 'MMM DD, YYYY'; // Month, day, and year
+        unitStepSize = 1; 
+        tooltipFormat = 'MMM DD, YYYY'; 
       }
-
       const xValues = JSON.parse('<%- xValues %>');
       const yValues = JSON.parse('<%- JSON.stringify(yValues) %>');
-      
       const formattedXValues = xValues.map(dateString => formatXLabel(dateString, timeInterval));
-
       new Chart("myChart", {
         type: "line",
         data: {
@@ -375,11 +385,9 @@
       } else if (timeInterval === 'yearly') {
         return `${date.getFullYear()}`;
       } else {
-        // Default to daily
         return `${getMonthName(date.getMonth())} ${date.getDate()}, ${date.getFullYear()}`;
       }
     }
-
     function getMonthName(monthIndex) {
       const months = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -406,7 +414,7 @@
       updateChart();
     });
 
-    updateChartData(selectedTimeInterval); // Initial chart rendering
+    updateChartData(selectedTimeInterval);
   });
 </script>
 
@@ -414,29 +422,14 @@
   function downloadSalesReport() {
     var startDate = document.getElementById('startDate').value;
     var endDate = document.getElementById('endDate').value;
-
-    // Perform validation if needed
     if (startDate === "" || endDate === "") {
       alert("Please select both start and end dates.");
       return;
     }
-
-    // Construct the download URL with selected dates
     var downloadURL = '/download-sales-report?startDate=' + startDate + '&endDate=' + endDate;
-
-    // Open the URL in a new tab
     window.open(downloadURL, '_blank');
   }
 </script>
-
-
-
-
-  
-  
-  <!-- ... your existing HTML code ... -->
-  
- 
 
   <%- include('footer') -%>
 </body>

@@ -14,20 +14,15 @@ const usermain = (req, res) => {
     res.render('./userprofile/userprofile.ejs', { pageTitle: 'userprofile', user, successMessage: '', errorMessage: '' });
 };
 //user address------------------------------------------------------->
-
 const address = async (req, res) => {
     try {
         if (req.session.user) {
-            const userId = req.session.user._id; // Corrected syntax
-            
-            
+            const userId = req.session.user._id; 
             const user = await User.findById(userId);
             console.log(user);
-
             if (!user) {
                 return res.status(404).send('User not found');
             }
-
             const addresses = await Address.find({ userId: user._id });
             res.render('userprofile/address', { addresses, user });
         } else {
@@ -38,7 +33,6 @@ const address = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
 //user add address------------------------------------------------------->
 const addaddress = (req, res) => {
     const user = req.session.user || {};
@@ -48,7 +42,6 @@ const addaddress = (req, res) => {
 const addaddressform = async (req, res) => {
     try {
         if (req.session.user) {
-            // Get the user from the database using the email
             const userId = req.session.user._id;
             console.log("userid", userId);
             const user = await User.findById(userId);

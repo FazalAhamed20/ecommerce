@@ -6,7 +6,6 @@ const crypto = require('crypto');
 const moment = require('moment');
 const CanceledOrder = require('../models/orderCancelModel');
 const Product = require('../models/productModel');
-const easyinvoice = require('easyinvoice');
 const pdf = require('html-pdf');
 const fs = require('fs');
 const ejs = require('ejs');
@@ -68,6 +67,7 @@ const createOrderData = async (userId, paymentMethod, selectedAddress) => {
       status: 'Pending',
   };
 };
+//order confirmed------------------------------------------------------->
 const confirm = async (req, res) => {
   try {
       const user = req.session.user;
@@ -85,6 +85,8 @@ const checkout = async (req, res) => {
         const userId = req.session.user._id;
         const addresses = await Address.find({ userId });
         console.log("User Addresses:", addresses);
+        const decrement=await Product.find(abcdd)
+        const result=decrement.quantity--;
         if (!addresses || addresses.length === 0) {
             return res.status(404).json({ success: false, message: 'User addresses not found' });
         }
@@ -109,26 +111,20 @@ const createOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
     const { paymentMethod, selectedAddressIndex } = req.body;
-
     if (!paymentMethod || !selectedAddressIndex || !selectedAddressIndex.length) {
       req.flash('error', 'Address or Payment is not selected');
       return res.redirect('/user/checkout');
     }
-
     if (!userId) {
       return res.status(401).json({ error: 'User not authenticated' });
     }
-
     const addresses = await Address.find({ userId });
     const selectedAddress = addresses[selectedAddressIndex];
 
     if (!selectedAddress) {
       return res.status(404).json({ error: 'Selected address not found' });
     }
-
     const orderData = await createOrderData(userId, paymentMethod, selectedAddress);
- 
-
     if (paymentMethod === 'Cash on Delivery') {
       const newOrder = new orderModels(orderData);
       const savedOrder = await newOrder.save();
@@ -143,13 +139,11 @@ const createOrder = async (req, res) => {
         receipt: orderData.orderID,
       };
       console.log(razorpayOptions);
-
       instance.orders.create(razorpayOptions, function (err, razorpayOrder) {
         if (err) {
           console.error(err);
           return res.status(500).json({ error: 'Razorpay order creation failed' });
         }
-
         return res.render('./orders/razorpay-checkout', {
           pageTitle: 'Razorpay Checkout',
           user: req.session.user,
@@ -159,7 +153,7 @@ const createOrder = async (req, res) => {
           messages: req.flash(),
           orderID: orderData.orderID,
           razorpayOrder,
-          paymentMethod, // Add paymentMethod to the render parameters
+          paymentMethod,
           selectedAddressIndex,
         });
       });
@@ -175,13 +169,10 @@ const userOrder = async (req, res) => {
       if (!req.session.user) {
           return res.render('./orders/userorder', { pageTitle: 'userorder', user: null, orders: [] });
       }
-
       const userId = req.session.user._id;
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 3; // You can adjust the default limit
-
+      const limit = parseInt(req.query.limit) || 3; 
       const skip = (page - 1) * limit;
-
       const orders = await orderModels.find({ customer: userId })
           .populate({
               path: 'products.product',
@@ -191,14 +182,13 @@ const userOrder = async (req, res) => {
           .skip(skip)
           .limit(limit)
           .exec();
-
       res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders, page, limit });
   } catch (error) {
       console.error('Error fetching user orders:', error);
       res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
+//razorpay online payment-------------------------------------------------------> 
 const processPayment = async (req, res) => {
   try {
     const userId = req.session.user._id;
@@ -207,27 +197,17 @@ const processPayment = async (req, res) => {
       const addresses = await Address.find({ userId });
       const selectedAddress = addresses[selectedAddressIndex];
       const secret = 'zeSoohctIJNkPlHsAeDwKUR2'; 
-
-      // Verify the signature
       const generatedSignature = crypto.createHmac('sha256', secret)
           .update(order_id + '|' + payment_id)
           .digest('hex');
-
       if (generatedSignature === signature) {
-          // Signature is valid
-          console.log('Signature verification successful');
-          console.log('Payment ID:', payment_id);
-          console.log('Order ID:', order_id);
           const orderData = await createOrderData(userId, paymentMethod, selectedAddress);
           console.log("order",orderData);
           const newOrder = new orderModels(orderData);
       const savedOrder = await newOrder.save();
       await cartModels.findOneAndDelete({ userId });
-
       res.json({ success: true });
-    
       } else {
-          // Signature is invalid
           console.error('Signature verification failed');
           res.status(400).json({ error: 'Invalid signature' });
       }
@@ -236,37 +216,23 @@ const processPayment = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-
+//cancellation of order-------------------------------------------------------> 
 const cancelorder = async (req, res) => {
   try {
-    // Extract order ID and cancellation reason from the request body
     const { orderID, cancellationReason } = req.body;
-
-    console.log({ orderID, cancellationReason });
-
-    // Create a new instance of the CanceledOrder model
     const canceledOrder = new CanceledOrder({
       orderID: orderID,
       reason: cancellationReason,
     });
-
-    // Save the canceled order to the database
     const savedOrder = await canceledOrder.save();
-
-    // Update the order status in your main orders collection to 'cancelled'
     const updatedOrder = await orderModels.findOneAndUpdate(
       { orderID: orderID },
       { $set: { status: 'cancelled' } },
       { new: true }
     );
-
     if (!updatedOrder) {
       return res.status(404).json({ error: 'Order not found' });
     }
-
-    // Perform any other necessary actions
-
     res.status(200).json({
       message: 'Order canceled, reason saved, and main order status updated',
       canceledOrder: savedOrder,
@@ -277,51 +243,26 @@ const cancelorder = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
+ //cancel of a single product------------------------------------------------------->   
 const cancelProduct = async (req, res) => {
   const { orderId, productId } = req.body;
-
-  console.log("Cancel order", { orderId, productId });
-
   try {
-    // Retrieve the order from the database based on orderID field
     const order = await orderModels.findOne({ orderID: orderId }).populate('products.product');
-
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
-
-    // Find the product in the order with the specified productId
     const productIndex = order.products.findIndex(
       (product) => product.product._id.toString() === productId
     );
-
     if (productIndex === -1) {
       return res.status(404).json({ success: false, message: 'Product not found in the order' });
     }
-
-    // Log detailed information about the cancelled product
     const cancelledProduct = order.products[productIndex];
-    console.log('Cancelled Product:', cancelledProduct);
-
-    // Log the product name and the total amount to be subtracted
     const productName = cancelledProduct.product ? cancelledProduct.product.productName : 'Unknown Product';
     const price = isNaN(cancelledProduct.product?.price) ? 0 : cancelledProduct.product.price;
     const tax = isNaN(cancelledProduct.product?.tax) ? 0 : cancelledProduct.product.tax;
     const cancelledAmount = (cancelledProduct.quantity * price) + tax;
-
-    // Log the product details and calculated amounts
-    console.log('Product Name:', productName);
-    console.log('Cancelled Amount:', cancelledAmount);
-    console.log('Cancelled Price:', price);
-
-    // Log the totals before the update
-    console.log('Before Update Totals:', order.totals);
-
-    // Update the product quantity
     const updatedProductQuantity = cancelledProduct.product.quantity + cancelledProduct.quantity;
-
-    // Update the order in the database using $pull and $inc
     const result = await orderModels.updateOne(
       { orderID: orderId },
       {
@@ -329,21 +270,15 @@ const cancelProduct = async (req, res) => {
         $inc: {
           'totals.subtotal': -price * cancelledProduct.quantity,
           'totals.tax': -tax * cancelledProduct.quantity,
-          'totals.shipping': 0, // Adjust this based on your logic for shipping
+          'totals.shipping': 0,
           'totals.grandTotal': -cancelledAmount,
         },
       }
     );
-
-    // Update the product quantity in the database
     await Product.updateOne(
       { _id: productId },
       { $set: { quantity: updatedProductQuantity } }
     );
-
-    // Log the totals after the update
-    console.log('After Update Totals:', result);
-
     if (result.modifiedCount > 0) {
       res.json({ success: true, message: 'Product canceled successfully' });
     } else {
@@ -354,66 +289,41 @@ const cancelProduct = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
   }
 };
-
+//download invoice------------------------------------------------------->   
 const downloadInvoice = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-
-    console.log(orderId);
-
-    // Fetch order details from the database
     const orderDetails = await orderModels.findOne({ orderID: orderId })
     .populate({
-      path: 'products.product', // Assuming 'product' field in 'products' array references the Product model
-      select: 'name price', // Specify the fields you want to populate
+      path: 'products.product',
+      select: 'name price', 
     })
     .exec();
-
-    // Check if the order exists
     if (!orderDetails) {
       console.log('Order not found');
       return res.status(404).send('Order not found');
     }
-
-    console.log('Order Details:', orderDetails);
-
-    // Read the EJS template from the file
     const templatePath = 'views/orders/invoice.ejs';
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
-
-    // Render the EJS template
     const renderedHTML = ejs.render(templateContent, { orderDetails,user:req.session.user });
-
-    // Generate PDF from HTML
-    const pdfOptions = { format: 'Letter' }; // You can adjust the format as needed
+    const pdfOptions = { format: 'Letter' }; 
     pdf.create(renderedHTML, pdfOptions).toStream((err, stream) => {
       if (err) {
         console.error('Error generating PDF:', err);
         res.status(500).send('Internal server error');
         return;
       }
-
       const currentDate = new Date();
     const formattedDate = currentDate.toISOString().slice(0, 10);
-
-      // Set response headers for file download
       res.setHeader('Content-Disposition', `attachment; filename=invoice_${formattedDate}.pdf`);
       res.setHeader('Content-Type', 'application/pdf');
-
-      // Stream the PDF directly to the response object
       stream.pipe(res);
     });
-
   } catch (error) {
     console.error('Error in downloadInvoice:', error);
     res.status(500).send('Internal Server Error: ' + error.message);
   }
 };
-
-
-
-
-
 //modules------------------------------------------------------->
  module.exports={
     checkout,

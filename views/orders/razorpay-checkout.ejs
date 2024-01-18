@@ -15,24 +15,18 @@
     <p>Your order details:</p>
     <p>Order ID: <%= razorpayOrder.receipt %></p>
     <p>Amount: <%= razorpayOrder.amount / 100 %> INR</p>
-
-    <!-- Include the Razorpay checkout script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
  
     <script>
-   
         var options = {
-            "key": "rzp_test_YCxRFmZdRfF2Qw", // Replace with your actual Razorpay key
-            "amount": "<%= totals.grandTotal * 100 %>", // Amount in paise
+            "key": "rzp_test_YCxRFmZdRfF2Qw",
+            "amount": "<%= totals.grandTotal * 100 %>", 
             "currency": "INR",
             "name": "Coffee Land",
             "description": "Test Transaction",
             "image": "https://example.com/your_logo",
             "order_id": "<%= razorpayOrder.id %>",
-// Replace with the dynamically generated order ID
             "handler": function (response) {
-                
-                
                 fetch('/process-payment', {
         method: 'POST',
         headers: {
@@ -42,7 +36,7 @@
             payment_id: response.razorpay_payment_id,
             order_id: response.razorpay_order_id,
             signature: response.razorpay_signature,
-            paymentMethod: "<%= paymentMethod %>", // Add paymentMethod to the request body
+            paymentMethod: "<%= paymentMethod %>",
                         selectedAddressIndex: "<%= selectedAddressIndex %>",
         }),
     })
@@ -50,7 +44,6 @@
     .then(data => {
         console.log('Payment details sent to the server:', data);
         if (data.success) {
-                        // If success is true, redirect to the confirm page
                         window.location.href = '/user/confirm';
                     }
         
@@ -59,12 +52,8 @@
         console.error('Error sending payment details to the server:', error);
     });
 
-    return this; // You can return any value or object you need
+    return this; 
 },
-
-                
-
-            
             "prefill": {
                 "name": "<%= user.name %>",
                 "email": "<%= user.email %>",
@@ -77,8 +66,6 @@
                 "color": "#3399cc"
             }
         };
-       
-
         var rzp1 = new Razorpay(options);
         rzp1.on('payment.failed', function (response) {
             alert(response.error.code);
@@ -89,10 +76,7 @@
             alert(response.error.metadata.order_id);
             alert(response.error.metadata.payment_id);
         });
-
         rzp1.open();
-    
-
 </script>
 </body>
 </html>

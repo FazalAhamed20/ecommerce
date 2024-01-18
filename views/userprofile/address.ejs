@@ -72,7 +72,7 @@
     color: #4A90E2;
     cursor: pointer;
     transition: color 0.3s ease;
-    margin-left: 10px; /* Adjust the margin-left for spacing */
+    margin-left: 10px; 
   }
 
   .edit-address-icon:hover,
@@ -102,12 +102,9 @@
   <% addresses.forEach(function(address, index) { %>
     <div class="address-card">
       <div class="icons">
-        <!-- Edit Icon -->
         <a href="/user/editaddressform/<%= address._id %>" class="edit-address-icon">
           <i class="fas fa-pencil-alt"></i>
         </a>
-
-        <!-- Delete Icon -->
         <a href="/user/deleteaddress/<%= address._id %>" class="delete-address-icon">
           <i class="fas fa-trash-alt"></i>
         </a>

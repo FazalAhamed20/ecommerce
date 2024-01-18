@@ -19,10 +19,7 @@ const admin = (req, res) => {
 //admin home------------------------------------------------------->
 const adhome = async (req, res) => {
   try {
-    
     const totalOrders = await orderModels.countDocuments();
-
-   
     const totalProductQuantity = await orderModels.aggregate([
       {
         $unwind: '$products',
@@ -34,19 +31,10 @@ const adhome = async (req, res) => {
         },
       },
     ]).exec();
-
-   
     const productQuantity = totalProductQuantity.length > 0 ? totalProductQuantity[0].totalProductQuantity : 0;
-
-    
     const totalUsers = await User.countDocuments();
-
-   
     const orders = await orderModels.find();
-
-   
     const selectedTimeInterval = req.query.interval || 'daily';
-
     let timeFormat, timeUnit, dateFormat;
     if (selectedTimeInterval === 'monthly') {
       timeFormat = '%Y-%m';
@@ -61,9 +49,6 @@ const adhome = async (req, res) => {
       timeUnit = '$dayOfMonth';
       dateFormat = 'MMMM DD, YYYY';
     }
-
-
-    // Aggregate orders based on the selected time interval and calculate the count for each period
     const ordersWithDate = await orderModels.aggregate([
       {
         $match: { "orderDate": { $exists: true } }
@@ -85,16 +70,9 @@ const adhome = async (req, res) => {
         $sort: { date: 1 } 
       }
     ]).exec();
-
-    // Filter out null or undefined dates
     const validOrdersWithDate = ordersWithDate.filter(order => order.date && order.date !== 'null');
-
-    // Set xValues and yValues based on the selected time interval
     const xValues = validOrdersWithDate.map(order => order.date);
     const yValues = validOrdersWithDate.map(order => order.count);
-   
-
-  
     const recentlyPlacedOrders = await orderModels
     .find()
     .sort({ orderDate: -1 })
@@ -106,7 +84,6 @@ const adhome = async (req, res) => {
       productQuantity,
       totalUsers,
       orders,
-     
       xValues: JSON.stringify(xValues), 
       yValues,
       recentlyPlacedOrders,
@@ -119,7 +96,6 @@ const adhome = async (req, res) => {
     res.status(500).send('Internal server error');
   }
 };
-
 //checking email and password of admin------------------------------------------------------->
 const dashboard = (req, res) => {
   const credential = {
@@ -130,7 +106,6 @@ const dashboard = (req, res) => {
     email: req.body.email,
     password: parseInt(req.body.password),
   };
-
   if (userInput.email === credential.email && userInput.password === credential.password) {
     req.session.admin = userInput.email;
     req.session.adLogged = true;
@@ -141,16 +116,14 @@ const dashboard = (req, res) => {
   }
 };
 const users = async (req, res) => {
-  const itemsPerPage = 3; // pagination
+  const itemsPerPage = 3; 
   const page = parseInt(req.query.page) || 1;
   try {
     const totalUsers = await User.countDocuments();
     const totalPages = Math.ceil(totalUsers / itemsPerPage);
-
     const users = await User.find()
       .skip((page - 1) * itemsPerPage)
       .limit(itemsPerPage);
-
     res.render('./admin/userlist', {
       title: 'users',
       users,  
@@ -200,12 +173,9 @@ const unblock=async (req, res) => {
 const userOrder = async (req, res) => {
   const itemsPerPage = 3;
   const page = parseInt(req.query.page) || 1;
-
   try {
     const totalOrders = await orderModels.countDocuments();
     const totalPages = Math.ceil(totalOrders / itemsPerPage);
-
-    // Fetch user orders
     const orders = await orderModels
       .find()
       .skip((page - 1) * itemsPerPage)
@@ -216,19 +186,16 @@ const userOrder = async (req, res) => {
         select: 'name price description image',
       })
       .exec();
-
-    // Fetch canceled orders for each user order
     const canceledOrders = await Promise.all(
       orders.map(async (order) => {
         const canceledOrder = await CanceledOrder.findOne({ orderID: order.orderID });
         return canceledOrder || null;
       })
     );
-
     res.render('./admin/userOrder', {
       title: 'User Orders',
       orders,
-      canceledOrders, // Add canceledOrders to the rendered data
+      canceledOrders, 
       totalPages,
       currentPage: page,
     });
@@ -237,9 +204,6 @@ const userOrder = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-
-
-
 //update order status------------------------------------------------------->
 const updateOrderstatus = async (req, res) => {
   try {
@@ -263,48 +227,29 @@ const logout = (req, res) => {
     }
   });
 };
-
-
-
+//generateSalesReport------------------------------------------------------->
 const generateSalesReport = async (req, res) => {
   try {
-    // Extract start and end dates from the request query parameters
     const startDate = req.query.startDate ? moment(req.query.startDate).startOf('day') : moment().startOf('day');
     const endDate = req.query.endDate ? moment(req.query.endDate).endOf('day') : moment().endOf('day');
-
-    // Fetch orders within the specified date range
     const orders = await orderModels.find({
       orderDate: { $gte: startDate.toDate(), $lte: endDate.toDate() },
       status: 'delivered',
     }).populate('customer products.product');
-
-    
-
-    // Format date on the server side
     const formattedStartDate = startDate.format('YYYY-MM-DD HH:mm:ss');
     const formattedEndDate = endDate.format('YYYY-MM-DD HH:mm:ss');
-
-    // Read the EJS template from the file
     const templatePath = 'views/admin/salesReport.ejs';
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
-
-    // Render the EJS template
     const renderedHTML = ejs.render(templateContent, { startDate: formattedStartDate, endDate: formattedEndDate, orders });
-
-    // Generate PDF from HTML
-    const pdfOptions = { format: 'Letter' }; // You can adjust the format as needed
+    const pdfOptions = { format: 'Letter' }; 
     pdf.create(renderedHTML, pdfOptions).toStream((err, stream) => {
       if (err) {
         console.error('Error generating PDF:', err);
         res.status(500).send('Internal server error');
         return;
       }
-
-      // Set response headers for file download
       res.setHeader('Content-Disposition', `attachment; filename=SalesReport_${formattedStartDate}_to_${formattedEndDate}.pdf`);
       res.setHeader('Content-Type', 'application/pdf');
-
-      // Stream the PDF directly to the response object
       stream.pipe(res);
     });
 
@@ -313,11 +258,6 @@ const generateSalesReport = async (req, res) => {
     res.status(500).send('Internal server error');
   }
 };
-
-
-
-
-
 //module exports------------------------------------------------------->
 module.exports = {
   admin,

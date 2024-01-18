@@ -4,11 +4,9 @@ const categoryList = async (req, res) => {
     const itemsPerPage = 3; //pagination
     const page = parseInt(req.query.page) || 1;
     const searchQuery = req.query.search || '';
-    console.log('Search Query:', searchQuery); // Add this line to log the search query
-
+    console.log('Search Query:', searchQuery); 
     try {
         let query = {};
-
         if (searchQuery) {
             query = {
                 $or: [
@@ -16,13 +14,11 @@ const categoryList = async (req, res) => {
                 ].filter(Boolean),
             };
         }
-
         const totalCategories = await Category.countDocuments(query);
         const totalPages = Math.ceil(totalCategories / itemsPerPage);
         const categories = await Category.find(query)
             .skip((page - 1) * itemsPerPage)
             .limit(itemsPerPage);
-
         res.render('./categories/category', {
             title: 'categories',
             categories,
@@ -35,18 +31,14 @@ const categoryList = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
 // create category in admin side------------------------------------------------------->
   const createcat = function(req, res) {
     const error= req.flash('error');
- 
     res.render('./categories/createcat',{error:error});
 };
 //add category in admin side------------------------------------------------------->
 const addcat = function(req, res) {
     const categoryName = req.body.categoryName;
-
-    // Check if the category with the same name already exists
     Category.findOne({ name: categoryName })
         .then(existingCategory => {
             if (existingCategory) {
@@ -54,9 +46,7 @@ const addcat = function(req, res) {
                 req.flash('error', error);
                 res.redirect('/createcat');
             } else {
-                // Category doesn't exist, create a new one
                 const newCategory = new Category({ name: categoryName });
-
                 newCategory.save()
                     .then(() => {
                         res.redirect('/category');
@@ -75,7 +65,6 @@ const addcat = function(req, res) {
 //finding category by id in database------------------------------------------------------->
 const editform = function(req, res) {
     const categoryId = req.params.id;
-
     Category.findById(categoryId)
         .then(category => {
             res.render('./categories/editcat', { category });

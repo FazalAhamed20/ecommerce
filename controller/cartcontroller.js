@@ -81,52 +81,36 @@ const addToCart = async (req, res) => {
   try {
     const userId = req.session.user._id;
     const productId = req.params.productId;
-
     const product = await Product.findById(productId);
     if (!product || product.quantity <= 0) {
       return res.status(400).json({ success: false, message: 'Product not available for purchase.' });
     }
-
     let cart = await cartModels.findOne({ userId });
     if (!cart) {
       cart = new cartModels({ userId, products: [] });
     }
-
     const existingProduct = cart.products.find(product => product.productId && product.productId.toString() === productId);
     if (existingProduct) {
-      // Check if decrementing will make the quantity negative
       if (product.quantity - 1 < 0) {
         return res.status(400).json({ success: false, message: 'Product out of stock.' });
       }
-
       existingProduct.quantity++;
-
-      // Decrement the quantity in the database
       product.quantity--;
       await product.save();
     } else {
-      // Check if decrementing will make the quantity negative
       if (product.quantity - 1 < 0) {
         return res.status(400).json({ success: false, message: 'Product out of stock.' });
       }
-
       cart.products.push({ productId, quantity: 1 });
-
-      // Decrement the quantity in the database
       product.quantity--;
       await product.save();
     }
-
     await cart.save();
-   
   } catch (error) {
     console.error('Error adding product to cart:', error);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
-
-
 //remove from the cart------------------------------------------------------->
 const removeFromCart = async (req, res) => {
   const userId = req.session.user._id; 
@@ -155,33 +139,24 @@ const updatequantity = async (req, res) => {
     const quantity = parseInt(req.params.quantity);
     console.log(quantity);
     const userId = req.session.user._id;
-
     if (!productId || productId === "null") {
       return res.status(400).json({ success: false, message: 'Invalid product ID' });
     }
-
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
-
     let userCart = await cartModels.findOne({ userId });
     if (!userCart) {
       userCart = new cartModels({ userId, products: [] });
     }
-
     const cartItemIndex = userCart.products.findIndex(product => product.productId && product.productId.toString() === productId);
     if (cartItemIndex !== -1) {
-      // Check if updating will make the quantity negative
       if (quantity < 0) {
         return res.status(400).json({ success: false, message: 'Invalid quantity' });
       }
-
-      // Update the quantity in the cart
       const oldQuantity = userCart.products[cartItemIndex].quantity;
       userCart.products[cartItemIndex].quantity = quantity;
-
-      // Update the quantity in the database
       const updatedQuantity = product.quantity + oldQuantity - quantity;
       product.quantity = updatedQuantity;
       console.log(product.quantity)
@@ -194,7 +169,6 @@ const updatequantity = async (req, res) => {
     } else {
       return res.status(400).json({ success: false, message: 'Product not found in the cart' });
     }
-
     await userCart.save();
     res.redirect('/user/cart');
   } catch (error) {
@@ -202,13 +176,10 @@ const updatequantity = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
-
 //modules------------------------------------------------------->
 module.exports = {
   usercart,
   addToCart,
   removeFromCart,
   updatequantity,
-  
- 
 };

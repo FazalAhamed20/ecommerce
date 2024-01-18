@@ -15,8 +15,6 @@ const home = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
-
-
 const coffeemix = (req, res) => {
     const user = req.session.user;
     
@@ -30,7 +28,7 @@ const signup=(req, res) => {
 const login = (req, res) => {
     const email=req.session.email
     console.log(email);
-    res.render("./user/login", { error: req.flash('error')[0] || '' });
+    res.render("./user/login", { error1: req.flash('error1')[0] || '' });
 }
 ;
 //checking the user valid or invalid------------------------------------------------------->
@@ -40,12 +38,12 @@ const login1 = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            req.flash('error', 'Invalid email or password');
-            return res.render('./user/login', { error: req.flash('error') });
+            req.flash('error1', 'Invalid email or password');
+            return res.render('./user/login', { error1: req.flash('error1') });
         }
         if (user.status === 'blocked') {
-            req.flash('error', 'User is blocked. Cannot log in.');
-            return res.render('./user/login', { error: req.flash('error') });
+            req.flash('error1', 'User is blocked. Cannot log in.');
+            return res.render('./user/login', { error1: req.flash('error1') });
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (passwordMatch) {
@@ -60,13 +58,13 @@ await cartItemCountMiddleware(req, res, () => {});
 const products = await Product.find().exec();
             return res.render('./user/userhome', { user ,products});
         } else {
-            req.flash('error', 'Invalid email or password');
-            return res.render('./user/login', { error: req.flash('error') });
+            req.flash('error1', 'Invalid email or password');
+            return res.render('./user/login', { error1: req.flash('error1') });
         }
     } catch (error) {
         console.error(error);
         req.flash('error', 'Internal Server Error');
-        return res.status(500).render('error', { error: req.flash('error') });
+        return res.status(500).render('error', { error1: req.flash('error') });
     }
 };
 //user products------------------------------------------------------->
@@ -132,11 +130,8 @@ const getProductsByCategory = async (req, res) => {
         const totalProducts = await Product.countDocuments({ category: categoryId });
         const totalPages = Math.ceil(totalProducts / itemsPerPage);
         if (currentPage < 1 || currentPage > totalPages) {
-            return res.status(404).render('error404'); // Handle invalid page numbers
+            return res.status(404).render('error404'); 
         }
-
-      
-
         const startIndex = (currentPage - 1) * itemsPerPage;
 const endIndex = startIndex + itemsPerPage;
         const products = await Product.find({ category: categoryId })
@@ -144,10 +139,8 @@ const endIndex = startIndex + itemsPerPage;
             .skip(startIndex)
             .limit(itemsPerPage);
             console.log(products.length);
-
         const categories = await Category.find();
         const cartItemCount = req.session.cartItemCount;
-
         res.render('./user/products', {
             title: 'Products',
             products,
@@ -162,7 +155,6 @@ const endIndex = startIndex + itemsPerPage;
         res.status(500).render('error500'); // Handle server error
     }
 };
-
 //user forgot password------------------------------------------------------->
 const forgot=(req, res) => {
     res.render('./user/forgot');
