@@ -1,6 +1,16 @@
 const nodemailer = require("nodemailer");
 const User=require('../models/userModel')
 const bcrypt = require('bcrypt');
+
+
+function generateReferralCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let referralCode = '';
+    for (let i = 0; i < 6; i++) {
+        referralCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return referralCode;
+}
 //Transporter for the mail(nodemailer)------------------------------------------------------->
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -63,8 +73,6 @@ const otp1 = async function (req, res) {
 //verifying generated otp and user entered otp------------------------------------------------------->
 const verify = async function (req, res) {
     const user = req.session.user;
-    const userSocketId = user.socketId;
-    console.log(userSocketId);
     const userOTP = req.body.otp;
     console.log(userOTP);
         console.log(otp);
@@ -83,19 +91,20 @@ const verify = async function (req, res) {
                 res.status(500).send('Internal Server Error');
                 return;
             }
+            const referral=generateReferralCode()
             const hashedPassword = user.password;
             console.log(hashedPassword);
             const newUser = new User({
                 name: user.name,
                 email: user.email,
                 password: hashedPassword,
-                socketId: userSocketId,   
+                referralCode:referral,                 
             });
             const savedUser = await newUser.save();
             req.session.userId = newUser._id;
             console.log('User data inserted successfully:', savedUser);
-            const error = "Welcome ,you are a member of Coffee land!";
-            res.render('./user/login', { user, error});
+            const error1 = "Welcome ,you are a member of Coffee land!";
+            res.render('./user/login', { user, error1});
         } catch (error) {
             console.error('Error hashing password or inserting data into MongoDB:', error);
             res.status(500).send('Internal Server Error');
@@ -124,10 +133,26 @@ const resend = function (req, res) {
         res.render('./admin/otp', { msg: "OTP has been sent" });
     });
 };
+const verifyReferal=async(req,res)=>{
+    const { referralCode } = req.body;
+    console.log("referal code",{referralCode});
+    try {
+        const user = await User.findOne({ referralCode });
+        if (user) {
+            res.json({ valid: true });
+        } else {
+            res.json({ valid: false });
+        }
+    } catch (error) {
+        console.error('Error validating referral code:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 //module exports------------------------------------------------------->
 module.exports = {
     otp1,
     verify,
     resend,
+    verifyReferal
     
 };

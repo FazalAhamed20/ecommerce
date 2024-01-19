@@ -3,6 +3,8 @@ const Product=require('../models/productModel')
 const Category=require('../models/categoryModel')
 const bcrypt = require('bcrypt');
 const cartItemCountMiddleware = require('../middlewares/cartCountMiddleware');
+
+
 //user home------------------------------------------------------->
 const home = async (req, res) => {
     try {
@@ -53,6 +55,7 @@ req.session.user = {
     name: user.name,
     email: user.email,
     _id: user._id,
+    referralCode:user.referralCode
 };
 await cartItemCountMiddleware(req, res, () => {});
 const products = await Product.find().exec();
@@ -182,5 +185,5 @@ module.exports = {
     getProductsByCategory,
     forgot,
     logout,
-    coffeemix
+    coffeemix,
 };

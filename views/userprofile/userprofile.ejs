@@ -90,6 +90,10 @@
     border-radius: 5px;
     cursor: pointer;
   }
+  button{
+    color: white;
+    background-color: green;
+  }
 </style>
 
 <div class="profile-container">
@@ -101,6 +105,18 @@
             <p>User not found</p>
         <% } %>
     </div>
+    <div class="details">
+        <p>Refer a friend and earn it!</p>
+        <% if (user && user.name) { %>
+            <p id="referralCode"><strong>Referral code:</strong> <%= user.referralCode %></p>
+            <button onclick="copyReferralCode()">Copy Referral Code</button>
+        <% } else { %>
+            <p>User not found</p>
+        <% } %>
+    </div>
+    
+    
+    
 
     <% if (typeof successMessage !== 'undefined' && successMessage) { %>
         <p class="success-message"><%= successMessage %></p>
@@ -164,6 +180,18 @@
         window.location.href = '/user/profile';
         // Hide the form
         toggleForm();
+    }
+</script>
+<script>
+    function copyReferralCode() {
+        var referralCodeElement = document.querySelector('#referralCode');
+        var range = document.createRange();
+        range.selectNode(referralCodeElement);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+        alert('Referral code copied! Share it with your friends.');
     }
 </script>
 

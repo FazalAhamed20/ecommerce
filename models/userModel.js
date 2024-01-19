@@ -29,13 +29,13 @@ mongoose.connect(process.env.atlas_URL || "mongodb+srv://fazalahamed628:jBKMkSox
         },
         status: {
             type: String,
-            enum: ['active', 'blocked'], // Assuming you want 'active' or 'blocked' status
-            default: 'active' // Set the default status to 'active'
+            enum: ['active', 'blocked'], 
+            default: 'active' 
         },
-        socketId: {
-            type: String, // Assuming you store the socket ID as a string
-            default: null // Set the default value to null
-        },
+        referralCode: {
+            type: String,
+            unique: true 
+        }
         
       
     });

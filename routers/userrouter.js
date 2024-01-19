@@ -23,6 +23,7 @@ router.get('/user/logout',verifyUser,controller.logout)
 router.post('/send',userExist,controller1.otp1)
 router.post('/verify',userExist,controller1.verify)
 router.get('/resend',userExist,controller1.resend)
+router.post('/verifyReferal',controller1.verifyReferal)
 router.get('/logout',verifyUser,controller.logout)
 //login forgot password otp------------------------------------------------------->
 router.get('/user/forgot-password', controller2.showForgotPasswordForm);
@@ -53,6 +54,8 @@ router.post('/process-payment',verifyUser, controller5.processPayment);
 router.post('/cancel-order',verifyUser,controller5.cancelorder )
 router.post('/cancelProduct',verifyUser,controller5.cancelProduct)
 router.get('/download-invoice/:orderId',verifyUser,controller5.downloadInvoice)
+
+
 
 
 

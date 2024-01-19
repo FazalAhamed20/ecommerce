@@ -2,7 +2,6 @@
   <style>
   body{
     background-color: #EDC9A0;
-    background-color: aqua;
   }
   input:invalid{
     animation:shake 300ms;
@@ -14,73 +13,85 @@
   }
 </style>
 <div class="container">
-    <div class="img">
+  <div class="img">
       <img src="/assets/pc.svg" />
-    </div>
-    <div class="login-container">
-      <form   action="/send" method="POST" onsubmit="return validateForm()">
-        <img class="avator" src="/assets/avator.svg" />
-        <h2>Coffe Day, Join us</h2>
-        <div>
-          <% if (error && error.length > 0) { %>
-              <p style="color: red;"><%= error %></p>
-          <% } %>
-        <div class="input-div" one>
-          <div class="i">
-            <i class="fas fa-user"></i>
-          </div>
-          <div>
-
-            <input class="input" type="text" placeholder="Name" name="name" id="name" />
-          </div>
-        </div>
-        <div class="input-div" two>
-          <div class="i">
-            <i class="fas fa-envelope"></i>
-          </div>
-          <div>
-            <input class="input" type="email" placeholder="Email" name="email" id="email"/>
-          </div>
-        </div>
-        <div class="input-div" three>
-          <div class="i">
-            <i class="fas fa-lock"></i>
-          </div>
-          <div style="display: flex; justify-content: space-between;">
-            <div style="margin-right: 10px;">
-                <input class="input" type="password" placeholder="Password" name="password" id="password" pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$" title="Password should be a strong mixture of alphabet, numbers, and symbols." required />
-            </div>
-            <div style="margin-left: 230px;">
-                <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
-                <label for="show password"> 👁️</label>
-                
-            </div>
-        </div>
-        
-        
-        
-        </div>
-        <div class="input-div" three>
-          <div class="i">
-            <i class="fas fa-lock"></i>
-          </div>
-          <div style="display: flex; justify-content: space-between;">
-            <div style="margin-right: 10px;">
-              <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" required />
-              
-            </div>
-            <div style="margin-left: 230px;">
-              <input type="checkbox" id="showConfirmPassword" onchange="togglePasswordVisibility()">
-                <label for="show password"> 👁️</label>
-                
-            </div>
-        </div>
-        </div>
-        <input type="submit" class="btn1" value="Signup" />
-        <a href="/user/login" style="text-decoration: none;color:black;" id="signbtn" ><i>Already have an account?</i><strong>Log in</strong></a>
-      </form>
-    </div>
   </div>
+  <div class="login-container">
+    <form action="/send" method="POST" onsubmit="return validateForm() && applyReferralCode()">
+      <!-- Your form content -->
+          <img class="avator" src="/assets/avator.svg" />
+          <h2>Coffee Day, Join us</h2>
+          <div>
+              <% if (error && error.length > 0) { %>
+                  <p style="color: red;"><%= error %></p>
+              <% } %>
+          </div>
+          <div class="input-div" one>
+              <div class="i">
+                  <i class="fas fa-user"></i>
+              </div>
+              <div>
+                  <input class="input" type="text" placeholder="Name" name="name" id="name" />
+              </div>
+          </div>
+          <div class="input-div" two>
+              <div class="i">
+                  <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                  <input class="input" type="email" placeholder="Email" name="email" id="email" />
+              </div>
+          </div>
+          <div class="input-div" three>
+              <div class="i">
+                  <i class="fas fa-lock"></i>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                  <div style="margin-right: 10px;">
+                      <input class="input" type="password" placeholder="Password" name="password" id="password" pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$" title="Password should be a strong mixture of alphabet, numbers, and symbols." required />
+                  </div>
+                  <div style="margin-left: 230px;">
+                      <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+                      <label for="show password"> 👁️</label>
+                  </div>
+              </div>
+          </div>
+          <div class="input-div" three>
+              <div class="i">
+                  <i class="fas fa-lock"></i>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                  <div style="margin-right: 10px;">
+                      <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" required />
+                  </div>
+                  <div style="margin-left: 230px;">
+                      <input type="checkbox" id="showConfirmPassword" onchange="togglePasswordVisibility()">
+                      <label for="show password"> 👁️</label>
+                  </div>
+              </div>
+          </div>
+          <!-- Referral code section -->
+          <div>
+            <input type="checkbox" id="hasReferralCode" onchange="toggleReferralCodeInput()">
+            <label for="hasReferralCode"> I have a referral code</label>
+        </div>
+        <div id="referralCodeInput" style="display: none;" class="input-div" four>
+            <div>
+                <input class="input" type="text" placeholder="Referral Code" name="referralCode" id="referralCode" />
+            </div>
+            <button type="button" onclick="applyReferralCode()">Apply</button>
+            <p id="referralCodeStatus"></p>
+        </div>
+         
+
+        <input type="submit" class="btn1" value="Signup" />
+        <a href="/user/login" style="text-decoration: none;color:black;" id="signbtn">
+            <i>Already have an account?</i><strong>Log in</strong>
+        </a>
+    </form>
+  </div>
+</div>
+
   
   <script>
     function displayAlert(message, inputId) {
@@ -154,10 +165,55 @@
           }
       }
   </script>
+ <script>
+  function toggleReferralCodeInput() {
+      var referralCodeInput = document.getElementById('referralCodeInput');
+      var hasReferralCodeCheckbox = document.getElementById('hasReferralCode');
+
+      if (hasReferralCodeCheckbox.checked) {
+          referralCodeInput.style.display = 'block';
+      } else {
+          referralCodeInput.style.display = 'none';
+      }
+  }
+
+  async function applyReferralCode() {
+        var referralCode = document.getElementById('referralCode').value;
+        var referralCodeStatus = document.getElementById('referralCodeStatus');
+
+        try {
+            const response = await fetch('/verifyReferal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ referralCode }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.valid) {
+                    referralCodeStatus.innerHTML = 'Referral code is valid!';
+                    // If the referral code is valid, you can proceed with the form submission
+                    return true;
+                } else {
+                    referralCodeStatus.innerHTML = 'Referral code is invalid.';
+                }
+            } else {
+                referralCodeStatus.innerHTML = 'Error checking referral code.';
+            }
+        } catch (error) {
+            console.error('Error checking referral code:', error);
+        }
+
+        // If the referral code is invalid or there's an error, prevent form submission
+        return false;
+    }
+</script>
   
     
     
     
     
   <script type="text/javascript" src="js/main.js"></script>
-<%- include('header') -%>
+<%- include('footer') -%>

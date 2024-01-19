@@ -1,6 +1,5 @@
 
 
-
 * {
   padding: 0;
   margin: 0;
@@ -176,7 +175,7 @@ footer {
   padding-top: 3vh;
   padding-bottom: 1vh;
 }
-/* important part for any devices */
+
 @media screen and (max-width: 1050px) {
   .container {
     grid-gap: 5rem;
@@ -247,39 +246,38 @@ footer {
     color: snow;
   }
 }
-/* Default styles for the navigation bar */
+
 nav {
-  background-color: #3e2723; /* Coffee Brown */
+  background-color: #3e2723; 
   padding: 10px;
   text-align: center;
 }
-/* Add this to your CSS file, or embed it in a <style> tag in your HTML file */
+
 
 .input-div i {
-  color: white; /* Set the icon color to white */
+  color: black; 
 }
 
-/* Additional styling for better visibility, you can adjust as needed */
+
 .input-div {
-  border-bottom: 2px solid white; /* Add a white border bottom to the input div */
-  margin-bottom: 15px; /* Add some spacing between input divs */
+  border-bottom: 2px solid white; 
+  margin-bottom: 15px; 
 }
 
 .input {
-  color: white; /* Set the input text color to white */
-  outline: none; /* Remove the input focus border */
-  background: transparent; /* Make the input background transparent */
-  width: 90%; /* Ensure the input takes up 100% width of its container */
+  color: black; 
+  outline: none; 
+  background: transparent;
+  width: 90%; 
 }
 .navbar-nav .nav-link i {
  
-  transition: transform 0.7s ease; /* Add a smooth transition for icon size */
+  transition: transform 0.7s ease; 
 }
 .navbar-nav .nav-item:hover .nav-link {
-  transform: scale(1.5); /* Zoom effect on hover */
+  transform: scale(1.5); 
 }
 
-/* Add any other styles you need for your specific design */
 
 
 

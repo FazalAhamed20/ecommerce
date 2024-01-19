@@ -85,8 +85,7 @@ const checkout = async (req, res) => {
         const userId = req.session.user._id;
         const addresses = await Address.find({ userId });
         console.log("User Addresses:", addresses);
-        const decrement=await Product.find(abcdd)
-        const result=decrement.quantity--;
+        
         if (!addresses || addresses.length === 0) {
             return res.status(404).json({ success: false, message: 'User addresses not found' });
         }
