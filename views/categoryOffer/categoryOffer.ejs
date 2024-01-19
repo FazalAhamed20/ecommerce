@@ -1,0 +1,140 @@
+<!-- views/admin/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 98%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-left: 10px;
+            margin-right: 50px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            color: black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .edit-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .edit-buttons button,
+        .edit-buttons input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .edit-buttons button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .edit-buttons input {
+            width: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Number of Products</th>
+                <th>Offer Percentage</th>
+                <th>Expiry Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% categoryData.forEach(category => { %>
+            <tr>
+                <td><%= category.category %></td>
+                <td><%= category.productCount %></td>
+                <td><%= category.offerPercentage %></td>
+                <td><%= category.expiryDate %></td>
+                <td>
+                    <div class="edit-buttons">
+                        <input type="number" id="offerInput_<%= category.category %>" placeholder="Increase %" />
+                        <button onclick="editOffer('<%= category.category %>')">Increase Offer</button>
+                        <button onclick="editExpiry('<%= category.category %>')">Edit Expiry</button>
+                    </div>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <script>
+        function editOffer(category) {
+            const offerInput = document.getElementById(`offerInput_${category}`);
+            const increasedPercentage = parseInt(offerInput.value, 10) || 0;
+
+            // Implement logic for increasing offer percentage
+            alert(`Increase offer for ${category} by ${increasedPercentage}%`);
+        }
+
+        function editExpiry(category) {
+            // Implement logic for editing expiry date
+            alert('Edit expiry for category: ' + category);
+        }
+    </script>
+     <script>
+        function editOffer(category) {
+            const offerInput = document.getElementById(`offerInput_${category}`);
+            const increasedPercentage = parseInt(offerInput.value, 10) || 0;
+
+           
+            fetch(`/admin/edit-offer/${category}/${increasedPercentage}`, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Offer for ${category} increased by ${increasedPercentage}%`);
+                } else {
+                    alert('Error updating offer. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+
+        function editExpiry(category) {
+            // Implement logic for editing expiry date (similar to editOffer)
+        }
+    </script>
+</body>
+
+</html>

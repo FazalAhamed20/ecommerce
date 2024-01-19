@@ -6,6 +6,8 @@ const crypto = require('crypto');
 const moment = require('moment');
 const CanceledOrder = require('../models/orderCancelModel');
 const Product = require('../models/productModel');
+const Wallet=require('../models/walletModel')
+const User=require('../models/userModel')
 const pdf = require('html-pdf');
 const fs = require('fs');
 const ejs = require('ejs');
@@ -97,9 +99,14 @@ const checkout = async (req, res) => {
         if (!cart) {
             return res.status(404).json({ success: false, message: 'Cart not found' });
         }
+        const user = await User.findById(userId);
+        const walletId = user.wallet;
+        const wallet = await Wallet.findById(walletId);
+        console.log("User wallet:", wallet);
+
         const razorpayOrder = {};
         const paymentMethod=[];
-        res.render('./orders/checkout', { pageTitle: 'checkout', addresses, user: req.session.user, cart: cart.products, totals: cart.totals,messages: req.flash(),orderID,razorpayOrder,paymentMethod });
+        res.render('./orders/checkout', { pageTitle: 'checkout', addresses, user: req.session.user, cart: cart.products, totals: cart.totals,messages: req.flash(),orderID,razorpayOrder,paymentMethod,wallet });
     } catch (error) {
         console.error('Error fetching user addresses and cart data for checkout:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });

@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const User=require('../models/userModel')
 const bcrypt = require('bcrypt');
+const Wallet=require('../models/walletModel')
 
 
 function generateReferralCode() {
@@ -43,11 +44,13 @@ const otp1 = async function (req, res) {
         }
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const email = req.body.email;
-        console.log(email);
+        console.log(req.body);
+        const referral=req.body.referralCode
         req.session.user = {
             name: req.body.name,
             email: email,
-            password: hashedPassword 
+            password: hashedPassword,
+            referralCode:referral,
         };
         const newOTP = generateOTP();
         req.session.otp = newOTP;
@@ -73,6 +76,7 @@ const otp1 = async function (req, res) {
 //verifying generated otp and user entered otp------------------------------------------------------->
 const verify = async function (req, res) {
     const user = req.session.user;
+    console.log("user",user);
     const userOTP = req.body.otp;
     console.log(userOTP);
         console.log(otp);
@@ -94,6 +98,33 @@ const verify = async function (req, res) {
             const referral=generateReferralCode()
             const hashedPassword = user.password;
             console.log(hashedPassword);
+         
+            const referredCode = req.session.user.referralCode;
+            console.log("reffered",referredCode);
+            const referredUser = await User.findOne({ referralCode: referredCode });
+            console.log("refferedUser",referredUser);
+            if (!referredUser) {
+                console.error('Referred user not found');
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+            
+           
+            if (!referredUser.wallet) {
+                const newWallet = new Wallet({ user: referredUser._id });
+                const savedWallet = await newWallet.save();
+                referredUser.wallet = savedWallet._id;
+                await referredUser.save();
+            }
+            
+            
+            const updatedWallet = await Wallet.findByIdAndUpdate(
+                referredUser.wallet,
+                { $inc: { balance: 100 } },
+                { new: true }
+            );
+            
+            
             const newUser = new User({
                 name: user.name,
                 email: user.email,

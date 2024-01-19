@@ -3,6 +3,7 @@ const router = express.Router();
 const controller2 = require('../controller/admincontroller');
 const catagorycontroller=require('../controller/categorycontroller')
 const productcontroller=require('../controller/productcontroller')
+const categoryoffercontroller=require('../controller/categoryOffercontroller')
 const bodyParser = require('body-parser');
 const upload = require("../middlewares/multer");
 const { verifyAdmin, adminExist } = require("../middlewares/session");
@@ -14,6 +15,7 @@ router.all("/adlog",verifyAdmin,controller2.users)
 router.post("/block",verifyAdmin,controller2.block)
 router.post('/unblock',verifyAdmin,controller2.unblock)
 router.get('/adlogout',verifyAdmin,controller2.logout)
+
 //category side------------------------------------------------------->
 router.get('/category',verifyAdmin,catagorycontroller.categoryList)
 router.get('/createcat',verifyAdmin,catagorycontroller.createcat)
@@ -33,6 +35,9 @@ router.get('/product/deleteproduct/:id',verifyAdmin,productcontroller.deleteprod
 router.get("/admin/userorder",verifyAdmin,controller2.userOrder);
 router.post("/updateOrderStatus",verifyAdmin,controller2.updateOrderstatus);
 router.get('/download-sales-report', verifyAdmin, controller2.generateSalesReport);
+
+router.get('/admin/categoryoffer',verifyAdmin,categoryoffercontroller.CategoryOffers)
+router.post('/admin/edit-offer/:category/:percentage',verifyAdmin,categoryoffercontroller.editOffer);
 
 
 

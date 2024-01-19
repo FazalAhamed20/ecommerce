@@ -218,6 +218,7 @@ const updateOrderstatus = async (req, res) => {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 };
+
 //logout------------------------------------------------------->
 const logout = (req, res) => {
   req.session.destroy(err => {
@@ -269,6 +270,7 @@ module.exports = {
   logout,
   userOrder,
   updateOrderstatus,
-  generateSalesReport
+  generateSalesReport,
+
   
 };

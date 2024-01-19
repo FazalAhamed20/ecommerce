@@ -35,7 +35,11 @@ mongoose.connect(process.env.atlas_URL || "mongodb+srv://fazalahamed628:jBKMkSox
         referralCode: {
             type: String,
             unique: true 
-        }
+        },
+        wallet: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Wallet',
+          },
         
       
     });
