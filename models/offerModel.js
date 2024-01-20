@@ -4,12 +4,13 @@ const mongoose = require('mongoose');
 const offerSchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category', // Reference the Category model
+    ref: 'Catagory',
     required: true,
   },
   discountPercentage: {
     type: Number,
     required: true,
+     
   },
   expiryDate: {
     type: Date,

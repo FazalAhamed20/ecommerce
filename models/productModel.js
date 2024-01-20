@@ -32,8 +32,12 @@ const productSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
-        default: 0, // You can set a default value if needed
+        default: 0, 
     },
+    Offerprice:{
+        type:Number,
+        required:false,
+    }
 });
 
 const Product = mongoose.model('Product', productSchema);

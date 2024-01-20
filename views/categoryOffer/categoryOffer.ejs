@@ -38,7 +38,7 @@
 
         .edit-buttons {
             display: flex;
-            justify-content: space-between;
+           
             margin-top: 20px;
         }
 
@@ -80,13 +80,18 @@
             <tr>
                 <td><%= category.category %></td>
                 <td><%= category.productCount %></td>
-                <td><%= category.offerPercentage %></td>
-                <td><%= category.expiryDate %></td>
+                <td>
+                    <input type="number" id="offerInput_<%= category.category %>" value="<%= category. offerPercentage %>" placeholder="Increase %" />
+                </td>
+                <td>
+                    <input type="date" id="expiryDateInput_<%= category.category %>" value="<%= category.expiryDate %>" />
+                </td>
                 <td>
                     <div class="edit-buttons">
-                        <input type="number" id="offerInput_<%= category.category %>" placeholder="Increase %" />
-                        <button onclick="editOffer('<%= category.category %>')">Increase Offer</button>
-                        <button onclick="editExpiry('<%= category.category %>')">Edit Expiry</button>
+                        <button onclick="editExpiry('<%= category.category %>')">Update</button>
+                        <button style="background-color: red;" onclick="deleteOffer('<%= category.categoryid %>')">Delete</button>
+
+
                     </div>
                 </td>
             </tr>
@@ -95,34 +100,25 @@
     </table>
 
     <script>
-        function editOffer(category) {
-            const offerInput = document.getElementById(`offerInput_${category}`);
-            const increasedPercentage = parseInt(offerInput.value, 10) || 0;
-
-            // Implement logic for increasing offer percentage
-            alert(`Increase offer for ${category} by ${increasedPercentage}%`);
-        }
-
+       
+    
         function editExpiry(category) {
-            // Implement logic for editing expiry date
-            alert('Edit expiry for category: ' + category);
-        }
-    </script>
-     <script>
-        function editOffer(category) {
+            const expiryDateInput = document.getElementById(`expiryDateInput_${category}`);
+            const editedExpiryDate = expiryDateInput.value;
+    
             const offerInput = document.getElementById(`offerInput_${category}`);
-            const increasedPercentage = parseInt(offerInput.value, 10) || 0;
-
+            const existingPercentage = parseInt(offerInput.value, 10) || 0;
+    
            
-            fetch(`/admin/edit-offer/${category}/${increasedPercentage}`, {
+            fetch(`/admin/edit-expiry-offer/${category}/${editedExpiryDate}/${existingPercentage}`, {
                 method: 'POST',
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(`Offer for ${category} increased by ${increasedPercentage}%`);
+                    alert(`The Offer for ${category} updated to ${editedExpiryDate}`);
                 } else {
-                    alert('Error updating offer. Please try again.');
+                    alert('Error updating expiry date and offer percentage. Please try again.');
                 }
             })
             .catch(error => {
@@ -130,11 +126,40 @@
                 alert('An error occurred. Please try again.');
             });
         }
-
-        function editExpiry(category) {
-            // Implement logic for editing expiry date (similar to editOffer)
-        }
+    
+        const datepickers = document.querySelectorAll('.datepicker');
+        datepickers.forEach(datepicker => {
+            new Datepicker(datepicker, {
+               
+            });
+        });
     </script>
+    <script>
+        function deleteOffer(categoryId) {
+    if (confirm(`Are you sure you want to delete the offer for ${categoryId}?`)) {
+        fetch(`/admin/delete-offer/${categoryId}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Offer for ${categoryId} deleted successfully`);
+                window.location.reload();
+                
+            } else {
+                alert('Error deleting offer. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+}
+
+    </script>
+    
+    
 </body>
 
 </html>
