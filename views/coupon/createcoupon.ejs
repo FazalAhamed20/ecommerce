@@ -101,7 +101,7 @@
       currentDate.setHours(0, 0, 0, 0);
 
       if (startDate < currentDate) {
-        alert('Start Date cannot be set to today or a date before today.');
+        alert('Start Date cannot be set to date before today.');
         return;
       }
 
@@ -110,7 +110,7 @@
       expiryDate.setHours(0, 0, 0, 0);
 
       if (expiryDate < currentDate) {
-        alert('Expiry Date cannot be set to today or a date before today.');
+        alert('Expiry Date cannot be set to date before today.');
         return;
       }
       

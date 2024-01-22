@@ -316,8 +316,10 @@ body {
                                     <div class="payment-option">
                                       <input type="radio" class="payment-radio" name="paymentMethod" id="walletRadio" value="Wallet">
                                       <i class="fas fa-wallet payment-icon"></i>
-                                      Wallet: ₹<span id="walletAmount"><%= wallet.balance %></span>
-                                  </div>
+                                      Wallet: ₹<span id="walletAmount"><%= wallet ? wallet.balance : '0' %></span>
+                                    </div>
+                                    
+                                    
                                   
                                    
 

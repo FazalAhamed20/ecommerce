@@ -44,8 +44,9 @@ router.delete('/admin/delete-offer/:categoryId', verifyAdmin, categoryoffercontr
 router.get('/admin/coupon',verifyAdmin,couponcontroller.showCreateCouponForm)
 router.post('/admin/create-coupon',verifyAdmin,couponcontroller.createCoupon)
 router.get('/coupons/create',verifyAdmin,couponcontroller.createcouponform)
-router.get('/edit-coupon/:couponId', couponcontroller.showEditCouponForm);
-router.post('/admin/edit-coupon/:couponId', couponcontroller.editCoupon);
+router.get('/edit-coupon/:couponId',verifyAdmin, couponcontroller.showEditCouponForm);
+router.post('/admin/edit-coupon/:couponId',verifyAdmin, couponcontroller.editCoupon);
+router.delete('/delete-coupons/:couponId',verifyAdmin,couponcontroller.deletecoupon)
 
 
 

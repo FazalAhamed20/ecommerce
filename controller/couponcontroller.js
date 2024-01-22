@@ -106,6 +106,25 @@ const showEditCouponForm = async (req, res, next) => {
       res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
   };
+
+  const deletecoupon=async(req,res)=>{
+    try{
+      const couponId = req.params.couponId;
+      console.log("couponid",couponId)
+      const deletecoupon=await Coupon.findOneAndDelete(couponId)
+
+      if (deletecoupon) {
+        return res.json({ success: true, message: 'Coupon deleted successfully' });
+      } else {
+        return res.status(404).json({ success: false, message: 'Coupon not found' });
+      }
+
+    }catch (error) {
+      console.error('Error deleting coupon:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  };
+  
   
 
 
@@ -115,5 +134,6 @@ module.exports = {
   createCoupon,
   createcouponform,
   showEditCouponForm,
-  editCoupon
+  editCoupon,
+  deletecoupon
 };

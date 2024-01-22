@@ -5,22 +5,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Category Offers</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-        }
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    h1 {
+        text-align: center;
+       
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+        background-color: #4CAF50;
+        color: white;
+    }
 
         table {
             width: 98%;
             border-collapse: collapse;
             margin-top: 20px;
-            margin-left: 10px;
+            margin-left: 40px;
             margin-right: 50px;
         }
 
@@ -63,7 +76,9 @@
 </head>
 
 <body>
-    <h1>Admin Dashboard</h1>
+    <h1>Category Offers</h1>
+    <a href="/adhome"><button>Home</button></a>
+    
 
     <table>
         <thead>
@@ -105,6 +120,14 @@
         function editExpiry(category) {
             const expiryDateInput = document.getElementById(`expiryDateInput_${category}`);
             const editedExpiryDate = expiryDateInput.value;
+
+            const currentDate = new Date().toISOString().split('T')[0];
+        if (editedExpiryDate < currentDate) {
+            alert('Expiry Date cannot be set to a date before today.');
+            return;
+        }
+
+            
     
             const offerInput = document.getElementById(`offerInput_${category}`);
             const existingPercentage = parseInt(offerInput.value, 10) || 0;
