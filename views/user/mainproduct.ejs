@@ -75,6 +75,19 @@
         margin-bottom: 10px;
         font-weight: bold;
     }
+    .product-original-price{
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: bold;
+
+    }
+    .product-offer-price{
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
 
     .btn-container {
         display: flex;
@@ -149,12 +162,27 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Add a smooth transition effect */
+
 .coffee-shop-message {
   transition: top 0.5s ease;
 }
 #image-zoom{
     z-index: 10;
+}
+.ribbon2 {
+  border-top: 25px solid red;
+  border-right: 20px solid transparent;
+  border-bottom: 25px solid red;
+  height: 0; 
+  line-height: 0;
+  margin-left: 100px;
+  position: absolute;
+  right: 7px;
+  text-align: center;
+  top: 0;
+  transform: rotateZ(90deg) translateY(-100px);
+  transform-origin: 0 0;
+  width: 100px; 
 }
 
 </style>
@@ -164,7 +192,9 @@
 
 
 <div class="main-product-container">
+   
     <div class="main-product">
+        
         <div class="main-product-img" id="image-zoom">
             <% if (product) { %>
                 <img src="/product-images/<%= product.image %>" alt="<%= product.name %>">
@@ -172,13 +202,32 @@
                 <p>No product found</p>
             <% } %>
         </div>
-        <div class="main-product-details">
+        <div class="main-product-details position-relative">
+            
             <% if (product) { %>
                 <h1 class="product-title"><%= product.name %></h1>
                 <p class="product-description"><%= product.description %></p>
                 <p class="product-category">Category: <%= product.category.name %></p>
                 <p class="product-ingredients">Ingredients: <%= product.ingredients || "N/A" %></p>
-                <p class="product-price">Price: ₹<%= product.price.toFixed(2) %></p>
+        
+                <% if (product.Offerprice) { %>
+                   
+                    <div class="ribbon2" style="font-weight: bold;">OFFER</div>
+        
+                    <!-- Display original price with strikethrough -->
+                    <p class="product-original-price">
+                        Original Price: <del>₹<%= product.price.toFixed(2) %></del>
+                    </p>
+        
+                    <!-- Display offer price -->
+                    <p class="product-offer-price">
+                        Offer Price: ₹<%= product.Offerprice.toFixed(2) %>
+                    </p>
+                <% } else { %>
+                    <!-- Display regular price if there's no offer -->
+                    <p class="product-price">Price: ₹<%= product.price.toFixed(2) %></p>
+                <% } %>
+        
                 <% if (product.quantity > 0) { %>
                     <% if (product.quantity < 5) { %>
                         <div class="alert alert-warning" role="alert">
@@ -190,14 +239,15 @@
                         Out of stock
                     </div>
                 <% } %>
+        
                 <div class="btn-container">
                     <% if (product.quantity > 0) { %>
-                    <a href="/user/addtocart/<%= product._id %>" id="addToCartLink" class="btn btn-primary" onclick="showAddedToCartMessage()">Add to Cart</a>
+                        <a href="/user/addtocart/<%= product._id %>" id="addToCartLink" class="btn btn-primary" onclick="showAddedToCartMessage()">Add to Cart</a>
                     <% } %>
-                    
                 </div>
             <% } %>
         </div>
+        
     </div>
 </div>
 

@@ -269,13 +269,13 @@ body {
                                         </div>
                                         <div class="price">
                                           <p>Tax:</p>
-                                          <p>₹<%= totals.tax %></p>
+                                          <p>₹<%= totals.tax.toFixed(2)  %></p>
                                         </div>
                                         <br />
                                         <hr />
                                         <div class="total_price">
                                           <p class="dark">Total:</p>
-                                          <p class="dark">₹<%= totals.grandTotal %></p>
+                                          <p class="dark">₹<%= totals.grandTotal.toFixed(2)  %></p>
                                         </div>
                                       </strong>
                                       </div>

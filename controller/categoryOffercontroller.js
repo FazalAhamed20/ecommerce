@@ -44,37 +44,49 @@ function formatDate(date) {
 }
 
 
-  const editOffer = async (req, res) => {
-    try {
-        const { category, percentage, expiryDate } = req.params;
-        console.log({ category, percentage, expiryDate });
+const editOffer = async (req, res) => {
+  try {
+      const { category, percentage, expiryDate } = req.params;
+      console.log({ category, percentage, expiryDate });
 
-        if (typeof category !== 'string') {
-            return res.status(400).json({ success: false, message: 'Invalid category type' });
-        }
+      if (typeof category !== 'string') {
+          return res.status(400).json({ success: false, message: 'Invalid category type' });
+      }
 
-        const existingCategory = await Category.findOne({ name: category });
+      const existingCategory = await Category.findOne({ name: category });
 
-        if (!existingCategory) {
-            return res.status(404).json({ success: false, message: 'Category not found' });
-        }
+      if (!existingCategory) {
+          return res.status(404).json({ success: false, message: 'Category not found' });
+      }
 
-        const parsedPercentage = parseFloat(percentage);
-        console.log('existingCategory', existingCategory);
-        console.log('parsedPercentage', parsedPercentage);
+      const parsedPercentage = parseFloat(percentage);
+      console.log('existingCategory', existingCategory);
+      console.log('parsedPercentage', parsedPercentage);
 
-        const updatedOffer = await Offer.findOneAndUpdate(
-            { category: existingCategory._id },
-            { $set: { discountPercentage: parsedPercentage, expiryDate } },
-            { new: true, upsert: true }
-        );
+      const updatedOffer = await Offer.findOneAndUpdate(
+          { category: existingCategory._id },
+          { $set: { discountPercentage: parsedPercentage, expiryDate } },
+          { new: true, upsert: true }
+      );
 
-        res.status(200).json({ success: true, message: 'Offer details updated successfully', offer: updatedOffer });
-    } catch (error) {
-        console.error('Error updating offer:', error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
+      
+      const products = await Product.find({ category: existingCategory._id });
+      console.log(products);
+
+     
+      for (const product of products) {
+          const Offerprice = product.price - (product.price * parsedPercentage / 100);
+          product.Offerprice = Offerprice;
+          await product.save();
+      }
+
+      res.status(200).json({ success: true, message: 'Offer details and product prices updated successfully', offer: updatedOffer });
+  } catch (error) {
+      console.error('Error updating offer:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
 };
+
 
 
 const deleteOffer = async (req, res) => {

@@ -188,7 +188,13 @@ const userOrder = async (req, res) => {
           .skip(skip)
           .limit(limit)
           .exec();
-      res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders, page, limit });
+          const formattedOrders = orders.map((order) => ({
+            ...order._doc,
+            orderDate:order.orderDate.toLocaleDateString('en-IN'),
+            deliveryDate: order.deliveryDate.toLocaleDateString('en-IN'), 
+
+          }));
+      res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders:formattedOrders, page, limit });
   } catch (error) {
       console.error('Error fetching user orders:', error);
       res.status(500).json({ success: false, message: 'Internal Server Error' });

@@ -2,12 +2,14 @@ const cartModels = require('../models/cartModel');
 const mongoose = require('mongoose');
 const Product = require('../models/productModel');
 //calculate totals------------------------------------------------------->
+// calculateTotals function
 const calculateTotals = (cartItems) => {
   const totals = cartItems.reduce(
     (accumulator, item) => {
       let productPrice = 0;
       if (item.productId && typeof item.productId === 'object') {
-        productPrice = item.productId.price || 0;
+        // Check if there is an offer price, otherwise use the regular price
+        productPrice = item.productId.Offerprice || item.productId.price || 0;
       } else {
         console.warn(`Invalid product data for item: ${JSON.stringify(item)}`);
       }
@@ -19,20 +21,23 @@ const calculateTotals = (cartItems) => {
       subtotal: 0,
     }
   );
-//update totalst------------------------------------------------------->
+
+  // update totals
   const updatedTotals = {
     subtotal: totals.subtotal,
     tax: totals.subtotal * 0.05,
     shipping: 15.00,
     grandTotal: totals.subtotal + totals.subtotal * 0.05 + 15.00,
   };
+
   return updatedTotals;
 };
+
 //user cart------------------------------------------------------->
 const usercart = async (req, res) => {
   try {
     const user = req.session.user || {};
-    const cart = await cartModels.findOne({ userId: user._id }).populate('products.productId', 'name price description image quantity');
+    const cart = await cartModels.findOne({ userId: user._id }).populate('products.productId', 'name price description image quantity Offerprice');
     if (!cart) {
       const newCart = new cartModels({ userId: user._id, products: [], totals: { subtotal: 0, tax: 0, shipping: 0, grandTotal: 0 } });
       await newCart.save();
@@ -56,6 +61,8 @@ const usercart = async (req, res) => {
               console.log('Product Name:', product.name || 'Product Name not available');
               console.log('Product Image:', product.image || 'No image available');
               console.log(product.quantity);
+              console.log('Product Price:', productPrice || 'Price not available');
+
             } else {
               console.log('Product ID not available');
             }
@@ -65,6 +72,7 @@ const usercart = async (req, res) => {
           console.log('Product Name:', item.productId.name || 'Product Name not available');
           console.log('Product Image:', item.productId.image || 'No image available');
           console.log('Product quantity:',item.productId.quantity);
+          console.log('Product offer price:',item.productId.Offerprice);
         }
       } else {
         console.log('Product ID not available');

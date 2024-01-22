@@ -9,6 +9,7 @@ const ejs = require('ejs');
 const CanceledOrder=require('../models/orderCancelModel')
 
 
+
 //admin login------------------------------------------------------->
 const admin = (req, res) => {
   if(req.session.admin!=null){
@@ -173,11 +174,13 @@ const unblock=async (req, res) => {
 const userOrder = async (req, res) => {
   const itemsPerPage = 3;
   const page = parseInt(req.query.page) || 1;
+
   try {
     const totalOrders = await orderModels.countDocuments();
     const totalPages = Math.ceil(totalOrders / itemsPerPage);
     const orders = await orderModels
       .find()
+      .sort({ _id: -1 })
       .skip((page - 1) * itemsPerPage)
       .limit(itemsPerPage)
       .populate({
@@ -186,16 +189,24 @@ const userOrder = async (req, res) => {
         select: 'name price description image',
       })
       .exec();
+
     const canceledOrders = await Promise.all(
       orders.map(async (order) => {
         const canceledOrder = await CanceledOrder.findOne({ orderID: order.orderID });
         return canceledOrder || null;
       })
     );
+
+    // Format dates for display
+    const formattedOrders = orders.map((order) => ({
+      ...order._doc,
+      deliveryDate: order.deliveryDate.toLocaleDateString('en-IN'), // 'en-IN' for India locale
+    }));
+
     res.render('./admin/userOrder', {
       title: 'User Orders',
-      orders,
-      canceledOrders, 
+      orders: formattedOrders,
+      canceledOrders,
       totalPages,
       currentPage: page,
     });
@@ -204,6 +215,7 @@ const userOrder = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
 //update order status------------------------------------------------------->
 const updateOrderstatus = async (req, res) => {
   try {

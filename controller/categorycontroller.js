@@ -18,7 +18,8 @@ const categoryList = async (req, res) => {
         const totalPages = Math.ceil(totalCategories / itemsPerPage);
         const categories = await Category.find(query)
             .skip((page - 1) * itemsPerPage)
-            .limit(itemsPerPage);
+            .limit(itemsPerPage)
+            .sort({ _id: -1 });
         res.render('./categories/category', {
             title: 'categories',
             categories,

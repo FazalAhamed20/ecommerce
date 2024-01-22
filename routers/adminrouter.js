@@ -4,6 +4,7 @@ const controller2 = require('../controller/admincontroller');
 const catagorycontroller=require('../controller/categorycontroller')
 const productcontroller=require('../controller/productcontroller')
 const categoryoffercontroller=require('../controller/categoryOffercontroller')
+const couponcontroller=require('../controller/couponcontroller')
 const bodyParser = require('body-parser');
 const upload = require("../middlewares/multer");
 const { verifyAdmin, adminExist } = require("../middlewares/session");
@@ -39,6 +40,12 @@ router.get('/download-sales-report', verifyAdmin, controller2.generateSalesRepor
 router.get('/admin/categoryoffer',verifyAdmin,categoryoffercontroller.CategoryOffers)
 router.post('/admin/edit-expiry-offer/:category/:expiryDate/:percentage',verifyAdmin,categoryoffercontroller.editOffer);
 router.delete('/admin/delete-offer/:categoryId', verifyAdmin, categoryoffercontroller.deleteOffer);
+
+router.get('/admin/coupon',verifyAdmin,couponcontroller.showCreateCouponForm)
+router.post('/admin/create-coupon',verifyAdmin,couponcontroller.createCoupon)
+router.get('/coupons/create',verifyAdmin,couponcontroller.createcouponform)
+router.get('/edit-coupon/:couponId', couponcontroller.showEditCouponForm);
+router.post('/admin/edit-coupon/:couponId', couponcontroller.editCoupon);
 
 
 

@@ -1,8 +1,4 @@
 <%- include('header') -%>
-
-
-
-
 <style>
   /* Global settings */
   body {
@@ -407,7 +403,7 @@ body {
         </div>
         <div class="product-details">
           <div class="product-title"><%= item.productId && item.productId.name %></div>
-          <div class="product-price">₹<%= item.productId && item.productId.price.toFixed(2) %></div>
+          <div class="product-price">₹<%= (item.productId && (item.productId.Offerprice || item.productId.price) * item.quantity).toFixed(2) %></div>
           <div class="product-quantity">
             Quantity: 
             
@@ -428,7 +424,10 @@ body {
           
           
         </div>
-        <div class="product-total">₹<%= (item.productId && item.productId.price * item.quantity).toFixed(2) %></div>
+        <div class="product-total">
+          ₹<%= (item.productId && (item.productId.Offerprice || item.productId.price) * item.quantity).toFixed(2) %>
+        </div>
+        
         <a href="/removeItem/<%= item.productId._id %>" class="remove-product" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">Remove</a>
       </div>
     <% }); %>
@@ -616,9 +615,13 @@ body {
       document.querySelectorAll('.cart-item').forEach(function (item) {
         var price = parseFloat(item.querySelector('.product-price').textContent.replace('₹', ''));
         var quantity = parseInt(item.querySelector('.product-quantity input').value);
-        var total = price * quantity;
+        var price = parseFloat(item.querySelector('.product-price').textContent.replace('₹', '')) || 0;
+    var offerPrice = parseFloat(item.querySelector('.product-offer-price').textContent.replace('₹', '')) || 0;
 
-        subtotal += total;
+    // Calculate total based on the offer price if available, otherwise use the regular price
+    var total = (offerPrice > 0 ? offerPrice : price) * quantity;
+
+    subtotal += total;
 
         item.querySelector('.product-total').textContent = '₹' + total.toFixed(2);
       });
