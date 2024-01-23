@@ -81,6 +81,13 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required:true 
   },
+  couponCode:{
+    type:String,
+  },
+  discountAmount:{
+    type:String,
+  },
+
   paymentMethod: {
     type: String,
     enum: ['Wallet', 'RazorPay', 'Cash on Delivery', 'Other'], 

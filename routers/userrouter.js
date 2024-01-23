@@ -6,6 +6,7 @@ const controller2= require('../controller/resetpassword');
 const controller3= require('../controller/userprofilecontroller');
 const controller4= require('../controller/cartcontroller');
 const controller5= require('../controller/ordercontroller');
+const controller6=require('../controller/usercouponcontroller')
 const { verifyUser, userExist ,checkUserStatus } = require("../middlewares/session");
 
 
@@ -54,6 +55,8 @@ router.post('/process-payment',verifyUser, controller5.processPayment);
 router.post('/cancel-order',verifyUser,controller5.cancelorder )
 router.post('/cancelProduct',verifyUser,controller5.cancelProduct)
 router.get('/download-invoice/:orderId',verifyUser,controller5.downloadInvoice)
+
+router.get('/validate-coupon',verifyUser,controller6.validcoupon)
 
 
 

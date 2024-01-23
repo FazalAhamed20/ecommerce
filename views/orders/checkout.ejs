@@ -186,6 +186,44 @@ body {
     .flash-message.error {
   color: red;
 }
+.coupon {
+    margin-top: 20px;
+  }
+
+  .coupon label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .coupon-input {
+    display: flex;
+    gap: 10px;
+  }
+
+  .coupon-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .coupon-input button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .coupon-input button:hover {
+    background-color: #45a049;
+  }
+  #couponButton.applied {
+  background-color: red;
+}
+
  
 
        
@@ -200,7 +238,7 @@ body {
         <% } %></h3>
       </div>
      
-      <form id="checkoutForm" action="/create-order" method="POST">
+      <form id="checkoutForm" action="/create-order" method="POST"  onsubmit="return applyCoupon()">
         
         <div class="step-checkout">
             <ul class="step-checkout_list" id="checkoutList">
@@ -253,12 +291,12 @@ body {
                             </div>
                             <div class="step-checkout_summary" id="stepCheckoutSummary2">
                               <div class="summary-box">
-                                  <div class="Orders">
-                                    <section class="order_summary">
-                                      <h2 class="order_head">Order Summary</h2>
-                                      <div class="order_price">
-                                        <hr />
-                                          <strong>
+                                <div class="Orders">
+                                  <section class="order_summary">
+                                    <h2 class="order_head">Order Summary</h2>
+                                    <div class="order_price">
+                                      <hr />
+                                      <strong>
                                         <div class="price">
                                           <p> Price:</p>
                                           <p>₹<%= totals.subtotal %></p>
@@ -269,20 +307,29 @@ body {
                                         </div>
                                         <div class="price">
                                           <p>Tax:</p>
-                                          <p>₹<%= totals.tax.toFixed(2)  %></p>
+                                          <p>₹<%= totals.tax.toFixed(2) %></p>
+                                        </div>
+                                        <div class="coupon">
+                                          <label for="couponCode">Coupon Code:</label>
+                                          <div class="coupon-input">
+                                            <input type="text" id="couponCode" name="couponCode" placeholder="Enter coupon code">
+                                            <button type="button" id="couponButton"  onclick="return applyOrRemoveCoupon()">Apply Coupon</button>
+                                            <div id="couponMessage"></div>
+                                          </div>
                                         </div>
                                         <br />
                                         <hr />
                                         <div class="total_price">
                                           <p class="dark">Total:</p>
-                                          <p class="dark">₹<%= totals.grandTotal.toFixed(2)  %></p>
+                                          <p class="dark">₹<span id="grandTotal"><%= totals.grandTotal.toFixed(2) %></span></p>
                                         </div>
                                       </strong>
-                                      </div>
-                                    </section>
-                                  </div>
+                                    </div>
+                                  </section>
+                                </div>
                               </div>
-                          </div>
+                            </div>
+                            
                           
                             <div class="step-checkout_summary" id="stepCheckoutSummary3">
                                 <div class="summary-box">
@@ -316,7 +363,7 @@ body {
                                     <div class="payment-option">
                                       <input type="radio" class="payment-radio" name="paymentMethod" id="walletRadio" value="Wallet">
                                       <i class="fas fa-wallet payment-icon"></i>
-                                      Wallet: ₹<span id="walletAmount"><%= wallet ? wallet.balance : '0' %></span>
+                                      Wallet: ₹<span id="walletAmount"><%= wallet ? wallet.balance : '0'%></span>
                                     </div>
                                     
                                     
@@ -389,49 +436,28 @@ function submitForm() {
 }
 
 </script>
-
-
-
- 
-
 <script>
-    // Add active class to the current list item (highlight it)
     const checkoutList = document.getElementById("checkoutList");
-
     checkoutList.addEventListener('click', e => {
-        // select all checkout li items
         const listItems = document.querySelectorAll('.step-checkout_item');
-        // get the current selected item
         const listItem = e.target.closest('.step-checkout_item');
-        // check if item exists otherwise return
         if (!listItem) return;
-        // Remove all active
         listItems.forEach(item => item.classList.remove('active'));
-        // Add active to clicked element
         listItem.classList.add('active');
-
-        // select all checkout summary items
         const summaries = document.querySelectorAll('.step-checkout_summary');
-        // hide all summaries
         summaries.forEach(summary => summary.style.display = 'none');
-        // get the id of the clicked item
         const itemId = listItem.id.replace('Item', 'Summary');
-        // show the related summary
         const relatedSummary = document.getElementById(itemId);
         if (relatedSummary) {
             relatedSummary.style.display = 'block';
         }
     });
-
-    // Set the default state to hide all summaries except the one related to the initially active item
     window.onload = () => {
         const defaultActiveItem = document.querySelector('.step-checkout_item.active');
         if (defaultActiveItem) {
             const itemId = defaultActiveItem.id.replace('Item', 'Summary');
             const relatedSummary = document.getElementById(itemId);
-            // hide all summaries
             document.querySelectorAll('.step-checkout_summary').forEach(summary => summary.style.display = 'none');
-            // show the related summary
             if (relatedSummary) {
                 relatedSummary.style.display = 'block';
             }
@@ -659,5 +685,60 @@ checkout.elm.addEventListener("click", (evt) => {
 });
 
 </script>
+<script>
+  async function applyOrRemoveCoupon() {
+    const couponCode = document.getElementById('couponCode').value;
+    const couponButton = document.getElementById('couponButton');
+    var couponMessage = document.getElementById('couponMessage');
+
+    try {
+      const response = await fetch(`/validate-coupon?code=${couponCode}`);
+      const data = await response.json();
+
+      if (data.valid) {
+        const discountedTotal = parseFloat(data.discountedTotal);
+
+        if (!isNaN(discountedTotal)) {
+          document.getElementById('grandTotal').textContent = `${discountedTotal.toFixed(2)}`;
+          
+          if (couponButton.classList.contains('applied')) {
+            couponMessage.innerHTML = 'Coupon removed successfully!';
+            couponButton.textContent = 'Apply Coupon';
+            couponButton.classList.remove('applied');
+            document.getElementById('couponButton').onclick = applyOrRemoveCoupon;
+          } else {
+            couponMessage.innerHTML = 'Coupon applied successfully!';
+            couponButton.textContent = 'Remove Coupon';
+            couponButton.classList.add('applied'); 
+            document.getElementById('couponButton').onclick = removeCoupon;
+          }
+        } else {
+          couponMessage.innerHTML = 'An error occurred. Please try again.';
+        }
+      } else {
+        couponMessage.innerHTML = `Invalid coupon code. Please try again.`;
+      }
+    } catch (error) {
+      console.error('Error validating coupon:', error);
+      couponMessage.innerHTML = 'An error occurred. Please try again.';
+    }
+    return false;
+  }
+
+  function removeCoupon() {
+    // Logic to remove the coupon and update UI
+    document.getElementById('couponButton').textContent = 'Apply Coupon';
+    document.getElementById('grandTotal').textContent = '<%= totals.grandTotal.toFixed(2) %>'; // Reset the total amount
+    document.getElementById('couponButton').classList.remove('applied'); // Remove the "applied" class
+    document.getElementById('couponMessage').innerHTML = 'Coupon removed successfully!';
+    document.getElementById('couponButton').onclick = applyOrRemoveCoupon;
+  }
+</script>
+
+
+
+
+
+
 
 </html>

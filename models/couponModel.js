@@ -31,13 +31,6 @@ const couponSchema = new Schema({
     required: true,
   },
 });
-couponSchema.pre('save', function (next) {
-    // Format startDate and expiryDate to only store the date part
-    this.startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate());
-    this.expiryDate = new Date(this.expiryDate.getFullYear(), this.expiryDate.getMonth(), this.expiryDate.getDate());
-  
-    next();
-  });
-  
+
 const Coupon = mongoose.model("Coupon", couponSchema);
 module.exports = Coupon;

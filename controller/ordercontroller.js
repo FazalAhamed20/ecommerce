@@ -172,34 +172,41 @@ const createOrder = async (req, res) => {
 //user orders------------------------------------------------------->  
 const userOrder = async (req, res) => {
   try {
-      if (!req.session.user) {
-          return res.render('./orders/userorder', { pageTitle: 'userorder', user: null, orders: [] });
-      }
-      const userId = req.session.user._id;
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 3; 
-      const skip = (page - 1) * limit;
-      const orders = await orderModels.find({ customer: userId })
-          .populate({
-              path: 'products.product',
-              model: 'Product',
-              select: 'name price description image',
-          })
-          .skip(skip)
-          .limit(limit)
-          .exec();
-          const formattedOrders = orders.map((order) => ({
-            ...order._doc,
-            orderDate:order.orderDate.toLocaleDateString('en-IN'),
-            deliveryDate: order.deliveryDate.toLocaleDateString('en-IN'), 
+    if (!req.session.user) {
+      return res.render('./orders/userorder', { pageTitle: 'userorder', user: null, orders: [], totalPages: 0, page: 1, limit: 3 });
+    }
+    
+    const userId = req.session.user._id;
+    const limit = parseInt(req.query.limit) || 3; 
+    const totalOrders = await orderModels.countDocuments({ customer: userId });
+    const totalPages = Math.ceil(totalOrders / limit);
+    console.log(totalPages)
+    const page = parseInt(req.query.page) || 1;
+    const skip = (page - 1) * limit;
+    
+    const orders = await orderModels.find({ customer: userId })
+      .populate({
+        path: 'products.product',
+        model: 'Product',
+        select: 'name price description image',
+      })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    
+    const formattedOrders = orders.map((order) => ({
+      ...order._doc,
+      orderDate: order.orderDate.toLocaleDateString('en-IN'),
+      deliveryDate: order.deliveryDate.toLocaleDateString('en-IN'), 
+    }));
 
-          }));
-      res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders:formattedOrders, page, limit });
+    res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders: formattedOrders, page, limit, totalPages });
   } catch (error) {
-      console.error('Error fetching user orders:', error);
-      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    console.error('Error fetching user orders:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
+
 //razorpay online payment-------------------------------------------------------> 
 const processPayment = async (req, res) => {
   try {
