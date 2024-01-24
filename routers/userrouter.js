@@ -57,6 +57,7 @@ router.post('/cancelProduct',verifyUser,controller5.cancelProduct)
 router.get('/download-invoice/:orderId',verifyUser,controller5.downloadInvoice)
 
 router.get('/validate-coupon',verifyUser,controller6.validcoupon)
+router.post('/remove-coupon',verifyUser,controller6.removeCoupon);
 
 
 

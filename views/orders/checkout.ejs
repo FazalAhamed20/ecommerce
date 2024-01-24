@@ -702,15 +702,11 @@ checkout.elm.addEventListener("click", (evt) => {
           document.getElementById('grandTotal').textContent = `${discountedTotal.toFixed(2)}`;
           
           if (couponButton.classList.contains('applied')) {
-            couponMessage.innerHTML = 'Coupon removed successfully!';
-            couponButton.textContent = 'Apply Coupon';
-            couponButton.classList.remove('applied');
-            document.getElementById('couponButton').onclick = applyOrRemoveCoupon;
+            await removeCoupon(couponCode);
           } else {
             couponMessage.innerHTML = 'Coupon applied successfully!';
             couponButton.textContent = 'Remove Coupon';
             couponButton.classList.add('applied'); 
-            document.getElementById('couponButton').onclick = removeCoupon;
           }
         } else {
           couponMessage.innerHTML = 'An error occurred. Please try again.';
@@ -722,19 +718,33 @@ checkout.elm.addEventListener("click", (evt) => {
       console.error('Error validating coupon:', error);
       couponMessage.innerHTML = 'An error occurred. Please try again.';
     }
-    return false;
   }
 
-  function removeCoupon() {
-    // Logic to remove the coupon and update UI
-    document.getElementById('couponButton').textContent = 'Apply Coupon';
-    document.getElementById('grandTotal').textContent = '<%= totals.grandTotal.toFixed(2) %>'; // Reset the total amount
-    document.getElementById('couponButton').classList.remove('applied'); // Remove the "applied" class
-    document.getElementById('couponMessage').innerHTML = 'Coupon removed successfully!';
-    document.getElementById('couponButton').onclick = applyOrRemoveCoupon;
+  async function removeCoupon(couponCode) {
+    try {
+      const response = await fetch(`/remove-coupon?code=${couponCode}`, {
+        method: 'POST'
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Update UI to reflect the removed coupon
+        document.getElementById('couponButton').textContent = 'Apply Coupon';
+        document.getElementById('grandTotal').textContent = '<%= totals.grandTotal.toFixed(2) %>'; // Replace with the original total
+        document.getElementById('couponButton').classList.remove('applied');
+        document.getElementById('couponMessage').innerHTML = 'Coupon removed successfully!';
+      } else {
+        // Handle error response from the server
+        console.error('Error removing coupon:', data.error);
+        document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
+      }
+    } catch (error) {
+      console.error('Error removing coupon:', error);
+      document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
+    }
   }
 </script>
-
 
 
 

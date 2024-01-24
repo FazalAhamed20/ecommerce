@@ -2,20 +2,16 @@ const express = require('express');
 const router = express.Router();
 const Coupon = require('../models/couponModel');
 const cartModels=require('../models/cartModel')
+const mongoose = require('mongoose');
+
 
 const validcoupon = async (req, res) => {
-  
     const couponCode = req.query.code;
-
-    console.log("couponcode", couponCode);
 
     try {
         const userId = req.session.user._id;
-    console.log(userId);
         const coupon = await Coupon.findOne({ couponCode });
-        console.log(coupon);
         const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image');
-        console.log("carttotal", cart);
 
         if (!coupon) {
             res.json({
@@ -26,9 +22,6 @@ const validcoupon = async (req, res) => {
         }
 
         const currentDate = new Date();
-        console.log('currentDate:', currentDate);
-        console.log('startDate:', coupon.startDate);
-        console.log('expiryDate:', coupon.expiryDate);
 
         if (currentDate < coupon.startDate || currentDate > coupon.expiryDate) {
             res.json({
@@ -38,16 +31,16 @@ const validcoupon = async (req, res) => {
             return;
         }
 
-        // Use the total amount from the cart instead of the hardcoded value
-        const originalTotal = cart.totals.grandTotal; // Adjust based on your actual cart model structure
+        const originalTotal = cart.totals.grandTotal;
         const discountAmount = coupon.discountAmount;
-
-        // Calculate discounted total
         const discountedTotal = Math.max(originalTotal - discountAmount, 0);
 
-        console.log('originalTotal:', originalTotal);
-        console.log('discountAmount:', discountAmount);
-        console.log('discountedTotal:', discountedTotal);
+        // Update the discount fields in the cart
+        await cartModels.findOneAndUpdate(
+            { userId },
+            { $set: { 'totals.discountAmount': discountAmount, 'totals.discountedTotal': discountedTotal } },
+            { new: true }
+        );
 
         res.json({
             valid: true,
@@ -61,8 +54,45 @@ const validcoupon = async (req, res) => {
     }
 };
 
+const removeCoupon = async (req, res) => {
+    const couponCode = req.query.code;
+
+    try {
+        const userId = req.session.user._id;
+        const coupon = await Coupon.findOne({ couponCode });
+
+        if (!coupon) {
+            res.status(404).json({
+                error: 'Coupon not found.',
+            });
+            return;
+        }
+
+        const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image');
+
+        // Remove the discount fields from the cart
+        await cartModels.findOneAndUpdate(
+            { userId },
+            { $set: { 'totals.discountAmount': 0, 'totals.discountedTotal': cart.totals.grandTotal } },
+            { new: true }
+        );
+
+        res.status(200).json({
+            success: true,
+        });
+    } catch (error) {
+        console.error('Error removing discount:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+        });
+    }
+};
+
+
+
 
 
 module.exports = {
-    validcoupon
+    validcoupon,
+    removeCoupon
 }

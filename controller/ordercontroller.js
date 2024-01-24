@@ -11,6 +11,7 @@ const User=require('../models/userModel')
 const pdf = require('html-pdf');
 const fs = require('fs');
 const ejs = require('ejs');
+const Coupon=require('../models/couponModel')
 
 var instance = new Razorpay({
   key_id: 'rzp_test_YCxRFmZdRfF2Qw',
@@ -27,7 +28,7 @@ function getCurrentTime() {
   return moment().format('HH:mm');
 }
 
-const createOrderData = async (userId, paymentMethod, selectedAddress) => {
+const createOrderData = async (userId, paymentMethod, selectedAddress,couponCode) => {
   const orderID = generateOrderID();
   const currentDate = moment();
   const orderDate = currentDate.format('ddd MMM DD YYYY');
@@ -39,10 +40,18 @@ const createOrderData = async (userId, paymentMethod, selectedAddress) => {
   const deliveryTime = deliveryDateTime.format('HH:mm');
   console.log(`Ordered Date: ${orderDate}`);
 
+  const appliedCoupon = await Coupon.findOne(couponCode);
+
   const cart = await cartModels.findOne({ userId });
   if (cart) {
       await cart.populate('products.productId', 'name price description image');
   }
+
+  let discountAmount = 0;
+  if (appliedCoupon) {
+    discountAmount = appliedCoupon.discountAmount;
+  }
+  const grandTotalAfterDiscount = cart.totals.grandTotal - discountAmount;
   const products = cart.products.map(cartItem => ({
       product: cartItem.productId,
       name: cartItem.productId && cartItem.productId.name,
@@ -52,7 +61,7 @@ const createOrderData = async (userId, paymentMethod, selectedAddress) => {
       subtotal: cart.totals.subtotal,
       tax: cart.totals.tax,
       shipping: cart.totals.shipping,
-      grandTotal: cart.totals.grandTotal,
+      grandTotal: grandTotalAfterDiscount,
   };
 
   return {
@@ -116,6 +125,7 @@ const checkout = async (req, res) => {
 const createOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
+    console.log(req.body);
     const { paymentMethod, selectedAddressIndex } = req.body;
     if (!paymentMethod || !selectedAddressIndex || !selectedAddressIndex.length) {
       req.flash('error', 'Address or Payment is not selected');
@@ -191,6 +201,7 @@ const userOrder = async (req, res) => {
         select: 'name price description image',
       })
       .skip(skip)
+      .sort({_id:-1})
       .limit(limit)
       .exec();
     

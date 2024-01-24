@@ -403,7 +403,7 @@ body {
         </div>
         <div class="product-details">
           <div class="product-title"><%= item.productId && item.productId.name %></div>
-          <div class="product-price">₹<%= (item.productId && (item.productId.Offerprice || item.productId.price) * item.quantity).toFixed(2) %></div>
+          <div class="product-price">₹<%= (item.productId && (item.productId.Offerprice || item.productId.price)).toFixed(2) %></div>
           <div class="product-quantity">
             Quantity: 
             
@@ -500,38 +500,6 @@ body {
 
 <script>
   async function updateQuantity(input) {
-    const productId = input.getAttribute('data-product-id');
-    const quantity = input.value;
-
-    try {
-      const response = await fetch(`/updatequantity/${productId}/${quantity}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        console.error('Failed to update quantity:', response.statusText);
-        // Handle error as needed
-        return;
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        // Update UI with the new totals
-        updateUITotals(result.totals);
-      } else {
-        console.error('Failed to update quantity:', result.message);
-        // Handle error as needed
-      }
-    } catch (error) {
-      console.error('Error updating quantity:', error);
-      // Handle error as needed
-    }
-  }
-  async function updateQuantity(input) {
   const productId = input.getAttribute('data-product-id');
   const quantity = input.value;
 
@@ -603,25 +571,23 @@ body {
     document.querySelectorAll('.remove-product').forEach(function (button) {
       button.addEventListener('click', function () {
         removeItem(this);
-        updateCartBadge(); // Update the badge after removing an item
+        updateCartBadge(); 
       });
     });
 
-    // Recalculate cart
-    function recalculateCart() {
+     function recalculateCart() {
       var subtotal = 0;
 
       // Sum up row totals
       document.querySelectorAll('.cart-item').forEach(function (item) {
         var price = parseFloat(item.querySelector('.product-price').textContent.replace('₹', ''));
         var quantity = parseInt(item.querySelector('.product-quantity input').value);
-        var price = parseFloat(item.querySelector('.product-price').textContent.replace('₹', '')) || 0;
-    var offerPrice = parseFloat(item.querySelector('.product-offer-price').textContent.replace('₹', '')) || 0;
+        
 
-    // Calculate total based on the offer price if available, otherwise use the regular price
-    var total = (offerPrice > 0 ? offerPrice : price) * quantity;
+        // Calculate total based on the offer price if available, otherwise use the regular price
+        var total = price * quantity;
 
-    subtotal += total;
+        subtotal += total;
 
         item.querySelector('.product-total').textContent = '₹' + total.toFixed(2);
       });
@@ -648,12 +614,10 @@ body {
       var total = price * quantity;
 
       item.querySelector('.product-total').textContent = '₹' + total.toFixed(2);
-     
 
-      recalculateCart();
+      recalculateCart(); // Recalculate the cart totals after updating quantity
     }
-
-    
+  
   });
 </script>
 <script>

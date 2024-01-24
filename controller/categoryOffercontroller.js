@@ -94,9 +94,16 @@ const deleteOffer = async (req, res) => {
     const { categoryId } = req.params;
 
     const deletedOffer = await Offer.findOneAndDelete({ category: categoryId });
-    console.log("deleteoffer", deletedOffer);
 
     if (deletedOffer) {
+      // Delete offer price from products
+      const products = await Product.find({ category: categoryId });
+
+      for (const product of products) {
+        product.Offerprice = null;
+        await product.save();
+      }
+
       return res.json({ success: true, message: 'Offer deleted successfully' });
     } else {
       return res.status(404).json({ success: false, message: 'Offer not found' });
@@ -106,6 +113,7 @@ const deleteOffer = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
+
 
 module.exports={
     CategoryOffers,

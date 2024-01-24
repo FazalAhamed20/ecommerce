@@ -14,6 +14,8 @@ const cartSchema = new Schema({
     tax: { type: Number, default: 0 },
     shipping: { type: Number, default: 0 },
     grandTotal: { type: Number, default: 0 },
+    discountAmount: { type: Number, default: 0 },
+        discountedTotal: { type: Number, default: 0 },
   },
 });
 

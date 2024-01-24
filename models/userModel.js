@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
-const Address = require('../models/addressModel');
 
-mongoose.connect(process.env.atlas_URL || "mongodb+srv://fazalahamed628:jBKMkSoxwciBSWkA@cluster0.mpqgtyu.mongodb.net/", {
+
+mongoose.connect(process.env.atlas_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
