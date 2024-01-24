@@ -9,6 +9,7 @@
     <title>User Orders</title>
 </head>
 <style>
+
   .list-group-item.active {
     background: #ffc107;
 }
@@ -105,10 +106,12 @@ ul.timeline > li.active:before {
         display: flex;
         justify-content: center;
         margin-top: 20px;
+        margin-bottom: -5px;
     }
 
     .pagination a, .pagination span {
-        margin: 0 5px;  
+        margin: 0 5px 3px 3px;
+        margin-bottom: -5px;  
         padding: 8px 16px;
         background-color: #007bff;
         color: white;
@@ -121,7 +124,8 @@ ul.timeline > li.active:before {
     }
 
     .pagination span {
-        background-color: #0056b3;  
+        background-color: #0056b3;
+        margin-bottom: -5px;  
     }
 
 </style>
@@ -317,7 +321,7 @@ ul.timeline > li.active:before {
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Order Summary</h5>
-                                <p>Total Price: ₹<%= order.totals.grandTotal %></p>
+                                <p>Total Price: ₹<%= order.totals.grandTotal.toFixed(2) %></p>
                                 <p>Ordered Date: <%= order.orderDate %></p>
                                 <p>Ordered Time: <%= order.orderTime %></p>
                             </div>
@@ -351,6 +355,7 @@ ul.timeline > li.active:before {
             <% } %>
         </div>
     <% } %>
+   
     
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

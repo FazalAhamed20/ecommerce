@@ -722,30 +722,32 @@ checkout.elm.addEventListener("click", (evt) => {
 
   async function removeCoupon(couponCode) {
     try {
-      const response = await fetch(`/remove-coupon?code=${couponCode}`, {
-        method: 'POST'
-      });
+        const response = await fetch(`/remove-coupon?code=${couponCode}`, {
+            method: 'POST'
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        // Update UI to reflect the removed coupon
-        document.getElementById('couponButton').textContent = 'Apply Coupon';
-        document.getElementById('grandTotal').textContent = '<%= totals.grandTotal.toFixed(2) %>'; // Replace with the original total
-        document.getElementById('couponButton').classList.remove('applied');
-        document.getElementById('couponMessage').innerHTML = 'Coupon removed successfully!';
-      } else {
-        // Handle error response from the server
-        console.error('Error removing coupon:', data.error);
-        document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
-      }
+        if (response.ok) {
+            // Update UI to reflect the removed coupon
+            document.getElementById('couponButton').textContent = 'Apply Coupon';
+            document.getElementById('grandTotal').textContent = '<%= totals.grandTotal.toFixed(2) %>'; // Replace with the original total
+            document.getElementById('couponButton').classList.remove('applied');
+            document.getElementById('couponMessage').innerHTML = 'Coupon removed successfully!';
+            
+            // Clear the input box value
+            document.getElementById('couponCode').value = '';
+        } else {
+            // Handle error response from the server
+            console.error('Error removing coupon:', data.error);
+            document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
+        }
     } catch (error) {
-      console.error('Error removing coupon:', error);
-      document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
+        console.error('Error removing coupon:', error);
+        document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
     }
-  }
+}
 </script>
-
 
 
 

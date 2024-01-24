@@ -64,6 +64,16 @@ const orderSchema = new mongoose.Schema({
       type: Number,
       required:true,
     },
+    couponCode:{
+      type:String,
+    },
+    discountAmount:{
+      type:Number,
+    },
+    discountTotal:{
+      type:Number,
+    }
+  
   },
   orderDate: {
     type: Date,
@@ -81,13 +91,7 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required:true 
   },
-  couponCode:{
-    type:String,
-  },
-  discountAmount:{
-    type:String,
-  },
-
+  
   paymentMethod: {
     type: String,
     enum: ['Wallet', 'RazorPay', 'Cash on Delivery', 'Other'], 

@@ -28,7 +28,7 @@ function getCurrentTime() {
   return moment().format('HH:mm');
 }
 
-const createOrderData = async (userId, paymentMethod, selectedAddress,couponCode) => {
+const createOrderData = async (userId, paymentMethod, selectedAddress, couponCode) => {
   const orderID = generateOrderID();
   const currentDate = moment();
   const orderDate = currentDate.format('ddd MMM DD YYYY');
@@ -40,44 +40,56 @@ const createOrderData = async (userId, paymentMethod, selectedAddress,couponCode
   const deliveryTime = deliveryDateTime.format('HH:mm');
   console.log(`Ordered Date: ${orderDate}`);
 
-  const appliedCoupon = await Coupon.findOne(couponCode);
+  const appliedCoupon = await Coupon.findOne({ couponCode });
+
+  console.log("applied coupon",appliedCoupon);
 
   const cart = await cartModels.findOne({ userId });
   if (cart) {
-      await cart.populate('products.productId', 'name price description image');
+    await cart.populate('products.productId', 'name price description image');
   }
 
   let discountAmount = 0;
+  let discountTotal = 0;
+  let couponCodeApplied = '';
+
   if (appliedCoupon) {
     discountAmount = appliedCoupon.discountAmount;
+    couponCodeApplied = appliedCoupon.couponCode;
   }
+
   const grandTotalAfterDiscount = cart.totals.grandTotal - discountAmount;
   const products = cart.products.map(cartItem => ({
-      product: cartItem.productId,
-      name: cartItem.productId && cartItem.productId.name,
-      quantity: cartItem.quantity,
+    product: cartItem.productId,
+    name: cartItem.productId && cartItem.productId.name,
+    quantity: cartItem.quantity,
   }));
+
   const totals = {
-      subtotal: cart.totals.subtotal,
-      tax: cart.totals.tax,
-      shipping: cart.totals.shipping,
-      grandTotal: grandTotalAfterDiscount,
+    subtotal: cart.totals.subtotal,
+    tax: cart.totals.tax,
+    shipping: cart.totals.shipping,
+    grandTotal: grandTotalAfterDiscount,
+    couponCode: couponCodeApplied,
+    discountAmount: discountAmount,
+    discountTotal: grandTotalAfterDiscount,
   };
 
   return {
-      orderID,
-      customer: userId,
-      products,
-      address: selectedAddress,
-      totals,
-      orderDate,
-      orderTime,
-      deliveryDate,
-      deliveryTime,
-      paymentMethod,
-      status: 'Pending',
+    orderID,
+    customer: userId,
+    products,
+    address: selectedAddress,
+    totals,
+    orderDate,
+    orderTime,
+    deliveryDate,
+    deliveryTime,
+    paymentMethod,
+    status: 'Pending',
   };
 };
+
 //order confirmed------------------------------------------------------->
 const confirm = async (req, res) => {
   try {
@@ -126,7 +138,7 @@ const createOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
     console.log(req.body);
-    const { paymentMethod, selectedAddressIndex } = req.body;
+    const { paymentMethod, selectedAddressIndex,couponCode } = req.body;
     if (!paymentMethod || !selectedAddressIndex || !selectedAddressIndex.length) {
       req.flash('error', 'Address or Payment is not selected');
       return res.redirect('/user/checkout');
@@ -140,7 +152,8 @@ const createOrder = async (req, res) => {
     if (!selectedAddress) {
       return res.status(404).json({ error: 'Selected address not found' });
     }
-    const orderData = await createOrderData(userId, paymentMethod, selectedAddress);
+    const orderData = await createOrderData(userId, paymentMethod, selectedAddress,couponCode);
+    console.log(orderData);
     if (paymentMethod === 'Cash on Delivery') {
       const newOrder = new orderModels(orderData);
       const savedOrder = await newOrder.save();

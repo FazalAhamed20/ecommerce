@@ -40,7 +40,10 @@ const validcoupon = async (req, res) => {
             { userId },
             { $set: { 'totals.discountAmount': discountAmount, 'totals.discountedTotal': discountedTotal } },
             { new: true }
+            
         );
+        console.log("apply coupon",discountedTotal);
+        
 
         res.json({
             valid: true,
@@ -71,12 +74,12 @@ const removeCoupon = async (req, res) => {
         const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image');
 
         // Remove the discount fields from the cart
-        await cartModels.findOneAndUpdate(
+      const updatedcart=  await cartModels.findOneAndUpdate(
             { userId },
             { $set: { 'totals.discountAmount': 0, 'totals.discountedTotal': cart.totals.grandTotal } },
             { new: true }
         );
-
+       console.log("remove coupon",updatedcart);
         res.status(200).json({
             success: true,
         });
