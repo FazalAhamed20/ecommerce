@@ -709,10 +709,12 @@ checkout.elm.addEventListener("click", (evt) => {
             couponButton.classList.add('applied'); 
           }
         } else {
+          document.getElementById('couponCode').value = '';
           couponMessage.innerHTML = 'An error occurred. Please try again.';
         }
       } else {
-        couponMessage.innerHTML = `Invalid coupon code. Please try again.`;
+        document.getElementById('couponCode').value = '';
+        couponMessage.innerHTML = data.message;
       }
     } catch (error) {
       console.error('Error validating coupon:', error);

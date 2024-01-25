@@ -375,6 +375,16 @@ body {
   .checkout:hover {
     background-color: #3c271f;
   }
+  @media screen and (max-width: 176px) {
+    .product-remove {
+      text-align: center; /* Center the link on small screens */
+      margin-top: 10px; /* Adjust the top margin */
+    }
+  }
+  .product-remove{
+    margin-right: 200px;
+    
+  }
 
 </style>
 
@@ -423,12 +433,13 @@ body {
           
           
           
+        </div><div class="product-remove">
+          <a href="/removeItem/<%= item.productId._id %>" class="remove-product" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">Remove</a>
         </div>
+       
         <div class="product-total">
           ₹<%= (item.productId && (item.productId.Offerprice || item.productId.price) * item.quantity).toFixed(2) %>
         </div>
-        
-        <a href="/removeItem/<%= item.productId._id %>" class="remove-product" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">Remove</a>
       </div>
     <% }); %>
   </div>

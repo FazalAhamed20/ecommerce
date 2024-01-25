@@ -138,26 +138,58 @@ const createOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
     console.log(req.body);
-    const { paymentMethod, selectedAddressIndex,couponCode } = req.body;
+    const { paymentMethod, selectedAddressIndex, couponCode } = req.body;
+
     if (!paymentMethod || !selectedAddressIndex || !selectedAddressIndex.length) {
       req.flash('error', 'Address or Payment is not selected');
       return res.redirect('/user/checkout');
     }
+
     if (!userId) {
       return res.status(401).json({ error: 'User not authenticated' });
     }
+
     const addresses = await Address.find({ userId });
     const selectedAddress = addresses[selectedAddressIndex];
 
     if (!selectedAddress) {
       return res.status(404).json({ error: 'Selected address not found' });
     }
-    const orderData = await createOrderData(userId, paymentMethod, selectedAddress,couponCode);
+
+    const orderData = await createOrderData(userId, paymentMethod, selectedAddress, couponCode);
     console.log(orderData);
+
     if (paymentMethod === 'Cash on Delivery') {
       const newOrder = new orderModels(orderData);
       const savedOrder = await newOrder.save();
       await cartModels.findOneAndDelete({ userId });
+      setTimeout(() => {
+        return res.render('./orders/confirm', { pageTitle: 'success', user: req.session.user, paymentMethod });
+      }, 1800);
+    } else if (paymentMethod === 'Wallet') {
+     
+      const userWallet = await Wallet.findOne({ userId });
+
+      if (!userWallet) {
+        return res.status(404).json({ error: 'User wallet not found' });
+      }
+
+      const orderTotal = orderData.totals.grandTotal;
+
+      if (userWallet.balance < orderTotal) {
+        return res.status(400).json({ error: 'Insufficient funds in the wallet' });
+      }
+
+     
+      userWallet.balance -= orderTotal;
+      await userWallet.save();
+
+      const newOrder = new orderModels(orderData);
+      const savedOrder = await newOrder.save();
+
+     
+      await cartModels.findOneAndDelete({ userId });
+
       setTimeout(() => {
         return res.render('./orders/confirm', { pageTitle: 'success', user: req.session.user, paymentMethod });
       }, 1800);
@@ -192,6 +224,7 @@ const createOrder = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 //user orders------------------------------------------------------->  
 const userOrder = async (req, res) => {
   try {

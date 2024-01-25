@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Coupon = require('../models/couponModel');
 const cartModels=require('../models/cartModel')
+const orderModel=require('../models/orderModel')
 const mongoose = require('mongoose');
 
 
@@ -31,19 +32,31 @@ const validcoupon = async (req, res) => {
             return;
         }
 
+        
+        const isCouponUsed = await orderModel.exists({
+            'customer': userId,
+            'totals.couponCode': couponCode,
+            'status': { $ne: 'Cancelled' } // Exclude cancelled orders
+        });
+
+        if (isCouponUsed) {
+            res.json({
+                valid: false,
+                message: 'Coupon is already used in a previous order.',
+            });
+            return;
+        }
+
         const originalTotal = cart.totals.grandTotal;
         const discountAmount = coupon.discountAmount;
         const discountedTotal = Math.max(originalTotal - discountAmount, 0);
 
-        // Update the discount fields in the cart
         await cartModels.findOneAndUpdate(
             { userId },
             { $set: { 'totals.discountAmount': discountAmount, 'totals.discountedTotal': discountedTotal } },
             { new: true }
-            
         );
-        console.log("apply coupon",discountedTotal);
-        
+        console.log("apply coupon", discountedTotal);
 
         res.json({
             valid: true,
@@ -56,7 +69,6 @@ const validcoupon = async (req, res) => {
         });
     }
 };
-
 const removeCoupon = async (req, res) => {
     const couponCode = req.query.code;
 

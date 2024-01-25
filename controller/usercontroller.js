@@ -74,6 +74,7 @@ const products = await Product.find().exec();
 const product = async (req, res) => {
     try {
         const user = req.session.user;
+        const categoryId = req.query.categoryId;
         const currentPage = parseInt(req.query.page) || 1;
         const itemsPerPage = 8;
 
@@ -98,7 +99,8 @@ const product = async (req, res) => {
             cartItemCount,
             user,
             currentPage,
-            totalPages
+            totalPages,
+            categoryId
         });
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -152,6 +154,7 @@ const endIndex = startIndex + itemsPerPage;
             user,
             currentPage,
             totalPages,
+            categoryId
         });
     } catch (error) {
         console.error('Error fetching products by category:', error);
