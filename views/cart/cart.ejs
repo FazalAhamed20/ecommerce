@@ -428,14 +428,10 @@ body {
             <% if (item.productId.quantity <= 1) { %>
               <span class="out-of-stock">Out of Stock</span>
             <% } %>
+          </div><div class="product-remove">
+            <a href="/removeItem/<%= item.productId._id %>" class="remove-product" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">Remove</a>
           </div>
-          
-          
-          
-          
-        </div><div class="product-remove">
-          <a href="/removeItem/<%= item.productId._id %>" class="remove-product" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">Remove</a>
-        </div>
+          </div>
        
         <div class="product-total">
           ₹<%= (item.productId && (item.productId.Offerprice || item.productId.price) * item.quantity).toFixed(2) %>

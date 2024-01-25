@@ -167,17 +167,23 @@ const createOrder = async (req, res) => {
         return res.render('./orders/confirm', { pageTitle: 'success', user: req.session.user, paymentMethod });
       }, 1800);
     } else if (paymentMethod === 'Wallet') {
+      const user = await User.findById(userId);
+        const walletId = user.wallet;
+        const userWallet = await Wallet.findById(walletId);
      
-      const userWallet = await Wallet.findOne({ userId });
+      
+
+      console.log("user wallet at payment",userWallet);
 
       if (!userWallet) {
-        return res.status(404).json({ error: 'User wallet not found' });
+        req.flash('error', 'User wallet not found');
+        return res.redirect('/user/checkout');
       }
-
       const orderTotal = orderData.totals.grandTotal;
 
       if (userWallet.balance < orderTotal) {
-        return res.status(400).json({ error: 'Insufficient funds in the wallet' });
+        req.flash('error', 'Insufficient funds in the wallet');
+        return res.redirect('/user/checkout');
       }
 
      

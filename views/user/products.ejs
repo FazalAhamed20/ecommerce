@@ -180,7 +180,7 @@
     
     justify-content: center;
     width: 90%;
-    margin-left: 15%;
+    margin-left: 12%;
     margin-right: auto;
 }
 
@@ -193,6 +193,7 @@
 .pagination-container {
     display: flex;
     justify-content: center;
+    gap: 10px;
     align-items: center;
     margin-top: 20px; /* Adjust as needed */
 }
@@ -233,7 +234,7 @@
   </div>
   <div class="card-container">
 <% products.forEach(product => { %>
-<div class="card" style="width: 15rem;">
+<div class="card" style="width: 20rem;">
     <img src="/product-images/<%= product.image %>" class="card-img-top" alt="<%= product.name %>" onclick="openModal('<%= product.image %>')">
     <div class="card-body">
         <h5 class="card-title"><%= product.name %></h5>
@@ -259,15 +260,14 @@
             <a href="?category=<%= categoryId %>&page=<%= currentPage - 1 %>">Previous</a>
         <% } %>
         
-        <% for (let i = 1; i <= totalPages; i++) { %>
-            <a href="?category=<%= categoryId %>&page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
-        <% } %>
+        <a href="?category=<%= categoryId %>&page=<%= currentPage %>" class="active"><%= currentPage %></a>
         
         <% if (currentPage < totalPages) { %>
             <a href="?category=<%= categoryId %>&page=<%= currentPage + 1 %>">Next</a>
         <% } %>
     </div>
 </div>
+
 
 <%- include('footer') -%>
 
