@@ -3,6 +3,7 @@ const Address = require('../models/addressModel');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const Coupon=require('../models/couponModel')
+const RateUs = require('../models/RateusModel');
 //user profile------------------------------------------------------->
 const userprofile = (req, res) => { 
     const user = req.session.user || {};
@@ -178,6 +179,42 @@ const rewards = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+const rateus=(req, res) => {
+    res.render('./userprofile/rateus.ejs', { pageTitle: 'Rate Us' });
+  };
+  const hasUserRated = async (userId) => {
+    const existingRating = await RateUs.findOne({ userId });
+    return !!existingRating;
+  };
+  
+  // Handle rating submission
+  const submitRating = async (req, res) => {
+    try {
+      const userId = req.session.user._id;
+  
+      // Check if the user has already rated
+      const userHasRated = await hasUserRated(userId);
+  
+      if (userHasRated) {
+        return res.status(400).send('User has already rated.');
+      }
+  
+      // Create a new RateUs document
+      const newRating = new RateUs({
+        userId,
+        rating: parseInt(req.body.rating),
+        feedback: req.body.feedback
+      });
+  
+      // Save the new rating to the database
+      await newRating.save();
+  
+      res.redirect('/user/rateus');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  };
 //modules------------------------------------------------------->
 module.exports = {
     userprofile,
@@ -188,5 +225,7 @@ module.exports = {
     addaddressform,
     editaddressform,
     deleteAddress,
-    rewards
+    rewards,
+    rateus,
+    submitRating
 };

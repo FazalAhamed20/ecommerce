@@ -42,6 +42,8 @@ router.get('/user/editaddressform/:id',verifyUser,controller3.editaddressform);
 router.post('/user/editaddressform/:id',verifyUser,controller3.editaddressform);
 router.get('/user/deleteaddress/:id',verifyUser,controller3.deleteAddress);
 router.get('/user/rewards',verifyUser,controller3.rewards)
+router.get('/user/rateus',verifyUser,controller3.rateus)
+router.post('/submit-rating',verifyUser,controller3.submitRating)
 //user cart------------------------------------------------------->
 router.get('/user/cart',verifyUser,controller4.usercart);
 router.get('/user/addtocart/:productId', verifyUser, controller4.addToCart);
