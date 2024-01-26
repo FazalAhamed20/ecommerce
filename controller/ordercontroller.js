@@ -12,21 +12,14 @@ const pdf = require('html-pdf');
 const fs = require('fs');
 const ejs = require('ejs');
 const Coupon=require('../models/couponModel')
+const {generateOrderID,getCurrentTime}=require('../util/helperfunction')
+require('dotenv').config();
+
 
 var instance = new Razorpay({
-  key_id: 'rzp_test_YCxRFmZdRfF2Qw',
-  key_secret: 'zeSoohctIJNkPlHsAeDwKUR2',
+  key_id:process.env.Razorpay_key_id,
+  key_secret:process.env.Razorpay_key_secret,
 });
-//generate orderid------------------------------------------------------->
-function generateOrderID() {
-  const safeIndex = Math.floor(Math.random() * 1000000);
-  const sixDigitID = String(safeIndex + 1).padStart(6, '0');
-  return 'ORD#' + sixDigitID;
-}
-//order time------------------------------------------------------->
-function getCurrentTime() {
-  return moment().format('HH:mm');
-}
 
 const createOrderData = async (userId, paymentMethod, selectedAddress, couponCode) => {
   const orderID = generateOrderID();

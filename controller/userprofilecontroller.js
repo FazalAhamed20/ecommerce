@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const Address = require('../models/addressModel');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const Coupon=require('../models/couponModel')
 //user profile------------------------------------------------------->
 const userprofile = (req, res) => { 
     const user = req.session.user || {};
@@ -157,6 +158,26 @@ const edituser = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+const rewards = async (req, res) => {
+    try {
+        const user = req.session.user || {};
+
+        // Fetch all coupons from the Coupon model
+        const coupons = await Coupon.find();
+
+        const formattedCoupons = coupons.map((coupon) => ({
+            ...coupon._doc,
+            startDate: coupon.startDate.toLocaleDateString('en-IN'),
+            expiryDate: coupon.expiryDate.toLocaleDateString('en-IN'),
+          }));
+
+        res.render('./userprofile/reward.ejs', { pageTitle: 'Rewards', user, coupons:formattedCoupons });
+    } catch (error) {
+        console.error('Error fetching coupons:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 //modules------------------------------------------------------->
 module.exports = {
     userprofile,
@@ -166,5 +187,6 @@ module.exports = {
     addaddress,
     addaddressform,
     editaddressform,
-    deleteAddress
+    deleteAddress,
+    rewards
 };

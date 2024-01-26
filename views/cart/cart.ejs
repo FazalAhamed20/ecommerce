@@ -2,7 +2,7 @@
 <style>
   /* Global settings */
   body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     background-color: #f5f2eb; /* Creamy background */
     margin: 0;
     padding: 0;
@@ -150,8 +150,6 @@
     color: #5c3d2e; /* Deep coffee brown */
   }
 
-
-
   .checkout:hover {
     background-color: #3c271f; /* Darker coffee brown on hover */
   }
@@ -164,134 +162,131 @@
       opacity: 1;
     }
   }
-  .product-total{
+  .product-total {
     margin-right: 100px;
   }
 
-
-
-
-
-  html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-body {
-  font-family: system-ui, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: 0;
-  display: flex;
-  align-items: center;
-  padding: 16px 20px 16px 15px;
-  height: 56px;
-  position: relative;
-  font-family: inherit;
-  font-size: 1em;
-  line-height: 1em;
-  font-weight: 500;
-  background-color: #3c271f;
-  color: white;
-  cursor: pointer;
-  border-radius: 32px;
-  
-  
-  &:hover, &:active {
-    background-color: #5c3d2e;
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
   }
-}
 
-#cart {
-  margin-right: 12px;
-  transform-origin: 20% 100%;
-  opacity: 1;
-}
+  body {
+    font-family: system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-@keyframes slide-up-fade {
-  from {
-    transform: translateY(0);
+  button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 0;
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 16px 15px;
+    height: 56px;
+    position: relative;
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1em;
+    font-weight: 500;
+    background-color: #3c271f;
+    color: white;
+    cursor: pointer;
+    border-radius: 32px;
+
+    &:hover,
+    &:active {
+      background-color: #5c3d2e;
+    }
+  }
+
+  #cart {
+    margin-right: 12px;
+    transform-origin: 20% 100%;
     opacity: 1;
   }
-  to {
-    transform: translateY(-16px);
-    opacity: 0;
-  }
-}
 
-@keyframes roll-out {
-  0% {
-    transform: translate(0) rotate(0);
+  @keyframes slide-up-fade {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-16px);
+      opacity: 0;
+    }
   }
-  20% {
-    transform: translate(0) rotate(-70deg);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(0) rotate(-45deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(140px) rotate(-47deg);
-    opacity: 0;
-  }
-}
 
-.checked-out span {
-  animation: slide-up-fade 150ms 1;
-  animation-fill-mode: both;
-}
+  @keyframes roll-out {
+    0% {
+      transform: translate(0) rotate(0);
+    }
+    20% {
+      transform: translate(0) rotate(-70deg);
+      opacity: 1;
+    }
+    50% {
+      transform: translate(0) rotate(-45deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(140px) rotate(-47deg);
+      opacity: 0;
+    }
+  }
 
-.checked-out #cart {
-  animation: roll-out 1s 1 150ms;
-  animation-timing-function: ease-in;
-  animation-fill-mode: both;
-}
+  .checked-out span {
+    animation: slide-up-fade 150ms 1;
+    animation-fill-mode: both;
+  }
 
-@keyframes checkmark {
-  from {
+  .checked-out #cart {
+    animation: roll-out 1s 1 150ms;
+    animation-timing-function: ease-in;
+    animation-fill-mode: both;
+  }
+
+  @keyframes checkmark {
+    from {
+      stroke-dashoffset: 26px;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  #check {
+    position: absolute;
+    left: calc(50% - 12px);
+  }
+
+  #check path {
+    stroke-dasharray: 26px;
     stroke-dashoffset: 26px;
   }
-  to {
-    stroke-dashoffset: 0;  
+
+  .checked-out #check path {
+    animation: checkmark 150ms 1 1150ms;
+    animation-timing-function: ease-in;
+    animation-fill-mode: both;
   }
-}
 
-#check {
-  position: absolute;
-  left: calc(50% - 12px);
-}
-
-#check path {
-  stroke-dasharray: 26px;
-  stroke-dashoffset: 26px;
-}
-
-.checked-out #check path {
-  animation: checkmark 150ms 1 1150ms;
-  animation-timing-function: ease-in;
-  animation-fill-mode: both;
-}
-
-.checked-out button {
-  background-color: #20bf6b;
-  transition-delay: 1150ms;
-}
-/* Add styles for the error flash message */
-.flash-message.error {
-  color: red;
-}
-body {
-    font-family: 'Roboto', sans-serif;
+  .checked-out button {
+    background-color: #20bf6b;
+    transition-delay: 1150ms;
+  }
+  /* Add styles for the error flash message */
+  .flash-message.error {
+    color: red;
+  }
+  body {
+    font-family: "Roboto", sans-serif;
     background-color: #f5f2eb;
     margin: 0;
     padding: 0;
@@ -381,11 +376,9 @@ body {
       margin-top: 10px; /* Adjust the top margin */
     }
   }
-  .product-remove{
+  .product-remove {
     margin-right: 200px;
-    
   }
-
 </style>
 
 <!-- views/cart.ejs -->
@@ -393,57 +386,71 @@ body {
   <a href="/user/home">
     <h1>Your Coffee Cart</h1>
     <% if (messages.error && messages.error.length > 0) { %>
-      <div class="flash-message error">
-        <%= messages.error[0] %>
-      </div>
+    <div class="flash-message error"><%= messages.error[0] %></div>
     <% } %>
   </a>
 
-  
-
   <div class="cart-items">
     <% cartItems.forEach(item => { %>
-      <div class="cart-item">
-        <div class="product-image">
-          <% if (item.productId && item.productId.image) { %>
-            <img src="/assets/product-images/<%= item.productId.image %>" alt="<%= item.productId.name %>">
-          <% } else { %>
-            <p>No image available</p>
+    <div class="cart-item">
+      <div class="product-image">
+        <% if (item.productId && item.productId.image) { %>
+        <img
+          src="/assets/product-images/<%= item.productId.image %>"
+          alt="<%= item.productId.name %>"
+        />
+        <% } else { %>
+        <p>No image available</p>
+        <% } %>
+      </div>
+      <div class="product-details">
+        <div class="product-title">
+          <%= item.productId && item.productId.name %>
+        </div>
+        <div class="product-price">
+          ₹<%= (item.productId && (item.productId.Offerprice ||
+          item.productId.price)).toFixed(2) %>
+        </div>
+        <div class="product-quantity">
+          Quantity:
+
+          <input
+            type="number"
+            value="<%= item.quantity %>"
+            min="1"
+            max="<%= item.productId.quantity %>"
+            data-product-id="<%= item.productId._id %>"
+            onchange="updateQuantity(this)"
+          />
+          <% if (item.productId.quantity <= 1) { %>
+          <span class="out-of-stock">Out of Stock</span>
           <% } %>
         </div>
-        <div class="product-details">
-          <div class="product-title"><%= item.productId && item.productId.name %></div>
-          <div class="product-price">₹<%= (item.productId && (item.productId.Offerprice || item.productId.price)).toFixed(2) %></div>
-          <div class="product-quantity">
-            Quantity: 
-            
-            <input 
-              type="number" 
-              value="<%= item.quantity %>" 
-              min="1" 
-              max="<%= item.productId.quantity %>"
-              data-product-id="<%= item.productId._id %>"
-              onchange="updateQuantity(this)"
-            >
-            <% if (item.productId.quantity <= 1) { %>
-              <span class="out-of-stock">Out of Stock</span>
-            <% } %>
-          </div><div class="product-remove">
-            <a href="/removeItem/<%= item.productId._id %>" class="remove-product" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">Remove</a>
-          </div>
-          </div>
-       
-        <div class="product-total">
-          ₹<%= (item.productId && (item.productId.Offerprice || item.productId.price) * item.quantity).toFixed(2) %>
+        <div class="product-remove">
+          <a
+            href="/removeItem/<%= item.productId._id %>"
+            class="remove-product"
+            onclick="removeItem(this)"
+            data-product-id="<%= item.productId._id %>"
+            >Remove</a
+          >
         </div>
       </div>
+
+      <div class="product-total">
+        ₹<%= (item.productId && (item.productId.Offerprice ||
+        item.productId.price) * item.quantity).toFixed(2) %>
+      </div>
+    </div>
     <% }); %>
   </div>
 
   <div class="totals">
     <div class="totals-item">
       <div class="totals-label">Subtotal:</div>
-      <div class="totals-value" id="cart-subtotal">₹<%=totals. subtotal.toFixed(2) %></div>
+      <div class="totals-value" id="cart-subtotal">
+        ₹<%=totals. subtotal.toFixed(2) %>
+      </div>
     </div>
     <div class="totals-item">
       <div class="totals-label">Tax (5%):</div>
@@ -451,19 +458,31 @@ body {
     </div>
     <div class="totals-item">
       <div class="totals-label">Shipping:</div>
-      <div class="totals-value" id="cart-shipping">₹<%=totals.shipping.toFixed(2) %></div>
+      <div class="totals-value" id="cart-shipping">
+        ₹<%=totals.shipping.toFixed(2) %>
+      </div>
     </div>
     <div class="totals-item totals-item-total">
       <div class="totals-label">Grand Total:</div>
-      <div class="totals-value" id="cart-total">₹<%=totals.grandTotal.toFixed(2) %></div>
+      <div class="totals-value" id="cart-total">
+        ₹<%=totals.grandTotal.toFixed(2) %>
+      </div>
     </div>
     <button id="checkoutButton" onclick="delayedRedirect()">
-      <svg style="width:24px;height:24px" viewBox="0 0 24 24" id="cart">
-        <path fill="#ffffff" d="M17,18A2,2 0 0,1 19,20A2,2 0 0,1 17,22C15.89,22 15,21.1 15,20C15,18.89 15.89,18 17,18M1,2H4.27L5.21,4H20A1,1 0 0,1 21,5C21,5.17 20.95,5.34 20.88,5.5L17.3,11.97C16.96,12.58 16.3,13 15.55,13H8.1L7.2,14.63L7.17,14.75A0.25,0.25 0 0,0 7.42,15H19V17H7C5.89,17 5,16.1 5,15C5,14.65 5.09,14.32 5.24,14.04L6.6,11.59L3,4H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22C5.89,22 5,21.1 5,20C5,18.89 5.89,18 7,18M16,11L18.78,6H6.14L8.5,11H16Z" />
+      <svg style="width: 24px; height: 24px" viewBox="0 0 24 24" id="cart">
+        <path
+          fill="#ffffff"
+          d="M17,18A2,2 0 0,1 19,20A2,2 0 0,1 17,22C15.89,22 15,21.1 15,20C15,18.89 15.89,18 17,18M1,2H4.27L5.21,4H20A1,1 0 0,1 21,5C21,5.17 20.95,5.34 20.88,5.5L17.3,11.97C16.96,12.58 16.3,13 15.55,13H8.1L7.2,14.63L7.17,14.75A0.25,0.25 0 0,0 7.42,15H19V17H7C5.89,17 5,16.1 5,15C5,14.65 5.09,14.32 5.24,14.04L6.6,11.59L3,4H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22C5.89,22 5,21.1 5,20C5,18.89 5.89,18 7,18M16,11L18.78,6H6.14L8.5,11H16Z"
+        />
       </svg>
       <span>Checkout</span>
-      <svg id="check" style="width:24px;height:24px" viewBox="0 0 24 24">
-        <path stroke-width="2" fill="none" stroke="#ffffff" d="M 3,12 l 6,6 l 12, -12"/>
+      <svg id="check" style="width: 24px; height: 24px" viewBox="0 0 24 24">
+        <path
+          stroke-width="2"
+          fill="none"
+          stroke="#ffffff"
+          d="M 3,12 l 6,6 l 12, -12"
+        />
       </svg>
     </button>
   </div>
@@ -473,33 +492,40 @@ body {
 <script>
   async function updateCartTotals() {
     try {
-      const response = await fetch('/updateTotals', {
-        method: 'POST',
+      const response = await fetch("/updateTotals", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         // Add any additional headers if needed
       });
 
       if (!response.ok) {
-        console.error('Failed to update cart totals:', response.statusText);
+        console.error("Failed to update cart totals:", response.statusText);
         // Handle error as needed
         return;
       }
 
       const result = await response.json();
-      console.log('Cart totals updated successfully:', result.totals);
+      console.log("Cart totals updated successfully:", result.totals);
 
       // Implement the logic to update the UI with the new totals
       // For example, you can update the displayed subtotal, tax, shipping, and grandTotal
       // Replace the following lines with your actual logic
-      document.getElementById('cart-subtotal').innerText = `₹${result.totals.subtotal.toFixed(2)}`;
-      document.getElementById('cart-tax').innerText = `₹${result.totals.tax.toFixed(2)}`;
-      document.getElementById('cart-shipping').innerText = `₹${result.totals.shipping.toFixed(2)}`;
-      document.getElementById('cart-total').innerText = `₹${result.totals.grandTotal.toFixed(2)}`;
-
+      document.getElementById(
+        "cart-subtotal"
+      ).innerText = `₹${result.totals.subtotal.toFixed(2)}`;
+      document.getElementById(
+        "cart-tax"
+      ).innerText = `₹${result.totals.tax.toFixed(2)}`;
+      document.getElementById(
+        "cart-shipping"
+      ).innerText = `₹${result.totals.shipping.toFixed(2)}`;
+      document.getElementById(
+        "cart-total"
+      ).innerText = `₹${result.totals.grandTotal.toFixed(2)}`;
     } catch (error) {
-      console.error('Error updating cart totals:', error);
+      console.error("Error updating cart totals:", error);
       // Handle error as needed
     }
   }
@@ -507,136 +533,147 @@ body {
 
 <script>
   async function updateQuantity(input) {
-  const productId = input.getAttribute('data-product-id');
-  const quantity = input.value;
+    const productId = input.getAttribute("data-product-id");
+    const quantity = input.value;
 
-  try {
-    const response = await fetch(`/updatequantity/${productId}/${quantity}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const response = await fetch(`/updatequantity/${productId}/${quantity}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (!response.ok) {
-      console.error('Failed to update quantity:', response.statusText);
+      if (!response.ok) {
+        console.error("Failed to update quantity:", response.statusText);
+        // Handle error as needed
+        return;
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Update UI with the new totals
+        updateUITotals(result.totals);
+        // Reload the page
+        location.reload();
+      } else {
+        console.error("Failed to update quantity:", result.message);
+        // Handle error as needed
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
       // Handle error as needed
-      return;
     }
-
-    const result = await response.json();
-
-    if (result.success) {
-      // Update UI with the new totals
-      updateUITotals(result.totals);
-      // Reload the page
-      location.reload();
-    } else {
-      console.error('Failed to update quantity:', result.message);
-      // Handle error as needed
-    }
-  } catch (error) {
-    console.error('Error updating quantity:', error);
-    // Handle error as needed
   }
-}
 
   function updateUITotals(totals) {
     // Implement the logic to update the UI with the new totals
     // For example, you can update the displayed subtotal, tax, shipping, and grandTotal
-    document.getElementById('cart-subtotal').textContent = `₹${totals.subtotal.toFixed(2)}`;
-    document.getElementById('cart-tax').textContent = `₹${totals.tax.toFixed(2)}`;
-    document.getElementById('cart-shipping').textContent = `₹${totals.shipping.toFixed(2)}`;
-    document.getElementById('cart-total').textContent = `₹${totals.grandTotal.toFixed(2)}`;
+    document.getElementById(
+      "cart-subtotal"
+    ).textContent = `₹${totals.subtotal.toFixed(2)}`;
+    document.getElementById("cart-tax").textContent = `₹${totals.tax.toFixed(
+      2
+    )}`;
+    document.getElementById(
+      "cart-shipping"
+    ).textContent = `₹${totals.shipping.toFixed(2)}`;
+    document.getElementById(
+      "cart-total"
+    ).textContent = `₹${totals.grandTotal.toFixed(2)}`;
   }
 </script>
 
-
 <script>
   function delayedRedirect() {
-    setTimeout(function() {
+    setTimeout(function () {
       window.location.href = "/user/checkout";
     }, 1600); // 1 minute delay
   }
 </script>
 
 <script>
-
-
   document.addEventListener("DOMContentLoaded", function () {
     var taxRate = 0.05;
-    var shippingRate = 15.00;
+    var shippingRate = 15.0;
     var fadeTime = 300;
 
     // Assign actions
-    document.querySelectorAll('.product-quantity input').forEach(function (input) {
-      input.addEventListener('change', function () {
-        updateQuantity(this);
+    document
+      .querySelectorAll(".product-quantity input")
+      .forEach(function (input) {
+        input.addEventListener("change", function () {
+          updateQuantity(this);
+        });
       });
-    });
 
-    document.querySelectorAll('.remove-product').forEach(function (button) {
-      button.addEventListener('click', function () {
+    document.querySelectorAll(".remove-product").forEach(function (button) {
+      button.addEventListener("click", function () {
         removeItem(this);
-        updateCartBadge(); 
+        updateCartBadge();
       });
     });
 
-     function recalculateCart() {
+    function recalculateCart() {
       var subtotal = 0;
 
       // Sum up row totals
-      document.querySelectorAll('.cart-item').forEach(function (item) {
-        var price = parseFloat(item.querySelector('.product-price').textContent.replace('₹', ''));
-        var quantity = parseInt(item.querySelector('.product-quantity input').value);
-        
+      document.querySelectorAll(".cart-item").forEach(function (item) {
+        var price = parseFloat(
+          item.querySelector(".product-price").textContent.replace("₹", "")
+        );
+        var quantity = parseInt(
+          item.querySelector(".product-quantity input").value
+        );
 
         // Calculate total based on the offer price if available, otherwise use the regular price
         var total = price * quantity;
 
         subtotal += total;
 
-        item.querySelector('.product-total').textContent = '₹' + total.toFixed(2);
+        item.querySelector(".product-total").textContent =
+          "₹" + total.toFixed(2);
       });
 
       // Calculate totals
       var tax = subtotal * taxRate;
-      var shipping = (subtotal > 0 ? shippingRate : 0);
+      var shipping = subtotal > 0 ? shippingRate : 0;
       var total = subtotal + tax + shipping;
 
       // Update totals display
-      document.getElementById('cart-subtotal').textContent = '₹' + subtotal.toFixed(2);
-      document.getElementById('cart-tax').textContent = '₹' + tax.toFixed(2);
-      document.getElementById('cart-shipping').textContent = '₹' + shipping.toFixed(2);
-      document.getElementById('cart-total').textContent = '₹' + total.toFixed(2);
+      document.getElementById("cart-subtotal").textContent =
+        "₹" + subtotal.toFixed(2);
+      document.getElementById("cart-tax").textContent = "₹" + tax.toFixed(2);
+      document.getElementById("cart-shipping").textContent =
+        "₹" + shipping.toFixed(2);
+      document.getElementById("cart-total").textContent =
+        "₹" + total.toFixed(2);
 
       updateCartBadge(); // Update the badge after recalculating cart
     }
 
     // Update quantity
     function updateQuantity(quantityInput) {
-      var item = quantityInput.closest('.cart-item');
-      var price = parseFloat(item.querySelector('.product-price').textContent.replace('₹', ''));
+      var item = quantityInput.closest(".cart-item");
+      var price = parseFloat(
+        item.querySelector(".product-price").textContent.replace("₹", "")
+      );
       var quantity = parseInt(quantityInput.value);
       var total = price * quantity;
 
-      item.querySelector('.product-total').textContent = '₹' + total.toFixed(2);
+      item.querySelector(".product-total").textContent = "₹" + total.toFixed(2);
 
       recalculateCart(); // Recalculate the cart totals after updating quantity
     }
-  
   });
 </script>
 <script>
-  const btn = document.querySelector('button');
+  const btn = document.querySelector("button");
 
-btn.addEventListener('click', () => {
-  document.documentElement.classList.toggle('checked-out');
-});
+  btn.addEventListener("click", () => {
+    document.documentElement.classList.toggle("checked-out");
+  });
 </script>
-
-
-
-
 
 <%- include('footer') -%>

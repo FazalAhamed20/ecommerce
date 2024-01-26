@@ -1,16 +1,6 @@
 // Import necessary modules
 const Coupon = require('../models/couponModel');
-
-function formatDate(date) {
-    if (!date) return null;
-  
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
-    const day = date.getDate().toString().padStart(2, '0');
-  
-    return `${year}-${month}-${day}`;
-  }
-
+const {formatDate}=require('../util/helperfunction')
 
 const showCreateCouponForm = async (req, res, next) => {
     try {

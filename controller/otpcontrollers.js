@@ -2,32 +2,9 @@ const nodemailer = require("nodemailer");
 const User=require('../models/userModel')
 const bcrypt = require('bcrypt');
 const Wallet=require('../models/walletModel')
+const {generateReferralCode}=require('../util/helperfunction')
+const {transporter}=require('../auth/nodemailer')
 
-
-function generateReferralCode() {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let referralCode = '';
-    for (let i = 0; i < 6; i++) {
-        referralCode += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return referralCode;
-}
-//Transporter for the mail(nodemailer)------------------------------------------------------->
-let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    service: 'Gmail',
-    auth: {
-        user: 'fazalahamed628@gmail.com',
-        pass: 'ywcz qold pmwt noqv',
-    },
-    tls: {
-        rejectUnauthorized: false,
-    },
-    connectionTimeout: 60000,
-    socketTimeout: 60000,
-});
 //generate otp------------------------------------------------------->
 function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000);
@@ -103,26 +80,20 @@ const verify = async function (req, res) {
             console.log("reffered",referredCode);
             const referredUser = await User.findOne({ referralCode: referredCode });
             console.log("refferedUser",referredUser);
-            if (!referredUser) {
-                console.error('Referred user not found');
-                res.status(500).send('Internal Server Error');
-                return;
-            }
-            
-           
-            if (!referredUser.wallet) {
-                const newWallet = new Wallet({ user: referredUser._id });
-                const savedWallet = await newWallet.save();
-                referredUser.wallet = savedWallet._id;
-                await referredUser.save();
-            }
-            
-            
-            const updatedWallet = await Wallet.findByIdAndUpdate(
-                referredUser.wallet,
-                { $inc: { balance: 100 } },
-                { new: true }
-            );
+            if (referredUser) {
+                if (!referredUser.wallet) {
+                    const newWallet = new Wallet({ user: referredUser._id });
+                    const savedWallet = await newWallet.save();
+                    referredUser.wallet = savedWallet._id;
+                    await referredUser.save();
+                }
+    
+                const updatedWallet = await Wallet.findByIdAndUpdate(
+                    referredUser.wallet,
+                    { $inc: { balance: 100 } },
+                    { new: true }
+                );
+            } 
             
             
             const newUser = new User({

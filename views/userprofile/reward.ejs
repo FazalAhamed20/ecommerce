@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
+    <title>Rewards</title>
+</head>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+body{
+    background-color:#EDC9A0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+ 
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  background-color:#EDC9A0;
+  gap: 10px;
+}
+
+.card {
+  width: 400px;
+  height: 180px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  padding: 10px 10px;
+  position: relative;
+}
+
+.main,
+.copy-button {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  align-items: center;
+}
+.card::after {
+  position: absolute;
+  content: "";
+  height: 40px;
+  right: -20px;
+  border-radius: 40px;
+  z-index: 1;
+  top: 70px;
+  background-color:#EDC9A0;
+  width: 40px;
+}
+
+.card::before {
+  position: absolute;
+  content: "";
+  height: 40px;
+  left: -20px;
+  border-radius: 40px;
+  z-index: 1;
+  top: 70px;
+  background-color:#EDC9A0;
+  width: 40px;
+}
+
+.co-img img {
+  width: 100px;
+  height: 100px;
+}
+.vertical {
+  border-left: 5px dotted black;
+  height: 100px;
+  position: absolute;
+  left: 40%;
+}
+
+.content h1 {
+  font-size: 35px;
+  margin-left: -20px;
+  color: #565656;
+}
+
+.content h1 span {
+  font-size: 18px;
+}
+.content h2 {
+  font-size: 18px;
+  margin-left: -20px;
+  color: #565656;
+  text-transform: uppercase;
+}
+
+.content p {
+  font-size: 16px;
+  color: #696969;
+  margin-left: -20px;
+}
+
+.copy-button {
+  margin: 12px 0 -5px 0;
+  height: 45px;
+  border-radius: 4px;
+  padding: 0 5px;
+  border: 1px solid #e1e1e1;
+}
+
+.copy-button input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.copy-button button {
+  padding: 5px 20px;
+  background-color: #3E2723;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.buy{
+ position: absolute;
+  content: "";
+  bottom: 20px;
+  left:20px;
+  background-color: #dc143c;
+ }
+
+</style>
+<div class="container">
+    <% if (coupons.length > 0) { %>
+        <% coupons.forEach((coupon, index) => { %>
+            <div class="card">
+                <div class="main">
+                    <div class="co-img">
+                        <img src="https://image.ibb.co/n5gUtm/icon_1.png" alt="" />
+                    </div>
+                    <div class="vertical"></div>
+                    <div class="content">
+                        <h2>COFFEE LAND</h2>
+                        <h1>OFFER ₹<%= coupon.discountAmount %></h1>
+                        <p>Valid till <%= coupon.expiryDate %></p>
+                    </div>
+                </div>
+                <div class="copy-button">
+                    <input id="copyvalue_<%= index %>" type="text" readonly value="<%= coupon.couponCode %>" />
+                    <button onclick="copyIt('copyvalue_<%= index %>')" class="copybtn">COPY</button>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>No coupons available at the moment. Stay tuned for future promotions!</p>
+    <% } %>
+</div>
+</body>
+
+<script>
+let copybtns = document.querySelectorAll(".copybtn");
+
+function copyIt(id) {
+    let copyInput = document.querySelector('#' + id);
+    copyInput.select();
+    document.execCommand("copy");
+    copybtns.forEach(btn => btn.textContent = "COPY");
+    copyInput.nextElementSibling.textContent = "COPIED";
+}
+</script>
+</html>
+
