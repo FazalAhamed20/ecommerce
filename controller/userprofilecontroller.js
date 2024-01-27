@@ -180,7 +180,9 @@ const rewards = async (req, res) => {
     }
 };
 const rateus=(req, res) => {
-    res.render('./userprofile/rateus.ejs', { pageTitle: 'Rate Us' });
+  const errorMessage = req.flash('error')[0];
+  const successMessage = req.flash('success')[0];
+    res.render('./userprofile/rateus.ejs', { pageTitle: 'Rate Us',errorMessage,successMessage });
   };
   const hasUserRated = async (userId) => {
     const existingRating = await RateUs.findOne({ userId });
@@ -196,7 +198,8 @@ const rateus=(req, res) => {
       const userHasRated = await hasUserRated(userId);
   
       if (userHasRated) {
-        return res.status(400).send('User has already rated.');
+        req.flash('error', 'you have already rated.');
+        return res.redirect('/user/rateus');  // Redirect to the original page or route
       }
   
       // Create a new RateUs document
@@ -208,7 +211,7 @@ const rateus=(req, res) => {
   
       // Save the new rating to the database
       await newRating.save();
-  
+      req.flash('success', 'Thanks for rating!');
       res.redirect('/user/rateus');
     } catch (error) {
       console.error(error);

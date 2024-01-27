@@ -19,6 +19,8 @@ router.get('/products',checkUserStatus,verifyUser,controller. getProductsByCateg
 router.get('/user/signup',checkUserStatus,userExist,controller.signup)
 router.all('/user/login',checkUserStatus,userExist,controller.login)
 router.all('/login1',checkUserStatus,userExist,controller.login1)
+router.get('/user/reminder',verifyUser,controller.reminder)
+router.post('/set-reminder',verifyUser,controller.setreminder)
 router.get('/user/logout',verifyUser,controller.logout)
 //user signup otp ------------------------------------------------------->
 router.post('/send',userExist,controller1.otp1)

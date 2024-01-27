@@ -3,6 +3,10 @@ const Product=require('../models/productModel')
 const Category=require('../models/categoryModel')
 const bcrypt = require('bcrypt');
 const cartItemCountMiddleware = require('../middlewares/cartCountMiddleware');
+const Reminder=require('../models/reminderModel')
+const mongoose=require('mongoose')
+const cron = require('node-cron');
+const twilio = require('twilio');
 
 
 //user home------------------------------------------------------->
@@ -21,6 +25,13 @@ const coffeemix = (req, res) => {
     const user = req.session.user;
     
     res.render("./user/coffeemix", { pageTitle: "coffeemix",user});
+}
+const reminder = (req, res) => {
+    const user = req.session.user;
+    const errorMessage = req.flash('error')[0];
+  const successMessage = req.flash('success')[0];
+    
+    res.render("./user/reminder", { pageTitle: "reminder",user,successMessage,errorMessage});
 }
 //user signup------------------------------------------------------->
 const signup=(req, res) => {
@@ -77,8 +88,21 @@ const product = async (req, res) => {
         const categoryId = req.query.categoryId;
         const currentPage = parseInt(req.query.page) || 1;
         const itemsPerPage = 8;
-
-        const totalProducts = await Product.countDocuments();
+        const searchQuery = req.query.search || ''; 
+        console.log(searchQuery);
+        let query = {};
+if (searchQuery) {
+    query = {
+        $or: [
+            { name: { $regex: searchQuery, $options: 'i' } },
+            { description: { $regex: searchQuery, $options: 'i' } },
+            { ingredients: { $regex: searchQuery, $options: 'i' } },
+            !isNaN(searchQuery) && { price: searchQuery },
+            { 'category.name': { $regex: searchQuery, $options: 'i' } },
+        ].filter(Boolean),
+    };
+}
+        const totalProducts = await Product.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / itemsPerPage);
 
         if (currentPage < 1 || currentPage > totalPages) {
@@ -88,7 +112,7 @@ const product = async (req, res) => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
 
-        const products = await Product.find().populate('category').skip(startIndex).limit(itemsPerPage);
+        const products = await Product.find(query).populate('category').skip(startIndex).limit(itemsPerPage);
         const categories = await Category.find(); 
         const cartItemCount = req.session.cartItemCount;
 
@@ -161,6 +185,42 @@ const endIndex = startIndex + itemsPerPage;
         res.status(500).render('error500'); // Handle server error
     }
 };
+
+const setreminder = async (req, res) => {
+    try {
+        
+        if (!req.session.user || !req.session.user._id) {
+            req.flash('error', 'User not authenticated');
+            return res.redirect('/set-reminder');
+        }
+
+        const userId = req.session.user._id;
+        console.log(userId);
+
+        const { coffeeTime, phoneNumber } = req.body;
+        console.log({ coffeeTime, phoneNumber });
+
+        const reminder = new Reminder({
+            userId,
+            coffeeTime,
+            phoneNumber,
+        });
+
+        await reminder.save();
+
+        req.flash('success', 'Reminder set successfully!');
+        return res.redirect('/user/reminder');
+    } catch (error) {
+        console.error('Error setting reminder:', error.message);
+        req.flash('error', 'Oops! Something went wrong. Please try again later.');
+        return res.redirect('/user/reminder');
+    }
+};
+
+
+
+
+
 //user forgot password------------------------------------------------------->
 const forgot=(req, res) => {
     res.render('./user/forgot');
@@ -177,6 +237,64 @@ const logout = (req, res) => {
         }
     });
 };
+
+const accountSid = 'ACef64d351381c5844984f101ad1c102b5';
+const authToken = '17258729111dec2e32ee189f5ee92021';
+const twilioPhoneNumber = '+15168064670';
+
+const client = new twilio(accountSid, authToken);
+
+const sendSMS = async (to, message) => {
+    try {
+        const result = await client.messages.create({
+            body: message,
+            from: twilioPhoneNumber,
+            to,
+        });
+
+        console.log('SMS sent successfully. SID:', result.sid);
+    } catch (error) {
+        console.error('Error sending SMS:', error.message);
+    }
+};
+
+// Schedule SMS sending using node-cron based on coffeeTime
+cron.schedule('* * * * *', async () => {
+    try {
+        const currentHour = new Date().getHours();
+        const currentMinute = new Date().getMinutes();
+
+        const reminders = await Reminder.find();
+
+        reminders.forEach(async (reminder) => {
+            const { userId, coffeeTime, phoneNumber } = reminder;
+            const [hour, minute] = coffeeTime.split(':');
+
+            // Schedule SMS only if the current time matches coffeeTime
+            if (parseInt(hour) === currentHour && parseInt(minute) === currentMinute) {
+                try {
+                    // Fetch the user information from the database
+                    const user = await User.findById(userId);
+
+                    if (user) {
+                        const userName = user.name;
+                        const message = `Hey ${userName}, don't forget your coffee time at ${coffeeTime} ☕️ from COFFEE LAND`;
+
+                        // Send SMS with the user's name
+                        await sendSMS(phoneNumber, message);
+                    } else {
+                        console.error(`User with ID ${userId} not found.`);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user information:', error.message);
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error processing reminders:', error.message);
+    }
+});
+
 //module exports------------------------------------------------------->
 module.exports = {
     home,
@@ -189,4 +307,6 @@ module.exports = {
     forgot,
     logout,
     coffeemix,
+    reminder,
+    setreminder
 };

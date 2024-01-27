@@ -107,11 +107,25 @@
       cursor: pointer;
       font-size: 16px;
     }
+    .error-message{
+      color: red;
+    }
+    .success-message{
+      color: green;
+    }
   </style>
 </head>
 <body>
+  <!-- Include this in your EJS template -->
+
+
 
   <div class="container">
+    <% if (errorMessage) { %>
+      <div class="error-message"><%= errorMessage %></div>
+    <% } else if (successMessage) { %>
+      <div class="success-message"><%= successMessage %></div>
+    <% } %>
     <h1><%= pageTitle %></h1>
 
     <div class="rating" id="ratingStars">
@@ -129,12 +143,7 @@
       </form>
   </div>
 
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-      <p>Thanks for rating us!</p>
-      <button class="modal-button" onclick="hideModal()">Close</button>
-    </div>
-  </div>
+  
 
 
   <script>
@@ -148,15 +157,7 @@
       document.getElementById('selectedRating').value = rating;
     }
 
-    function showModal() {
-      const modal = document.getElementById('myModal');
-      modal.style.display = 'block';
-    }
-
-    function hideModal() {
-      const modal = document.getElementById('myModal');
-      modal.style.display = 'none';
-    }
+   
   </script>
 
 </body>
