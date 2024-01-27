@@ -608,78 +608,35 @@ html {
     </div>
   </section>
 
+<!-- Assuming your EJS template is named "userhome.ejs" -->
+
 <section class="review" id="review">
-    <h1 class="heading">reviews <span>what people says</span></h1>
+    <h1 class="heading">reviews <span>what people say</span></h1>
 
     <div class="swiper review-slider">
         <div class="swiper-wrapper">
-            <div class="swiper-slide box">
-                <i class="fas fa-quote-left"></i>
-                <i class="fas fa-quote-right"></i>
-                <img src="/assets/pic-1.png" alt="">
-                <div class="stars">
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                </div>
-                <p>Elegance in every espresso shot! This place defines coffee sophistication. Impeccable service, chic decor, and the espresso—pure liquid gold. My taste buds are forever </p>
-                <h3>Vivek</h3>
-                <span>satisfied client</span>
-            </div>
 
-            <div class="swiper-slide box">
-                <i class="fas fa-quote-left"></i>
-                <i class="fas fa-quote-right"></i>
-                <img src="/assets/pic-2.png" alt="">
-                <div class="stars">
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
+            <% Rateus.forEach(review => { %>
+                <div class="swiper-slide box">
+                    <i class="fas fa-quote-left"></i>
+                    <i class="fas fa-quote-right"></i>
+                    
+                    <div class="stars">
+                        <% for (let i = 1; i <= review.rating; i++) { %>
+                            <i class="fas fa-star" style="color: goldenrod;"></i>
+                        <% } %>
+                    </div>
+                    <p><%= review.feedback %></p>
+                    <h3><%= review.userId.name %></h3>
+                    <span><%= review.role %></span>
                 </div>
-                <p>This coffee spot is my happy place! The aroma, the taste—absolute perfection. The staff is incredibly welcoming, and the attention to detail is impressive. It's where coffee </p>
-                <h3>Ganga</h3>
-                <span>satisfied client</span>
-            </div>
+            <% }); %>
 
-            <div class="swiper-slide box">
-                <i class="fas fa-quote-left"></i>
-                <i class="fas fa-quote-right"></i>
-                <img src="/assets/pic-3.png" alt="">
-                <div class="stars">
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                </div>
-                <p>Flavor explosion in every sip! This place takes coffee to a whole new level. Unique blends, friendly faces, and a trendy setup. Highly recommend for fellow coffee </p>
-                <h3>Varun</h3>
-                <span>satisfied client</span>
-            </div>
-
-            <div class="swiper-slide box">
-                <i class="fas fa-quote-left"></i>
-                <i class="fas fa-quote-right"></i>
-                <img src="/assets/pic-4.png" alt="">
-                <div class="stars">
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                    <i class="fas fa-star" style="color: goldenrod;"></i>
-                </div>
-                <p>Found my new sanctuary for a perfect cup! The vibe is super cozy, and the coffee is a game-changer. Friendly staff and a delightful menu. It's my daily escape now! </p>
-                <h3>Megna</h3>
-                <span>satisfied client</span>
-            </div>
         </div>
         <div class="swiper-pagination"></div>
     </div>
 </section>
+
 <section class="footer">
     <div class="box-container">
         <div class="box">

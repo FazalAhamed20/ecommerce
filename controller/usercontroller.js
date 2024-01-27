@@ -7,6 +7,7 @@ const Reminder=require('../models/reminderModel')
 const mongoose=require('mongoose')
 const cron = require('node-cron');
 const twilio = require('twilio');
+const RateUs=require('../models/RateusModel')
 
 
 //user home------------------------------------------------------->
@@ -14,13 +15,17 @@ const home = async (req, res) => {
     try {
         const user = req.session.user;
         const products = await Product.find().exec();
+        const Rateus= await RateUs.find({ rating: { $gt: 4 } }).populate('userId').limit(4).exec();
 
-        res.render("./user/userhome", { pageTitle: "userhome", user, products });
+        console.log("rateus", Rateus);
+
+        res.render("./user/userhome", { pageTitle: "userhome", user, products, Rateus });
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching data:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 const coffeemix = (req, res) => {
     const user = req.session.user;
     
@@ -70,7 +75,8 @@ req.session.user = {
 };
 await cartItemCountMiddleware(req, res, () => {});
 const products = await Product.find().exec();
-            return res.render('./user/userhome', { user ,products});
+const Rateus=await RateUs.find()
+            return res.render('./user/userhome', { user ,products,Rateus});
         } else {
             req.flash('error1', 'Invalid email or password');
             return res.render('./user/login', { error1: req.flash('error1') });
