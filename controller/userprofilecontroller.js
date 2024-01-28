@@ -52,10 +52,9 @@ const addaddressform = async (req, res) => {
                 return res.status(404).send('User not found');
             }
 
-            const { name, mobile, email, pincode, houseName, locality, city, district, state } = req.body;
+            const {  mobile, email, pincode, houseName, locality, city, district, state } = req.body;
             const newAddress = new Address({
                 userId: user._id,
-                name,
                 mobile,
                 email,
                 pincode,

@@ -94,6 +94,10 @@
             font-size: 14px;
             text-align: center;
         }
+        #image-preview {
+            max-width: 100px;
+            max-height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -110,14 +114,11 @@
     <label for="price">Product Price:</label>
     <input type="number" id="price" name="price" value="<%= product.price %>" required min="0">
     <label for="quantity">Product Quantity:</label>
-<input type="number" id="quantity" name="quantity" value="<%= product.quantity || 0 %>" required min="0">
-
+    <input type="number" id="quantity" name="quantity" value="<%= product.quantity || 0 %>" required min="0">
 
     <label for="ingredients">Product Ingredients:</label>
     <textarea id="ingredients" name="ingredients" required><%= product.ingredients %></textarea>
     
-    
-
     <div class="checkbox-group">
         <label for="updateImage">Update Image:</label>
         <input type="checkbox" id="updateImage" name="updateImage">
@@ -137,10 +138,13 @@
 
     <div id="newImageSection">
         <label for="newImage">Upload New Image:</label>
-        <input type="file" id="image" name="image" accept="image/*" onchange="validateImageType()">
+        <input type="file" id="image" name="image" accept="image/*" onchange="validateImageType('image')">
         <!-- Display area for error message -->
         <div id="newImageError" class="error-message"></div>
-      </div>
+        <div id="image-preview-container">
+            <img id="image-preview" src="#" alt="Image Preview">
+        </div>
+    </div>
 
     <label for="category">Product Category:</label>
     <select id="category" name="category" required>
@@ -154,29 +158,66 @@
 
 <a href="/product">Back to Products</a>
 <script>
+    // Initial call to displayImagePreview to handle existing image
+    displayImagePreview();
+
     document.getElementById('updateImage').addEventListener('change', function () {
         var newImageSection = document.getElementById('newImageSection');
         newImageSection.style.display = this.checked ? 'block' : 'none';
     });
-</script>
-<script>
+
     function validateImageType(inputId) {
-      const input = document.getElementById(inputId);
-      const errorElement = document.getElementById(`${inputId}Error`);
-  
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Add more if needed
-  
-      if (input.files.length > 0) {
-        const fileType = input.files[0].type;
-        if (!allowedTypes.includes(fileType)) {
-          errorElement.textContent = 'Please choose a valid image file (JPEG, PNG, GIF).';
-          input.value = ''; // Clear the file input
+        const input = document.getElementById(inputId);
+        const errorElement = document.getElementById(`${inputId}Error`);
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+
+        if (input.files.length > 0) {
+            const fileType = input.files[0].type;
+
+            if (!allowedTypes.includes(fileType)) {
+                errorElement.textContent = 'Please choose a valid image file (JPEG, PNG, GIF, SVG, WebP).';
+                input.value = ''; // Clear the file input
+                imagePreviewContainer.style.display = 'none';
+            } else {
+                errorElement.textContent = '';
+                displayImagePreview();
+            }
         } else {
-          errorElement.textContent = '';
+            // No file selected, reset error and show the container
+            errorElement.textContent = '';
+            imagePreviewContainer.style.display = 'block';
         }
-      }
     }
-  </script>
+
+    function displayImagePreview() {
+        console.log("displayImagePreview function called");
+
+        const newImageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+
+        console.log("newImageInput:", newImageInput);
+
+        if (newImageInput.files && newImageInput.files.length > 0) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                console.log("New image loaded successfully");
+                imagePreview.src = e.target.result;
+                imagePreviewContainer.style.display = 'block';
+            };
+
+            reader.readAsDataURL(newImageInput.files[0]);
+        } else {
+            console.log("No file selected");
+            // Handle the case when no file is selected
+            imagePreviewContainer.style.display = 'none';
+        }
+    }
+</script>
+
 
 </body>
 </html>

@@ -87,6 +87,13 @@
             }
         }
 
+        #image-preview {
+            max-width: 100px;
+            max-height: 100px;
+        }
+        #image-preview-container{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -107,6 +114,9 @@
 <input type="number" id="quantity" name="quantity" required min="0">
     <label for="image">Product Image:</label>
     <input type="file" id="image" name="image" accept="image/*" onchange="validateImageType()" required>
+    <div id="image-preview-container">
+        <img id="image-preview" src="#">
+    </div>
     <label for="category">Product Category:</label>
     <select id="category" name="category" required>
         <% categories.forEach(category => { %>
@@ -135,6 +145,25 @@
           imageError.textContent = '';
         }
       }
+      displayImagePreview();
+    }
+    
+    function displayImagePreview() {
+        document.getElementById('image-preview-container').style.display = 'block';
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+
+        if (imageInput.files.length > 0) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreviewContainer.style.display = 'block';
+            };
+
+            reader.readAsDataURL(imageInput.files[0]);
+        }
     }
   </script>
 </html>

@@ -56,6 +56,7 @@ router.get('/user/checkout',verifyUser,controller5.checkout);
 router.get('/user/confirm',verifyUser,controller5.confirm);
 router.get('/user/userOrder',verifyUser, controller5.userOrder);
 router.post('/create-order',verifyUser,controller5.createOrder);
+router.post('/save-address',verifyUser,controller5.saveAddress)
 router.post('/process-payment',verifyUser, controller5.processPayment);
 router.post('/cancel-order',verifyUser,controller5.cancelorder )
 router.post('/cancelProduct',verifyUser,controller5.cancelProduct)

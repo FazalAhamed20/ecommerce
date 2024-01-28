@@ -102,9 +102,7 @@ const checkout = async (req, res) => {
         const addresses = await Address.find({ userId });
         console.log("User Addresses:", addresses);
         
-        if (!addresses || addresses.length === 0) {
-            return res.status(404).json({ success: false, message: 'User addresses not found' });
-        }
+       
         const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image');
         if (!cart || cart.products.length === 0) {
             req.flash('error', 'Your cart is empty. Cannot create an order.');
@@ -126,6 +124,49 @@ const checkout = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
+const saveAddress=async (req, res) => {
+  try {
+    if (req.session.user) {
+      const userId = req.session.user._id;
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+
+      const { mobile, email, pincode, houseName, locality, city, district, state } = req.body;
+      const newAddress = new Address({
+        userId: user._id,
+        mobile,
+        email,
+        pincode,
+        houseName,
+        locality,
+        city,
+        district,
+        state,
+      });
+
+      await newAddress.save();
+
+      user.addresses = user.addresses || [];
+      user.addresses.push(newAddress._id);
+      await user.save();
+
+      // Update the session with the user object
+      req.session.user = user;
+
+      res.status(201).json({ message: 'Address saved successfully' });
+    } else {
+      res.status(401).send('Unauthorized');
+    }
+  } catch (error) {
+    console.error('Error saving address:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 //save orders details at database------------------------------------------------------->
 const createOrder = async (req, res) => {
   try {
@@ -408,6 +449,7 @@ const downloadInvoice = async (req, res) => {
     confirm,
     cancelorder,
     cancelProduct,
-    downloadInvoice
+    downloadInvoice,
+    saveAddress
   
  }  
