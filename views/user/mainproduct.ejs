@@ -184,6 +184,48 @@
   transform-origin: 0 0;
   width: 100px; 
 }
+@media (max-width: 768px) {
+    .main-product-container {
+        margin: 20px;
+    }
+
+    .main-product {
+        flex-direction: column;
+        max-width: 100%;
+        border-radius: 16px;
+    }
+
+    .main-product-img {
+        max-width: 100%;
+        padding: 20px 0;
+    }
+
+    .main-product-details {
+        padding: 20px;
+        border-radius: 0;
+    }
+
+    .product-title {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .product-description,
+    .product-category,
+    .product-ingredients,
+    .product-price,
+    .product-original-price,
+    .product-offer-price {
+        font-size: 1rem;
+    }
+
+    .btn-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
 
 </style>
 <div id="addedToCartMessage" class="alert alert-success coffee-shop-message" role="alert" style="display:none;">

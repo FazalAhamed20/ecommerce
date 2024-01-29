@@ -10,24 +10,7 @@
     overflow: hidden; 
   }
 
-  #video-container1 {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    z-index: -1;
-    opacity: 1;
-    transition: opacity 1s ease-out;
-  }
-
-  #video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-  }
-
+ 
   body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -62,8 +45,7 @@
   }
 
   .dashboard-container {
-    opacity: 0;
-    transition: opacity 1s ease-out;
+   
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -181,12 +163,7 @@
 </style>
 
 
-<div id="video-container1">
-  <video id="video" autoplay muted>
-    <source src="/assets/admin panel.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
+
   <header>
     <h1>Admin Dashboard</h1>
   </header>

@@ -98,6 +98,12 @@
             max-width: 100px;
             max-height: 100px;
         }
+        #image-preview-container{
+            display: none;
+        }
+        #newImageError{
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -105,6 +111,9 @@
 <h1>Edit Product</h1>
 
 <form action="/product/updateproduct/<%= product._id %>" method="post" enctype="multipart/form-data">
+    <!-- Add this in your HTML body -->
+    
+
     <label for="name">Product Name:</label>
     <input type="text" id="name" name="name" value="<%= product.name %>" required>
     
@@ -138,13 +147,14 @@
 
     <div id="newImageSection">
         <label for="newImage">Upload New Image:</label>
-        <input type="file" id="image" name="image" accept="image/*" onchange="validateImageType('image')">
-        <!-- Display area for error message -->
-        <div id="newImageError" class="error-message"></div>
+        <!-- Update the onchange attribute -->
+        <input type="file" id="image" name="image" accept="image/*" onchange="validateImageType('image');">
         <div id="image-preview-container">
-            <img id="image-preview" src="#" alt="Image Preview">
+            <img id="image-preview" src="#">
         </div>
+        <div id="newImageError" class="error-message"></div>
     </div>
+    
 
     <label for="category">Product Category:</label>
     <select id="category" name="category" required>
@@ -152,32 +162,38 @@
             <option value="<%= category._id %>" <% if (product.category && product.category._id.equals(category._id)) { %>selected<% } %>><%= category.name %></option>
         <% }); %>
     </select>
-
+    
     <button type="submit">Update Product</button>
-</form>
-
-<a href="/product">Back to Products</a>
+    </form>
+    
+    <a href="/product">Back to Products</a>
 <script>
     // Initial call to displayImagePreview to handle existing image
-    displayImagePreview();
-
     document.getElementById('updateImage').addEventListener('change', function () {
         var newImageSection = document.getElementById('newImageSection');
         newImageSection.style.display = this.checked ? 'block' : 'none';
     });
 
+
+    // Update the error handling in the script
     function validateImageType(inputId) {
         const input = document.getElementById(inputId);
-        const errorElement = document.getElementById(`${inputId}Error`);
+        const errorElement = document.getElementById('newImageError'); // Corrected the error div id
         const imagePreviewContainer = document.getElementById('image-preview-container');
 
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+        const maxFileSizeMB = 5; // Set a maximum file size limit (in megabytes)
 
         if (input.files.length > 0) {
             const fileType = input.files[0].type;
+            const fileSizeMB = input.files[0].size / (1024 * 1024);
 
             if (!allowedTypes.includes(fileType)) {
                 errorElement.textContent = 'Please choose a valid image file (JPEG, PNG, GIF, SVG, WebP).';
+                input.value = ''; // Clear the file input
+                imagePreviewContainer.style.display = 'none';
+            } else if (fileSizeMB > maxFileSizeMB) {
+                errorElement.textContent = `File size exceeds the maximum limit of ${maxFileSizeMB} MB.`;
                 input.value = ''; // Clear the file input
                 imagePreviewContainer.style.display = 'none';
             } else {
@@ -192,30 +208,25 @@
     }
 
     function displayImagePreview() {
-        console.log("displayImagePreview function called");
-
-        const newImageInput = document.getElementById('image');
+        const imageInput = document.getElementById('image');
         const imagePreview = document.getElementById('image-preview');
-        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreviewContainer = document.getElementById('image-preview-container').style.display = 'block';
 
-        console.log("newImageInput:", newImageInput);
-
-        if (newImageInput.files && newImageInput.files.length > 0) {
+        if (imageInput.files.length > 0) {
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                console.log("New image loaded successfully");
                 imagePreview.src = e.target.result;
                 imagePreviewContainer.style.display = 'block';
             };
 
-            reader.readAsDataURL(newImageInput.files[0]);
+            reader.readAsDataURL(imageInput.files[0]);
         } else {
-            console.log("No file selected");
-            // Handle the case when no file is selected
+            // Hide the image preview container if no file is selected
             imagePreviewContainer.style.display = 'none';
         }
     }
+
 </script>
 
 

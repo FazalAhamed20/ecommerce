@@ -294,19 +294,7 @@ button:hover {
 <%- include('footer') -%>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const radioButtons = document.querySelectorAll('input[name="dots"]');
-    const pacman = document.querySelector('.pacman');
-    const categoryId = getCategoryIdFromUrl(); // Add this line to get the category ID
 
-    radioButtons.forEach((radioButton, index) => {
-        radioButton.addEventListener('change', function () {
-            const newUrl = `?category=${categoryId}&page=${index + 1}`; // Include category ID
-            window.location.href = newUrl;
-            getProductsByCategory(categoryId, index + 1); // Pass category ID to the function
-        });
-    });
-});
 
 function getCategoryIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);

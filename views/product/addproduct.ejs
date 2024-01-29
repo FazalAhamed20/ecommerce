@@ -94,6 +94,9 @@
         #image-preview-container{
             display: none;
         }
+    #imageError{
+        color: red;
+    }
     </style>
 </head>
 <body>
@@ -101,7 +104,7 @@
 <h1>Add Product</h1>
 
 <form action="/addproduct" method="post" enctype="multipart/form-data">
-    <div id="imageError" class="error-message"></div>
+    
     <label for="name">Product Name:</label>
     <input type="text" id="name" name="name" required>
     <label for="description">Product Description:</label>
@@ -117,6 +120,7 @@
     <div id="image-preview-container">
         <img id="image-preview" src="#">
     </div>
+    <div id="imageError" class="error-message"></div>
     <label for="category">Product Category:</label>
     <select id="category" name="category" required>
         <% categories.forEach(category => { %>
