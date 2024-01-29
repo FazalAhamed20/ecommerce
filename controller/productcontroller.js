@@ -106,7 +106,6 @@ const updateproduct = async function (req, res) {
     const { name, description, category, price, ingredients, quantity, deleteExistingImage } = req.body;
     try {
         const currentProduct = await Product.findById(productId);
-        console.log('Current Product:', currentProduct);
         if (!currentProduct) {
             return res.status(404).send('Product not found');
         }
@@ -114,14 +113,12 @@ const updateproduct = async function (req, res) {
             const imagePath = path.join(__dirname, '../public/assets/product-images', currentProduct.image);
             try {
                 await FS.promises.unlink(imagePath);
-                console.log('Old Image Deleted Successfully');
                 currentProduct.image = undefined;
             } catch (error) {
                 if (error.code !== 'ENOENT') {
                     console.error('Error deleting image file:', error.message);
                     return res.status(500).send('Error deleting image file');
                 }
-                console.log('File not found:', imagePath);
             }
         }
         if (req.file) {
@@ -159,7 +156,6 @@ const deleteproduct = async function(req, res) {
             const imagePath = path.join(__dirname, '../public/assets/product-images', product.image);
             try {
                 await FS.promises.unlink(imagePath);
-                console.log('Image Deleted Successfully');
             } catch (error) {
                 console.error('Error deleting image file:', error.message);
             }

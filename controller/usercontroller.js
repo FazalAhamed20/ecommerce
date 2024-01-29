@@ -4,38 +4,32 @@ const Category=require('../models/categoryModel')
 const bcrypt = require('bcrypt');
 const cartItemCountMiddleware = require('../middlewares/cartCountMiddleware');
 const Reminder=require('../models/reminderModel')
-const mongoose=require('mongoose')
+const RateUs=require('../models/RateusModel')
 const cron = require('node-cron');
 const twilio = require('twilio');
-const RateUs=require('../models/RateusModel')
-
-
+require("dotenv").config();
 //user home------------------------------------------------------->
 const home = async (req, res) => {
     try {
         const user = req.session.user;
         const products = await Product.find().exec();
         const Rateus= await RateUs.find({ rating: { $gt: 4 } }).populate('userId').limit(4).exec();
-
-        console.log("rateus", Rateus);
-
         res.render("./user/userhome", { pageTitle: "userhome", user, products, Rateus });
     } catch (error) {
         console.error('Error fetching data:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
-
+//coffee mix------------------------------------------------------->
 const coffeemix = (req, res) => {
     const user = req.session.user;
-    
     res.render("./user/coffeemix", { pageTitle: "coffeemix",user});
 }
+//coffee reminder------------------------------------------------------->
 const reminder = (req, res) => {
     const user = req.session.user;
     const errorMessage = req.flash('error')[0];
   const successMessage = req.flash('success')[0];
-    
     res.render("./user/reminder", { pageTitle: "reminder",user,successMessage,errorMessage});
 }
 //user signup------------------------------------------------------->
@@ -52,7 +46,6 @@ const login = (req, res) => {
 //checking the user valid or invalid------------------------------------------------------->
 const login1 = async (req, res) => {
     const { email, password } = req.body;
-    console.log({email,password});
     try {
         const user = await User.findOne({ email });
         if (!user) {
@@ -110,18 +103,14 @@ if (searchQuery) {
 }
         const totalProducts = await Product.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / itemsPerPage);
-
         if (currentPage < 1 || currentPage > totalPages) {
-            return res.status(404).render('error404'); // Handle invalid page numbers
+            return res.status(404).render('error404'); 
         }
-
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-
         const products = await Product.find(query).populate('category').skip(startIndex).limit(itemsPerPage);
         const categories = await Category.find(); 
         const cartItemCount = req.session.cartItemCount;
-
         res.render('./user/products', {
             title: 'Products',
             products,
@@ -134,7 +123,7 @@ if (searchQuery) {
         });
     } catch (error) {
         console.error('Error fetching products:', error);
-        res.status(500).render('error500'); // Handle server error
+        res.status(500).render('error500');
     }
 };
 //user main product page------------------------------------------------------->
@@ -188,32 +177,24 @@ const endIndex = startIndex + itemsPerPage;
         });
     } catch (error) {
         console.error('Error fetching products by category:', error);
-        res.status(500).render('error500'); // Handle server error
+        res.status(500).render('error500'); 
     }
 };
-
+//setreminder------------------------------------------------------->
 const setreminder = async (req, res) => {
     try {
-        
         if (!req.session.user || !req.session.user._id) {
             req.flash('error', 'User not authenticated');
             return res.redirect('/set-reminder');
         }
-
         const userId = req.session.user._id;
-        console.log(userId);
-
         const { coffeeTime, phoneNumber } = req.body;
-        console.log({ coffeeTime, phoneNumber });
-
         const reminder = new Reminder({
             userId,
             coffeeTime,
             phoneNumber,
         });
-
         await reminder.save();
-
         req.flash('success', 'Reminder set successfully!');
         return res.redirect('/user/reminder');
     } catch (error) {
@@ -222,10 +203,6 @@ const setreminder = async (req, res) => {
         return res.redirect('/user/reminder');
     }
 };
-
-
-
-
 
 //user forgot password------------------------------------------------------->
 const forgot=(req, res) => {
@@ -243,13 +220,13 @@ const logout = (req, res) => {
         }
     });
 };
-
-const accountSid = 'ACef64d351381c5844984f101ad1c102b5';
-const authToken = '17258729111dec2e32ee189f5ee92021';
-const twilioPhoneNumber = '+15168064670';
-
-const client = new twilio(accountSid, authToken);
-
+//schedule the coffee time------------------------------------------------------->
+const accountSid = process.env.accountSid;
+const authToken = process.env.authToken;
+const twilioPhoneNumber = process.env.twilioPhoneNumber;
+const client = new twilio(accountSid, authToken, {
+    from: twilioPhoneNumber,
+});
 const sendSMS = async (to, message) => {
     try {
         const result = await client.messages.create({
@@ -263,30 +240,20 @@ const sendSMS = async (to, message) => {
         console.error('Error sending SMS:', error.message);
     }
 };
-
-// Schedule SMS sending using node-cron based on coffeeTime
 cron.schedule('* * * * *', async () => {
     try {
         const currentHour = new Date().getHours();
         const currentMinute = new Date().getMinutes();
-
         const reminders = await Reminder.find();
-
-        reminders.forEach(async (reminder) => {
+        for (const reminder of reminders) {
             const { userId, coffeeTime, phoneNumber } = reminder;
             const [hour, minute] = coffeeTime.split(':');
-
-            // Schedule SMS only if the current time matches coffeeTime
             if (parseInt(hour) === currentHour && parseInt(minute) === currentMinute) {
                 try {
-                    // Fetch the user information from the database
                     const user = await User.findById(userId);
-
                     if (user) {
                         const userName = user.name;
                         const message = `Hey ${userName}, don't forget your coffee time at ${coffeeTime} ☕️ from COFFEE LAND`;
-
-                        // Send SMS with the user's name
                         await sendSMS(phoneNumber, message);
                     } else {
                         console.error(`User with ID ${userId} not found.`);
@@ -295,12 +262,11 @@ cron.schedule('* * * * *', async () => {
                     console.error('Error fetching user information:', error.message);
                 }
             }
-        });
+        }
     } catch (error) {
         console.error('Error processing reminders:', error.message);
     }
 });
-
 //module exports------------------------------------------------------->
 module.exports = {
     home,

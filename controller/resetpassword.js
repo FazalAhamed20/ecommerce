@@ -1,26 +1,8 @@
 const nodemailer = require("nodemailer");
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
-//nodemailer to send otp------------------------------------------------------->
-let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    service: 'Gmail',
-    auth: {
-        user: 'fazalahamed628@gmail.com',
-        pass: 'ywcz qold pmwt noqv',
-    },
-    tls: {
-        rejectUnauthorized: false,
-    },
-    connectionTimeout: 60000, 
-    socketTimeout: 60000,
-});
-//generate otp------------------------------------------------------->
-function generateOTP() {
-    return Math.floor(1000 + Math.random() * 9000);
-}
+const {transporter}=require('../auth/nodemailer')
+const {generateOTP}=require('../util/helperfunction')
 const otp1 = generateOTP();
 //otp for user email------------------------------------------------------->
 const sendOTP = async (email, otp) => {
@@ -55,7 +37,7 @@ const forgotPassword = async (req, res) => {
         };
         req.session.otp = otp1
         await sendOTP(email,otp1);
-        res.render('./user/resetpassword', { email, otp1, errorMessage1:null});
+        res.render('./user/resetpassword', { email, otp1, errorMessage10:null});
     } catch (error) {
         console.error('Error in forgotPassword:', error);
         res.status(500).send('Internal Server Error');
@@ -66,19 +48,17 @@ const resetPassword = async (req, res) => {
     try {
         const { email, otp, newPassword } = req.body;
         const userOTP = req.body.otp;
-       console.log(userOTP);
-       console.log(otp1);
         if (userOTP != otp1) {
-            const errorMessage1 = 'Invalid OTP Or Expired OTP. Please try again.';
-            req.flash('error', errorMessage1);
-            return res.render('./user/resetpassword', { email, otp1, errorMessage1 });
+            const errorMessage10 = 'Invalid OTP Or Expired OTP. Please try again.';
+            req.flash('error', errorMessage10);
+            return res.render('./user/resetpassword', { email, otp1, errorMessage10 });
         }
         const user = await User.findOne({ email });
         if (!user) {
             req.flash('error', 'User not found.');
             return res.send("invalid user");
         }
-        const hashedPassword = await bcrypt.hash(newPassword, 10); // 10 is the number of salt rounds
+        const hashedPassword = await bcrypt.hash(newPassword, 10); 
         user.password = hashedPassword;
         user.resetPasswordOTP = null;
         await user.save();
@@ -86,7 +66,6 @@ const resetPassword = async (req, res) => {
             req.session.user=user
             return res.redirect('/user/profile');
         } else {
-            // If the user is not logged in, redirect to the login page
             return res.redirect('/user/login');
         }
     } catch (error) {

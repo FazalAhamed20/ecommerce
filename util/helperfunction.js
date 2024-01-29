@@ -54,11 +54,15 @@ function generateReferralCode() {
   }
   return referralCode;
 }
+function generateOTP() {
+  return Math.floor(1000 + Math.random() * 9000);
+}
 
 module.exports={
   calculateTotals,
   formatDate,
   generateOrderID,
   getCurrentTime,
-  generateReferralCode
+  generateReferralCode,
+  generateOTP
 }

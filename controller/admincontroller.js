@@ -213,8 +213,6 @@ const userOrder = async (req, res) => {
         return canceledOrder || null;
       })
     );
-
-    // Format dates for display
     const formattedOrders = orders.map((order) => ({
       ...order._doc,
       deliveryDate: order.deliveryDate.toLocaleDateString("en-IN"),
@@ -250,7 +248,6 @@ const updateOrderstatus = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
-
 //logout------------------------------------------------------->
 const logout = (req, res) => {
   req.session.destroy((err) => {

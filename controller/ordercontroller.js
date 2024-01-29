@@ -14,13 +14,12 @@ const ejs = require('ejs');
 const Coupon=require('../models/couponModel')
 const {generateOrderID,getCurrentTime}=require('../util/helperfunction')
 require('dotenv').config();
-
-
+//Razorpay Instance------------------------------------------------------->
 var instance = new Razorpay({
   key_id:process.env.Razorpay_key_id,
   key_secret:process.env.Razorpay_key_secret,
 });
-
+//Order data------------------------------------------------------->
 const createOrderData = async (userId, paymentMethod, selectedAddress, couponCode) => {
   const orderID = generateOrderID();
   const currentDate = moment();
@@ -31,33 +30,24 @@ const createOrderData = async (userId, paymentMethod, selectedAddress, couponCod
   const deliveryDateTime = moment(orderDateTimeWithTime).add(40, 'minutes');
   const deliveryDate = deliveryDateTime.format('ddd MMM DD YYYY ');
   const deliveryTime = deliveryDateTime.format('HH:mm');
-  console.log(`Ordered Date: ${orderDate}`);
-
   const appliedCoupon = await Coupon.findOne({ couponCode });
-
-  console.log("applied coupon",appliedCoupon);
-
   const cart = await cartModels.findOne({ userId });
   if (cart) {
     await cart.populate('products.productId', 'name price description image');
   }
-
   let discountAmount = 0;
   let discountTotal = 0;
   let couponCodeApplied = '';
-
   if (appliedCoupon) {
     discountAmount = appliedCoupon.discountAmount;
     couponCodeApplied = appliedCoupon.couponCode;
   }
-
   const grandTotalAfterDiscount = cart.totals.grandTotal - discountAmount;
   const products = cart.products.map(cartItem => ({
     product: cartItem.productId,
     name: cartItem.productId && cartItem.productId.name,
     quantity: cartItem.quantity,
   }));
-
   const totals = {
     subtotal: cart.totals.subtotal,
     tax: cart.totals.tax,
@@ -67,7 +57,6 @@ const createOrderData = async (userId, paymentMethod, selectedAddress, couponCod
     discountAmount: discountAmount,
     discountTotal: grandTotalAfterDiscount,
   };
-
   return {
     orderID,
     customer: userId,
@@ -100,9 +89,6 @@ const checkout = async (req, res) => {
       const orderID=generateOrderID();
         const userId = req.session.user._id;
         const addresses = await Address.find({ userId });
-        console.log("User Addresses:", addresses);
-        
-       
         const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image');
         if (!cart || cart.products.length === 0) {
             req.flash('error', 'Your cart is empty. Cannot create an order.');
@@ -114,8 +100,6 @@ const checkout = async (req, res) => {
         const user = await User.findById(userId);
         const walletId = user.wallet;
         const wallet = await Wallet.findById(walletId);
-        console.log("User wallet:", wallet);
-
         const razorpayOrder = {};
         const paymentMethod=[];
         res.render('./orders/checkout', { pageTitle: 'checkout', addresses, user: req.session.user, cart: cart.products, totals: cart.totals,messages: req.flash(),orderID,razorpayOrder,paymentMethod,wallet });
@@ -124,17 +108,15 @@ const checkout = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
-
+//save Address------------------------------------------------------->
 const saveAddress=async (req, res) => {
   try {
     if (req.session.user) {
       const userId = req.session.user._id;
       const user = await User.findById(userId);
-
       if (!user) {
         return res.status(404).send('User not found');
       }
-
       const { mobile, email, pincode, houseName, locality, city, district, state } = req.body;
       const newAddress = new Address({
         userId: user._id,
@@ -147,16 +129,11 @@ const saveAddress=async (req, res) => {
         district,
         state,
       });
-
       await newAddress.save();
-
       user.addresses = user.addresses || [];
       user.addresses.push(newAddress._id);
       await user.save();
-
-      // Update the session with the user object
       req.session.user = user;
-
       res.status(201).json({ message: 'Address saved successfully' });
     } else {
       res.status(401).send('Unauthorized');
@@ -166,7 +143,6 @@ const saveAddress=async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 //save orders details at database------------------------------------------------------->
 const createOrder = async (req, res) => {
   try {
@@ -178,21 +154,16 @@ const createOrder = async (req, res) => {
       req.flash('error', 'Address or Payment is not selected');
       return res.redirect('/user/checkout');
     }
-
     if (!userId) {
       return res.status(401).json({ error: 'User not authenticated' });
     }
-
     const addresses = await Address.find({ userId });
     const selectedAddress = addresses[selectedAddressIndex];
 
     if (!selectedAddress) {
       return res.status(404).json({ error: 'Selected address not found' });
     }
-
     const orderData = await createOrderData(userId, paymentMethod, selectedAddress, couponCode);
-    console.log(orderData);
-
     if (paymentMethod === 'Cash on Delivery') {
       const newOrder = new orderModels(orderData);
       const savedOrder = await newOrder.save();
@@ -204,32 +175,20 @@ const createOrder = async (req, res) => {
       const user = await User.findById(userId);
         const walletId = user.wallet;
         const userWallet = await Wallet.findById(walletId);
-     
-      
-
-      console.log("user wallet at payment",userWallet);
-
       if (!userWallet) {
         req.flash('error', 'User wallet not found');
         return res.redirect('/user/checkout');
       }
       const orderTotal = orderData.totals.grandTotal;
-
       if (userWallet.balance < orderTotal) {
         req.flash('error', 'Insufficient funds in the wallet');
         return res.redirect('/user/checkout');
       }
-
-     
       userWallet.balance -= orderTotal;
       await userWallet.save();
-
       const newOrder = new orderModels(orderData);
       const savedOrder = await newOrder.save();
-
-     
       await cartModels.findOneAndDelete({ userId });
-
       setTimeout(() => {
         return res.render('./orders/confirm', { pageTitle: 'success', user: req.session.user, paymentMethod });
       }, 1800);
@@ -264,22 +223,18 @@ const createOrder = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 //user orders------------------------------------------------------->  
 const userOrder = async (req, res) => {
   try {
     if (!req.session.user) {
       return res.render('./orders/userorder', { pageTitle: 'userorder', user: null, orders: [], totalPages: 0, page: 1, limit: 3 });
     }
-    
     const userId = req.session.user._id;
     const limit = parseInt(req.query.limit) || 3; 
     const totalOrders = await orderModels.countDocuments({ customer: userId });
     const totalPages = Math.ceil(totalOrders / limit);
-    console.log(totalPages)
     const page = parseInt(req.query.page) || 1;
     const skip = (page - 1) * limit;
-    
     const orders = await orderModels.find({ customer: userId })
       .populate({
         path: 'products.product',
@@ -290,29 +245,25 @@ const userOrder = async (req, res) => {
       .sort({_id:-1})
       .limit(limit)
       .exec();
-    
     const formattedOrders = orders.map((order) => ({
       ...order._doc,
       orderDate: order.orderDate.toLocaleDateString('en-IN'),
       deliveryDate: order.deliveryDate.toLocaleDateString('en-IN'), 
     }));
-
     res.render('./orders/userorder', { pageTitle: 'userorder', user: req.session.user, orders: formattedOrders, page, limit, totalPages });
   } catch (error) {
     console.error('Error fetching user orders:', error);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
 //razorpay online payment-------------------------------------------------------> 
 const processPayment = async (req, res) => {
   try {
     const userId = req.session.user._id;
-    console.log("razorpay",req.body);
       const { payment_id, order_id, signature,paymentMethod,selectedAddressIndex } = req.body;
       const addresses = await Address.find({ userId });
       const selectedAddress = addresses[selectedAddressIndex];
-      const secret = 'zeSoohctIJNkPlHsAeDwKUR2'; 
+      const secret =process.env.Razorpay_key_secret; 
       const generatedSignature = crypto.createHmac('sha256', secret)
           .update(order_id + '|' + payment_id)
           .digest('hex');

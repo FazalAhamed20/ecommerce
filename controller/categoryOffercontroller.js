@@ -3,7 +3,7 @@ const Product=require('../models/productModel')
 const Category=require('../models/categoryModel')
 const mongoose=require('mongoose')
 const {formatDate}=require('../util/helperfunction')
-
+//Category Offers------------------------------------------------------->
 const CategoryOffers = async (req, res) => {
   try {
     const categories = await Category.find();
@@ -33,10 +33,7 @@ const CategoryOffers = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
-
-
-
+//Edit offers------------------------------------------------------->
 const editOffer = async (req, res) => {
   try {
       const { category, percentage, expiryDate } = req.params;
@@ -51,22 +48,13 @@ const editOffer = async (req, res) => {
       if (!existingCategory) {
           return res.status(404).json({ success: false, message: 'Category not found' });
       }
-
       const parsedPercentage = parseFloat(percentage);
-      console.log('existingCategory', existingCategory);
-      console.log('parsedPercentage', parsedPercentage);
-
       const updatedOffer = await Offer.findOneAndUpdate(
           { category: existingCategory._id },
           { $set: { discountPercentage: parsedPercentage, expiryDate } },
           { new: true, upsert: true }
       );
-
-      
       const products = await Product.find({ category: existingCategory._id });
-      console.log(products);
-
-     
       for (const product of products) {
           const Offerprice = product.price - (product.price * parsedPercentage / 100);
           product.Offerprice = Offerprice;
@@ -79,24 +67,17 @@ const editOffer = async (req, res) => {
       res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
-
-
+//Delete offer------------------------------------------------------->
 const deleteOffer = async (req, res) => {
   try {
     const { categoryId } = req.params;
-
     const deletedOffer = await Offer.findOneAndDelete({ category: categoryId });
-
     if (deletedOffer) {
-      // Delete offer price from products
       const products = await Product.find({ category: categoryId });
-
       for (const product of products) {
         product.Offerprice = null;
         await product.save();
       }
-
       return res.json({ success: true, message: 'Offer deleted successfully' });
     } else {
       return res.status(404).json({ success: false, message: 'Offer not found' });
@@ -106,8 +87,7 @@ const deleteOffer = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
-
+//module exports------------------------------------------------------->
 module.exports={
     CategoryOffers,
     editOffer,

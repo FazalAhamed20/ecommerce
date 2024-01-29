@@ -64,16 +64,11 @@ const addaddressform = async (req, res) => {
                 district,
                 state,
             });
-
             await newAddress.save();
-
             user.addresses = user.addresses || [];
             user.addresses.push(newAddress._id);
             await user.save();
-
-            // Update the session with the user object
             req.session.user = user;
-
             return res.redirect('/user/address');
         } else {
             return res.status(401).send('Unauthorized');
@@ -142,7 +137,6 @@ const edituser = async (req, res) => {
                     );
                     req.session.user = updatedUser;
                     const successMessage = 'Successfully updated';
-                    
                     res.render('./userprofile/userprofile', { successMessage, user });
                 
                 } else {
@@ -158,14 +152,11 @@ const edituser = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
+//rewards------------------------------------------------------->
 const rewards = async (req, res) => {
     try {
         const user = req.session.user || {};
-
-        // Fetch all coupons from the Coupon model
         const coupons = await Coupon.find();
-
         const formattedCoupons = coupons.map((coupon) => ({
             ...coupon._doc,
             startDate: coupon.startDate.toLocaleDateString('en-IN'),
@@ -178,6 +169,7 @@ const rewards = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+//rateus------------------------------------------------------->
 const rateus=(req, res) => {
   const errorMessage = req.flash('error')[0];
   const successMessage = req.flash('success')[0];
@@ -187,28 +179,20 @@ const rateus=(req, res) => {
     const existingRating = await RateUs.findOne({ userId });
     return !!existingRating;
   };
-  
-  // Handle rating submission
   const submitRating = async (req, res) => {
     try {
       const userId = req.session.user._id;
-  
-      // Check if the user has already rated
       const userHasRated = await hasUserRated(userId);
-  
+
       if (userHasRated) {
         req.flash('error', 'you have already rated.');
-        return res.redirect('/user/rateus');  // Redirect to the original page or route
+        return res.redirect('/user/rateus');  
       }
-  
-      // Create a new RateUs document
       const newRating = new RateUs({
         userId,
         rating: parseInt(req.body.rating),
         feedback: req.body.feedback
       });
-  
-      // Save the new rating to the database
       await newRating.save();
       req.flash('success', 'Thanks for rating!');
       res.redirect('/user/rateus');

@@ -29,47 +29,6 @@ const usercart = async (req, res) => {
     cart.totals.shipping = totals.shipping;
     cart.totals.grandTotal = totals.grandTotal;
     await cart.save();
-    console.log("Product Names and Images:");
-    cartItems.forEach((item) => {
-      if (item.productId) {
-        if (Array.isArray(item.productId)) {
-          item.productId.forEach((product) => {
-            if (product && product._id) {
-              console.log("Product ID:", product._id);
-              console.log(
-                "Product Name:",
-                product.name || "Product Name not available"
-              );
-              console.log(
-                "Product Image:",
-                product.image || "No image available"
-              );
-              console.log(product.quantity);
-              console.log(
-                "Product Price:",
-                productPrice || "Price not available"
-              );
-            } else {
-              console.log("Product ID not available");
-            }
-          });
-        } else {
-          console.log("Product ID:", item.productId._id);
-          console.log(
-            "Product Name:",
-            item.productId.name || "Product Name not available"
-          );
-          console.log(
-            "Product Image:",
-            item.productId.image || "No image available"
-          );
-          console.log("Product quantity:", item.productId.quantity);
-          console.log("Product offer price:", item.productId.Offerprice);
-        }
-      } else {
-        console.log("Product ID not available");
-      }
-    });
     res.render("./cart/cart.ejs", {
       pageTitle: "usercart",
       user,
@@ -190,8 +149,6 @@ const updatequantity = async (req, res) => {
       product.quantity = updatedQuantity;
       console.log(product.quantity);
       if (product.quantity < 0) {
-        console.log(product.quantity);
-        console.log("out of stock");
         return res.send("out of stocks");
       }
       await product.save();

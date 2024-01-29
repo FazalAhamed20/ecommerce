@@ -16,7 +16,6 @@ let transporter = nodemailer.createTransport({
     connectionTimeout: 60000,
     socketTimeout: 60000,
 });
-
 module.exports={
     transporter
 }

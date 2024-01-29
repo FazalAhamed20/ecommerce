@@ -2,15 +2,8 @@ const nodemailer = require("nodemailer");
 const User=require('../models/userModel')
 const bcrypt = require('bcrypt');
 const Wallet=require('../models/walletModel')
-const {generateReferralCode}=require('../util/helperfunction')
+const {generateReferralCode,generateOTP}=require('../util/helperfunction')
 const {transporter}=require('../auth/nodemailer')
-
-//generate otp------------------------------------------------------->
-function generateOTP() {
-    return Math.floor(1000 + Math.random() * 9000);
-}
-const otp = generateOTP();
-console.log(otp);
 //sending the generated otp to the user------------------------------------------------------->
 const otp1 = async function (req, res) {
     try {
@@ -94,8 +87,6 @@ const verify = async function (req, res) {
                     { new: true }
                 );
             } 
-            
-            
             const newUser = new User({
                 name: user.name,
                 email: user.email,
@@ -112,7 +103,6 @@ const verify = async function (req, res) {
             res.status(500).send('Internal Server Error');
         }
     } else {
-       
         res.render('./admin/otp', { msg: 'OTP is incorrect or Time Expires' });
     }
 };
@@ -120,7 +110,6 @@ const verify = async function (req, res) {
 const resend = function (req, res) {
     const user=req.session.user
     let email=user.email
-    console.log(email); // Use the outer email variable
     const mailOptions = {
         to: email,
         subject: "Otp for registration is: ",
@@ -135,6 +124,7 @@ const resend = function (req, res) {
         res.render('./admin/otp', { msg: "OTP has been sent" });
     });
 };
+//verify Refferal------------------------------------------------------->
 const verifyReferal=async(req,res)=>{
     const { referralCode } = req.body;
     console.log("referal code",{referralCode});
