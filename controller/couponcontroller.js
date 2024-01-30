@@ -3,18 +3,38 @@ const Coupon = require('../models/couponModel');
 const {formatDate}=require('../util/helperfunction')
 //create coupon------------------------------------------------------->
 const showCreateCouponForm = async (req, res, next) => {
-    try {
-      const coupons = await Coupon.find().sort({ _id: -1 });
-      const formattedCoupons = coupons.map(coupon => ({
-        ...coupon._doc,
-        startDate: coupon.startDate.toLocaleDateString('en-IN'), 
-        expiryDate: coupon.expiryDate.toLocaleDateString('en-IN')
-      }));
-      res.render('./coupon/coupon.ejs', { coupons: formattedCoupons });
-    } catch (error) {
-      next(error);
-    }
-  };
+  const ITEMS_PER_PAGE = 4;
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const searchQuery = req.query.search || '';
+    console.log(searchQuery);
+    const filter = {
+      $or: [
+        { description: { $regex: new RegExp(searchQuery, 'i') } },
+        { couponCode: { $regex: new RegExp(searchQuery, 'i') } },
+      ],
+    };
+    const totalCoupons = await Coupon.countDocuments(filter);
+    const totalPages = Math.ceil(totalCoupons / ITEMS_PER_PAGE);
+    const coupons = await Coupon.find(filter)
+      .sort({ _id: -1 })
+      .skip((page - 1) * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE);
+    const formattedCoupons = coupons.map(coupon => ({
+      ...coupon._doc,
+      startDate: formatDate(coupon.startDate),
+      expiryDate: formatDate(coupon.expiryDate),
+    }));
+    res.render('./coupon/coupon.ejs', {
+      coupons: formattedCoupons,
+      totalPages: totalPages,
+      currentPage: page,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
   //create coupon form------------------------------------------------------->
   const createcouponform=async (req,res)=>{
     try{

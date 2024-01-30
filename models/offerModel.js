@@ -12,6 +12,10 @@ const offerSchema = new mongoose.Schema({
     required: true,
      
   },
+  startDate: {
+    type: Date,
+    required: true,
+  },
   expiryDate: {
     type: Date,
     required: true,

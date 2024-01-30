@@ -3,56 +3,99 @@ const Product=require('../models/productModel')
 const Category=require('../models/categoryModel')
 const mongoose=require('mongoose')
 const {formatDate}=require('../util/helperfunction')
+const cron = require('node-cron');
+//function to remove expired offers------------------------------------------------------->
+const removeExpiredOffers = async () => {
+  try {
+    const expiredOffers = await Offer.find({ expiryDate: { $lt: new Date() } });
+
+    for (const expiredOffer of expiredOffers) {
+      const categoryId = expiredOffer.category;
+      const products = await Product.find({ category: categoryId });
+
+      for (const product of products) {
+        product.Offerprice = null;
+        await product.save();
+      }
+
+      await Offer.findOneAndDelete({ category: categoryId });
+    }
+
+    console.log('Expired offers removed successfully');
+  } catch (error) {
+    console.error('Error removing expired offers:', error);
+  }
+};
+cron.schedule('0 0 * * *', async () => {
+  await removeExpiredOffers();
+});
 //Category Offers------------------------------------------------------->
+
 const CategoryOffers = async (req, res) => {
   try {
-    const categories = await Category.find();
-    const categoryData = [];
-
-    for (const category of categories) {
-      const productCount = await Product.countDocuments({ category: category._id });
-      const offer = await Offer.findOne({ category: category._id }).populate('category');
-
-      const offerPercentage = offer ? offer.discountPercentage : 0;
-      const expiryDate = offer ? formatDate(offer.expiryDate) : null;
-      console.log("expiry date",expiryDate);
-
-      categoryData.push({
-        categoryid:category._id,
-        category: category.name,
-        productCount,
-        offerPercentage,
-        expiryDate,
+      const categories = await Category.find();
+      const categoryData = [];
+      const ITEMS_PER_PAGE = 4;
+      const page = parseInt(req.query.page) || 1;
+      console.log(page);
+      const searchQuery = req.query.search || '';
+      console.log(searchQuery);
+      for (const category of categories) {
+          const productCount = await Product.countDocuments({ category: category._id });
+          const offer = await Offer.findOne({ category: category._id }).populate('category');
+          const offerPercentage = offer ? offer.discountPercentage : 0;
+          const expiryDate = offer ? formatDate(offer.expiryDate) : null;
+          if (searchQuery && category.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+              categoryData.push({
+                  categoryid: category._id,
+                  category: category.name,
+                  productCount,
+                  offerPercentage,
+                  expiryDate,
+              });
+          } else if (!searchQuery) {
+              categoryData.push({
+                  categoryid: category._id,
+                  category: category.name,
+                  productCount,
+                  offerPercentage,
+                  expiryDate,
+              });
+          }
+      }
+      const totalItems = categoryData.length;
+      const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+      const startIndex = (page - 1) * ITEMS_PER_PAGE;
+      const endIndex = startIndex + ITEMS_PER_PAGE;
+      const paginatedCategoryData = categoryData.slice(startIndex, endIndex);
+      res.render('./categoryOffer/categoryOffer', {
+          categoryData: paginatedCategoryData,
+          currentPage: page,
+          totalPages,
+          searchQuery,
       });
-    }
-    console.log(categoryData);
-
-    res.render('./categoryOffer/categoryOffer', { categoryData });
   } catch (error) {
-    console.error('Error fetching admin dashboard data:', error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+      console.error('Error fetching category offers data:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
 //Edit offers------------------------------------------------------->
 const editOffer = async (req, res) => {
   try {
-      const { category, percentage, expiryDate } = req.params;
+    const { category, percentage, startDate, expiryDate } = req.params;
       console.log({ category, percentage, expiryDate });
-
       if (typeof category !== 'string') {
           return res.status(400).json({ success: false, message: 'Invalid category type' });
       }
-
       const existingCategory = await Category.findOne({ name: category });
-
       if (!existingCategory) {
           return res.status(404).json({ success: false, message: 'Category not found' });
       }
       const parsedPercentage = parseFloat(percentage);
       const updatedOffer = await Offer.findOneAndUpdate(
-          { category: existingCategory._id },
-          { $set: { discountPercentage: parsedPercentage, expiryDate } },
-          { new: true, upsert: true }
+        { category: existingCategory._id },
+        { $set: { discountPercentage: parsedPercentage, startDate, expiryDate } },
+        { new: true, upsert: true }
       );
       const products = await Product.find({ category: existingCategory._id });
       for (const product of products) {

@@ -91,7 +91,6 @@ const editcat = function(req, res) {
 //find the delete category bu id------------------------------------------------------->
 const confirmdel = function(req, res) {
     const categoryId = req.params.id;
-
     Category.findById(categoryId)
         .then(category => {
             res.render('./categories/delete', { category });
@@ -104,7 +103,6 @@ const confirmdel = function(req, res) {
 //Delete category in admin side------------------------------------------------------->
 const deletecat = function(req, res) {
     const categoryId = req.params.id;
-
     Category.findOneAndDelete({ _id: categoryId })
         .then(() => {
             res.redirect('/category');

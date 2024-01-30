@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
   <title>Coupon List</title>
 
   <style>
@@ -103,6 +104,14 @@
 
   <h2 style="text-align: center;">Coupon List</h2>
   <a class="home" href="/adhome">Home</a>
+   <!-- Link to create a new coupon -->
+   <div style="text-align: center;">
+    <a href="/coupons/create">Create New Coupon</a>
+  </div>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search coupon">
+    <button onclick="searchCoupon()">Search</button>
+</div>
   
   <!-- Display list of coupons -->
   <table>
@@ -136,14 +145,23 @@
       <% }); %>
     </tbody>
   </table>
+  <div class="pagination">
+    <a href="?page=<%= currentPage - 1 %>" class="<%= currentPage === 1 ? 'disabled' : '' %>">Previous</a>
+    <% for (let i = 1; i <= 3; i++) { %>
+        <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+    <% } %>
+    <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
+</div>
   
-  <!-- Link to create a new coupon -->
-  <div style="text-align: center;">
-    <a href="/coupons/create">Create New Coupon</a>
-  </div>
+ 
 
 </body>
 <script>
+   function searchCoupon() {
+    const searchQuery = document.getElementById('searchInput').value;
+    const url = `/admin/coupon?page=1&search=${encodeURIComponent(searchQuery)}`;
+    window.location.href = url;
+}
   function deletecoupon(couponId) {
 if (confirm(`Are you sure you want to delete the coupon`)) {
   fetch(`/delete-coupons/${couponId}`, {

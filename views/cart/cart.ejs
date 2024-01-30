@@ -3,7 +3,7 @@
   /* Global settings */
   body {
     font-family: "Roboto", sans-serif;
-    background-color: #f5f2eb; /* Creamy background */
+    background-color: #f5f2eb; 
     margin: 0;
     padding: 0;
     display: flex;
@@ -16,8 +16,8 @@
   h1 {
     text-align: center;
     padding: 20px 0;
-    color: #5c3d2e; /* Deep coffee brown */
-    animation: fadeIn 1s ease; /* Fade in the title */
+    color: #5c3d2e; 
+    animation: fadeIn 1s ease;
   }
 
   @keyframes fadeIn {
@@ -31,11 +31,11 @@
 
   .cart-container {
     width: 80%;
-    background-color: #f9f5f2; /* Light coffee cream */
+    background-color: #f9f5f2; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
-    animation: slideIn 0.5s ease; /* Slide in the cart container */
+    animation: slideIn 0.5s ease; 
   }
 
   @keyframes slideIn {
@@ -51,13 +51,13 @@
 
   .cart-item {
     display: flex;
-    border-bottom: 1px solid #e0dedc; /* Light gray separator */
+    border-bottom: 1px solid #e0dedc; 
     padding: 15px;
     transition: background-color 0.3s ease;
   }
 
   .cart-item:hover {
-    background-color: #e9e7e5; /* Lighter coffee cream on hover */
+    background-color: #e9e7e5;
   }
 
   .product-image img {
@@ -65,7 +65,7 @@
     height: 70px;
     border-radius: 5px;
     margin-right: 15px;
-    animation: fadeInImage 0.5s ease; /* Fade in the product image */
+    animation: fadeInImage 0.5s ease;
   }
 
   @keyframes fadeInImage {
@@ -84,7 +84,7 @@
   .product-title {
     font-weight: bold;
     font-size: 18px;
-    color: #5c3d2e; /* Deep coffee brown */
+    color: #5c3d2e; 
   }
 
   .product-price,
@@ -92,8 +92,8 @@
   .product-total,
   .remove-product {
     font-size: 16px;
-    color: #5c3d2e; /* Deep coffee brown */
-    animation: fadeInText 0.5s ease; /* Fade in text elements */
+    color: #5c3d2e;
+    animation: fadeInText 0.5s ease; 
   }
 
   @keyframes fadeInText {
@@ -106,25 +106,25 @@
   }
 
   .remove-product {
-    color: #96372e; /* Darker coffee red */
+    color: #96372e; 
     cursor: pointer;
     margin-left: auto;
     transition: color 0.3s ease;
   }
 
   .remove-product:hover {
-    color: #721d1b; /* Darker coffee red on hover */
+    color: #721d1b;
   }
 
   .totals {
     margin-top: 20px;
     padding: 20px;
-    background-color: #f9f5f2; /* Light coffee cream */
-    border-top: 1px solid #e0dedc; /* Light gray separator */
+    background-color: #f9f5f2; 
+    border-top: 1px solid #e0dedc; 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    animation: fadeInTotals 1s ease; /* Fade in the totals */
+    animation: fadeInTotals 1s ease; 
   }
 
   @keyframes fadeInTotals {
@@ -142,16 +142,16 @@
   }
 
   .totals-label {
-    color: #5c3d2e; /* Deep coffee brown */
+    color: #5c3d2e; 
   }
 
   .totals-value {
     font-weight: bold;
-    color: #5c3d2e; /* Deep coffee brown */
+    color: #5c3d2e; 
   }
 
   .checkout:hover {
-    background-color: #3c271f; /* Darker coffee brown on hover */
+    background-color: #3c271f; 
   }
 
   @keyframes fadeInCheckout {
@@ -297,7 +297,7 @@
     overflow-y: scroll;
   }
 
-  /* ... (existing styles) */
+  
 
   .cart-container {
     width: 80%;
@@ -310,7 +310,7 @@
   }
 
   @media screen and (max-width: 768px) {
-    /* Adjust styles for smaller screens */
+   
     .cart-container {
       width: 90%;
     }
@@ -327,7 +327,7 @@
     transition: background-color 0.3s ease;
   }
 
-  /* ... (existing styles) */
+ 
 
   .totals {
     margin-top: 20px;
@@ -335,7 +335,7 @@
     background-color: #f9f5f2;
     border-top: 1px solid #e0dedc;
     display: flex;
-    flex-direction: column; /* Display totals line by line */
+    flex-direction: column; 
     align-items: center;
     animation: fadeInTotals 1s ease;
   }
@@ -352,14 +352,14 @@
   .totals-item {
     font-size: 18px;
     margin-bottom: 10px;
-    display: flex; /* Make the totals items flex containers */
+    display: flex; 
     justify-content: space-between;
-    width: 100%; /* Ensure full width for line by line display */
+    width: 100%; 
   }
 
   .totals-label {
     color: #5c3d2e;
-    flex-grow: 1; /* Allow label to take available space */
+    flex-grow: 1; 
   }
 
   .totals-value {
@@ -372,8 +372,8 @@
   }
   @media screen and (max-width: 176px) {
     .product-remove {
-      text-align: center; /* Center the link on small screens */
-      margin-top: 10px; /* Adjust the top margin */
+      text-align: center; 
+      margin-top: 10px; 
     }
   }
   .product-remove {
@@ -428,13 +428,14 @@
         </div>
         <div class="product-remove">
           <a
-            href="/removeItem/<%= item.productId._id %>"
+            href="javascript:void(0);"
             class="remove-product"
-            onclick="removeItem(this)"
-            data-product-id="<%= item.productId._id %>"
-            >Remove</a
+            onclick="showConfirmationModal('<%= item.productId._id %>')"
           >
+            Remove
+          </a>
         </div>
+        
       </div>
 
       <div class="product-total">
@@ -488,7 +489,7 @@
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-<!-- Add this script in your HTML -->
+
 <script>
   async function updateCartTotals() {
     try {
@@ -497,21 +498,19 @@
         headers: {
           "Content-Type": "application/json",
         },
-        // Add any additional headers if needed
+       
       });
 
       if (!response.ok) {
         console.error("Failed to update cart totals:", response.statusText);
-        // Handle error as needed
+       
         return;
       }
 
       const result = await response.json();
       console.log("Cart totals updated successfully:", result.totals);
 
-      // Implement the logic to update the UI with the new totals
-      // For example, you can update the displayed subtotal, tax, shipping, and grandTotal
-      // Replace the following lines with your actual logic
+      
       document.getElementById(
         "cart-subtotal"
       ).innerText = `₹${result.totals.subtotal.toFixed(2)}`;
@@ -526,7 +525,7 @@
       ).innerText = `₹${result.totals.grandTotal.toFixed(2)}`;
     } catch (error) {
       console.error("Error updating cart totals:", error);
-      // Handle error as needed
+      
     }
   }
 </script>
@@ -546,30 +545,29 @@
 
       if (!response.ok) {
         console.error("Failed to update quantity:", response.statusText);
-        // Handle error as needed
+       
         return;
       }
 
       const result = await response.json();
 
       if (result.success) {
-        // Update UI with the new totals
+      
         updateUITotals(result.totals);
-        // Reload the page
+        
         location.reload();
       } else {
         console.error("Failed to update quantity:", result.message);
-        // Handle error as needed
+      
       }
     } catch (error) {
       console.error("Error updating quantity:", error);
-      // Handle error as needed
+      
     }
   }
 
   function updateUITotals(totals) {
-    // Implement the logic to update the UI with the new totals
-    // For example, you can update the displayed subtotal, tax, shipping, and grandTotal
+ 
     document.getElementById(
       "cart-subtotal"
     ).textContent = `₹${totals.subtotal.toFixed(2)}`;
@@ -589,7 +587,7 @@
   function delayedRedirect() {
     setTimeout(function () {
       window.location.href = "/user/checkout";
-    }, 1600); // 1 minute delay
+    }, 1600);
   }
 </script>
 
@@ -598,8 +596,6 @@
     var taxRate = 0.05;
     var shippingRate = 15.0;
     var fadeTime = 300;
-
-    // Assign actions
     document
       .querySelectorAll(".product-quantity input")
       .forEach(function (input) {
@@ -618,7 +614,7 @@
     function recalculateCart() {
       var subtotal = 0;
 
-      // Sum up row totals
+      
       document.querySelectorAll(".cart-item").forEach(function (item) {
         var price = parseFloat(
           item.querySelector(".product-price").textContent.replace("₹", "")
@@ -626,8 +622,6 @@
         var quantity = parseInt(
           item.querySelector(".product-quantity input").value
         );
-
-        // Calculate total based on the offer price if available, otherwise use the regular price
         var total = price * quantity;
 
         subtotal += total;
@@ -636,12 +630,12 @@
           "₹" + total.toFixed(2);
       });
 
-      // Calculate totals
+     
       var tax = subtotal * taxRate;
       var shipping = subtotal > 0 ? shippingRate : 0;
       var total = subtotal + tax + shipping;
 
-      // Update totals display
+    
       document.getElementById("cart-subtotal").textContent =
         "₹" + subtotal.toFixed(2);
       document.getElementById("cart-tax").textContent = "₹" + tax.toFixed(2);
@@ -650,10 +644,8 @@
       document.getElementById("cart-total").textContent =
         "₹" + total.toFixed(2);
 
-      updateCartBadge(); // Update the badge after recalculating cart
+      updateCartBadge(); 
     }
-
-    // Update quantity
     function updateQuantity(quantityInput) {
       var item = quantityInput.closest(".cart-item");
       var price = parseFloat(
@@ -664,7 +656,7 @@
 
       item.querySelector(".product-total").textContent = "₹" + total.toFixed(2);
 
-      recalculateCart(); // Recalculate the cart totals after updating quantity
+      recalculateCart(); 
     }
   });
 </script>
@@ -675,5 +667,15 @@
     document.documentElement.classList.toggle("checked-out");
   });
 </script>
+<script>
+  function showConfirmationModal(productId) {
+    const isConfirmed = confirm('Are you sure you want to remove this item from your cart?');
+
+    if (isConfirmed) {
+      window.location.href = `/removeItem/${productId}`;
+    }
+  }
+</script>
+
 
 <%- include('footer') -%>

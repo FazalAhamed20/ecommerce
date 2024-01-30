@@ -38,7 +38,7 @@ router.post("/updateOrderStatus",verifyAdmin,controller2.updateOrderstatus);
 router.get('/download-sales-report', verifyAdmin, controller2.generateSalesReport);
 
 router.get('/admin/categoryoffer',verifyAdmin,categoryoffercontroller.CategoryOffers)
-router.post('/admin/edit-expiry-offer/:category/:expiryDate/:percentage',verifyAdmin,categoryoffercontroller.editOffer);
+router.post('/admin/edit-offer/:category/:startDate/:expiryDate/:percentage',verifyAdmin,categoryoffercontroller.editOffer);
 router.delete('/admin/delete-offer/:categoryId', verifyAdmin, categoryoffercontroller.deleteOffer);
 
 router.get('/admin/coupon',verifyAdmin,couponcontroller.showCreateCouponForm)
