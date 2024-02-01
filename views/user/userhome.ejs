@@ -528,6 +528,10 @@ html {
   width: 100%;
   height: auto;
 }
+del {
+      text-decoration: line-through;
+      color: gray; /* You can set the color or any other styling as needed */
+    }
 
 
 
@@ -605,7 +609,7 @@ html {
 
               <% if (products[i].productOfferprice) { %>
                 <!-- Display offer price if productOfferPrice exists -->
-                <span>Regular Price:<del> ₹<%= products[i].price.toFixed(2) %></del> </span>,<br>
+                <span>Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del> </span>,<br>
                 <span>Offer Price:₹<%= products[i].productOfferprice.toFixed(2) %></span>
               <% } else if (products[i].Offerprice) { %>
                 <!-- Display offer price if offerPrice exists -->
