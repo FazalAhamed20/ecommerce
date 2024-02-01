@@ -45,13 +45,16 @@ const CategoryOffers = async (req, res) => {
           const offer = await Offer.findOne({ category: category._id }).populate('category');
           const offerPercentage = offer ? offer.discountPercentage : 0;
           const expiryDate = offer ? formatDate(offer.expiryDate) : null;
+          const startDate = offer ? formatDate(offer.startDate) : null;
           if (searchQuery && category.name.toLowerCase().includes(searchQuery.toLowerCase())) {
               categoryData.push({
                   categoryid: category._id,
                   category: category.name,
                   productCount,
                   offerPercentage,
+                  startDate,
                   expiryDate,
+                  
               });
           } else if (!searchQuery) {
               categoryData.push({
@@ -59,7 +62,9 @@ const CategoryOffers = async (req, res) => {
                   category: category.name,
                   productCount,
                   offerPercentage,
+                  startDate,
                   expiryDate,
+
               });
           }
       }
@@ -83,7 +88,7 @@ const CategoryOffers = async (req, res) => {
 const editOffer = async (req, res) => {
   try {
     const { category, percentage, startDate, expiryDate } = req.params;
-      console.log({ category, percentage, expiryDate });
+      console.log({ category, percentage,startDate, expiryDate });
       if (typeof category !== 'string') {
           return res.status(400).json({ success: false, message: 'Invalid category type' });
       }

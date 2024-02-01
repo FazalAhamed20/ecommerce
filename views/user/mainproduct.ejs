@@ -184,6 +184,21 @@
   transform-origin: 0 0;
   width: 100px; 
 }
+.ribbon1 {
+  border-top: 25px solid green;
+  border-right: 20px solid transparent;
+  border-bottom: 25px solid green;
+  height: 0; 
+  line-height: 0;
+  margin-left: 100px;
+  position: absolute;
+  right: 7px;
+  text-align: center;
+  top: 0;
+  transform: rotateZ(90deg) translateY(-100px);
+  transform-origin: 0 0;
+  width: 100px; 
+}
 @media (max-width: 768px) {
     .main-product-container {
         margin: 20px;
@@ -252,23 +267,26 @@
                 <p class="product-category">Category: <%= product.category.name %></p>
                 <p class="product-ingredients">Ingredients: <%= product.ingredients || "N/A" %></p>
         
-                <% if (product.Offerprice) { %>
-                   
-                    <div class="ribbon2" style="font-weight: bold;">OFFER</div>
-        
-                    <!-- Display original price with strikethrough -->
+                <% if (product.productOfferprice) { %>
+                    <div class="ribbon1" style="font-weight: bold;">OFFER</div>
                     <p class="product-original-price">
                         Original Price: <del>₹<%= product.price.toFixed(2) %></del>
                     </p>
-        
-                    <!-- Display offer price -->
+                    <p class="product-offer-price">
+                        Offer Price: ₹<%= product.productOfferprice.toFixed(2) %>
+                    </p>
+                <% } else if (product.Offerprice) { %>
+                    <div class="ribbon2" style="font-weight: bold;">OFFER</div>
+                    <p class="product-original-price">
+                        Original Price: <del>₹<%= product.price.toFixed(2) %></del>
+                    </p>
                     <p class="product-offer-price">
                         Offer Price: ₹<%= product.Offerprice.toFixed(2) %>
                     </p>
                 <% } else { %>
-                    <!-- Display regular price if there's no offer -->
                     <p class="product-price">Price: ₹<%= product.price.toFixed(2) %></p>
                 <% } %>
+                
         
                 <% if (product.quantity > 0) { %>
                     <% if (product.quantity < 5) { %>

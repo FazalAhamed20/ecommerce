@@ -55,16 +55,61 @@
     button:hover {
       background-color: #5c3d2e;
     }
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #41a9d5;
+    color: black;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
   </style>
 </head>
 <body>
 
   <h2 style="text-align: center;">Edit Coupon</h2>
+  <div id="customModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCustomModal()">&times;</span>
+        <p id="customModalMessage"></p>
+    </div>
+</div>
 
 
 
   
-  <form id="editCouponForm" action="/admin/edit-coupon/<%= coupon._id %>" method="post">
+  <form id="editCouponForm" action="/admin/edit-coupon/<%= coupon._id %>" method="put">
     <label for="couponCode">Coupon Code:</label>
     <input type="text" id="couponCode" name="couponCode" value="<%= coupon.couponCode %>" required>
 
@@ -88,13 +133,26 @@
 
 </body>
 <script>
+  function openCustomModal(message) {
+    const modal = document.getElementById('customModal');
+    const modalMessage = document.getElementById('customModalMessage');
+    
+    modalMessage.textContent = message;
+    modal.style.display = 'block';
+}
+
+// Function to close the custom modal
+function closeCustomModal() {
+    const modal = document.getElementById('customModal');
+    modal.style.display = 'none';
+}
     function editCoupon() {
       const form = document.getElementById('editCouponForm');
       const formData = new FormData(form);
   
      
       if (!validateForm(formData)) {
-        alert('Please fill in all required fields with correct values.');
+        openCustomModal('Please fill in all required fields with correct values.');
         return;
       }
       const startDate = new Date(formData.get('startDate'));
@@ -102,7 +160,7 @@
       currentDate.setHours(0, 0, 0, 0);
 
       if (startDate < currentDate) {
-        alert('Start Date cannot be set to today or a date before today.');
+        openCustomModal('Start Date cannot be set to today or a date before today.');
         return;
       }
 
@@ -111,7 +169,7 @@
       expiryDate.setHours(0, 0, 0, 0);
 
       if (expiryDate < currentDate) {
-        alert('Expiry Date cannot be set to today or a date before today.');
+        openCustomModal('Expiry Date cannot be set to today or a date before today.');
         return;
       }
       
@@ -126,7 +184,7 @@
   
      
       fetch('/admin/edit-coupon/<%= coupon._id %>', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -135,15 +193,15 @@
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          alert('Coupon edited successfully!');
+          openCustomModal('Coupon edited successfully!');
           window.location.href = '/admin/coupon';
         } else {
-          alert('Failed to edit coupon. Please check the form and try again.');
+          openCustomModal('Coupon with same coupon code exist');
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Please give the correct format values for the fields');
+        openCustomModal('Please give the correct format values for the fields');
       });
     }
   

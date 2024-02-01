@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const Wallet=require('../models/walletModel')
 const {generateReferralCode,generateOTP}=require('../util/helperfunction')
 const {transporter}=require('../auth/nodemailer')
+const otp=generateOTP()
 //sending the generated otp to the user------------------------------------------------------->
 const otp1 = async function (req, res) {
     try {

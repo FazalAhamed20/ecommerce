@@ -4,6 +4,7 @@ const controller2 = require('../controller/admincontroller');
 const catagorycontroller=require('../controller/categorycontroller')
 const productcontroller=require('../controller/productcontroller')
 const categoryoffercontroller=require('../controller/categoryOffercontroller')
+const productoffercontroller=require('../controller/productoffercontroller')
 const couponcontroller=require('../controller/couponcontroller')
 const bodyParser = require('body-parser');
 const upload = require("../middlewares/multer");
@@ -45,8 +46,13 @@ router.get('/admin/coupon',verifyAdmin,couponcontroller.showCreateCouponForm)
 router.post('/admin/create-coupon',verifyAdmin,couponcontroller.createCoupon)
 router.get('/coupons/create',verifyAdmin,couponcontroller.createcouponform)
 router.get('/edit-coupon/:couponId',verifyAdmin, couponcontroller.showEditCouponForm);
-router.post('/admin/edit-coupon/:couponId',verifyAdmin, couponcontroller.editCoupon);
+router.put('/admin/edit-coupon/:couponId',verifyAdmin, couponcontroller.editCoupon);
 router.delete('/delete-coupons/:couponId',verifyAdmin,couponcontroller.deletecoupon)
+
+
+router.get('/admin/productoffer',verifyAdmin,productoffercontroller.ProductOffers)
+router.put('/admin/edit-product-offer/:productId/:startDate/:expiryDate/:percentage',verifyAdmin,productoffercontroller.editProductOffer);
+router.delete('/admin/delete-product-offer/:productId',verifyAdmin,productoffercontroller.deleteProductOffer)
 
 
 

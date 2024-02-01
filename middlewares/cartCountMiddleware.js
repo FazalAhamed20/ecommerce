@@ -1,4 +1,4 @@
-// cartCountMiddleware.js
+
 
 const Cart = require("../models/cartModel");
 const User = require("../models/userModel");

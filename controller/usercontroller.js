@@ -12,14 +12,25 @@ require("dotenv").config();
 const home = async (req, res) => {
     try {
         const user = req.session.user;
-        const products = await Product.find().exec();
-        const Rateus= await RateUs.find({ rating: { $gt: 4 } }).populate('userId').limit(4).exec();
-        res.render("./user/userhome", { pageTitle: "userhome", user, products, Rateus });
+
+        // Fetch products with either offerPrice or productOfferPrice
+        const productsWithOffer = await Product.find({
+            $or: [
+                { Offerprice: { $exists: true } },
+                { productOfferprice: { $exists: true } }
+            ]
+        }).exec();
+        console.log(productsWithOffer);
+
+        const Rateus = await RateUs.find({ rating: { $gt: 4 } }).limit(4).populate('userId').exec();
+        
+        res.render("./user/userhome", { pageTitle: "userhome", user, products: productsWithOffer, Rateus });
     } catch (error) {
         console.error('Error fetching data:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 //coffee mix------------------------------------------------------->
 const coffeemix = (req, res) => {
     const user = req.session.user;

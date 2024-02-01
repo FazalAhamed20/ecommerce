@@ -10,7 +10,7 @@ const usercart = async (req, res) => {
       .findOne({ userId: user._id })
       .populate(
         "products.productId",
-        "name price description image quantity Offerprice"
+        "name price description image quantity Offerprice productOfferprice"
       );
     if (!cart) {
       const newCart = new cartModels({

@@ -408,7 +408,7 @@
           <%= item.productId && item.productId.name %>
         </div>
         <div class="product-price">
-          ₹<%= (item.productId && (item.productId.Offerprice ||
+          ₹<%= (item.productId && (item.productId.productOfferprice || item.productId.Offerprice ||
           item.productId.price)).toFixed(2) %>
         </div>
         <div class="product-quantity">
@@ -439,7 +439,7 @@
       </div>
 
       <div class="product-total">
-        ₹<%= (item.productId && (item.productId.Offerprice ||
+        ₹<%= (item.productId && (item.productId.productOfferprice || item.productId.Offerprice ||
         item.productId.price) * item.quantity).toFixed(2) %>
       </div>
     </div>

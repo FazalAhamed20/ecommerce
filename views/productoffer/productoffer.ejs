@@ -1,12 +1,12 @@
-<!-- views/admin/dashboard.ejs -->
+<!-- views/admin/product-offers.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
-    <title>Category Offers</title>
+    <!-- Include necessary meta tags, title, and styles -->
+    <!-- ... -->
+
+    <title>Product Offers</title>
     <style>
         body {
         font-family: Arial, sans-serif;
@@ -185,20 +185,22 @@ button:hover,
             <p id="customModalMessage"></p>
         </div>
     </div>
-    </div>
-    <h1>Category Offers</h1>
+
+    <!-- Header section -->
+    <h1>Product Offers</h1>
     <a href="/adhome"><button>Home</button></a>
+
+    <!-- Search container -->
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search categories">
-        <button onclick="searchCategories()">Search</button>
+        <input type="text" id="searchInput" placeholder="Search products">
+        <button onclick="searchProducts()">Search</button>
     </div>
 
-
+    <!-- Product offers table -->
     <table>
         <thead>
             <tr>
-                <th>Category</th>
-                <th>Number of Products</th>
+                <th>Product</th>
                 <th>Offer Percentage</th>
                 <th>Start Date</th>
                 <th>Expiry Date</th>
@@ -206,32 +208,29 @@ button:hover,
             </tr>
         </thead>
         <tbody>
-            <% categoryData.forEach(category => { %>
+            <% productData.forEach(product => { %>
             <tr>
-                <td><%= category.category %></td>
-                <td><%= category.productCount %></td>
+                <td><%= product.productName %></td>
                 <td>
-                    <input type="number" id="offerInput_<%= category.category %>" value="<%= category.offerPercentage %>" placeholder="Increase %" min="0" />
-                </td>
-                
-                <td>
-                    <input type="date" id="startDateInput_<%= category.category %>" value="<%= category.startDate %>" />
+                    <input type="number" id="offerInput_<%= product.productId %>" value="<%= product.offerPercentage %>" placeholder="Increase %" min="0" />
                 </td>
                 <td>
-                    <input type="date" id="expiryDateInput_<%= category.category %>" value="<%= category.expiryDate %>" />
+                    <input type="date" id="startDateInput_<%= product.productId %>" value="<%= product.startDate %>" />
+                </td>
+                <td>
+                    <input type="date" id="expiryDateInput_<%= product.productId %>" value="<%= product.expiryDate %>" />
                 </td>
                 <td>
                     <div class="edit-buttons">
-                        <button onclick="editOffer('<%= category.category %>')">Update</button>
-                        <button style="background-color: red;" onclick="deleteOffer('<%= category.categoryid %>')">Delete</button>
-
-
+                        <button onclick="editProductOffer('<%= product.productId %>')">Update</button>
+                        <button style="background-color: red;" onclick="deleteProductOffer('<%= product.productId %>')">Delete</button>
                     </div>
                 </td>
             </tr>
             <% }); %>
         </tbody>
     </table>
+
     <div class="pagination">
         <a href="?page=<%= currentPage - 1 %>" class="<%= currentPage === 1 ? 'disabled' : '' %>">Previous</a>
         <% for (let i = 1; i <= 3; i++) { %>
@@ -239,10 +238,10 @@ button:hover,
         <% } %>
         <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
     </div>
-    
 
     <script>
-        function openCustomModal(message) {
+
+function openCustomModal(message) {
     const modal = document.getElementById('customModal');
     const modalMessage = document.getElementById('customModalMessage');
     
@@ -255,25 +254,26 @@ function closeCustomModal() {
     const modal = document.getElementById('customModal');
     modal.style.display = 'none';
 }
-   function searchCategories() {
-    const searchQuery = document.getElementById('searchInput').value;
-    const url = `/admin/categoryoffer?page=1&search=${encodeURIComponent(searchQuery)}`;
-    window.location.href = url;
-}
+        // Include the existing script for searching, editing, and deleting offers
+        // ...
 
+        function searchProducts() {
+            const searchQuery = document.getElementById('searchInput').value;
+            const url = `/admin/productoffer?page=1&search=${encodeURIComponent(searchQuery)}`;
+            window.location.href = url;
+        }
 
+        function editProductOffer(productId) {
+        const currentDate = new Date().toISOString().split('T')[0];
 
+        const startDateInput = document.getElementById(`startDateInput_${productId}`);
+        const editedStartDate = startDateInput.value;
 
-        function editOffer(category) {
-            const currentDate = new Date().toISOString().split('T')[0];
+        const expiryDateInput = document.getElementById(`expiryDateInput_${productId}`);
+        const editedExpiryDate = expiryDateInput.value;
 
-            const startDateInput = document.getElementById(`startDateInput_${category}`);
-            const editedStartDate = startDateInput.value;
-
-            const expiryDateInput = document.getElementById(`expiryDateInput_${category}`);
-            const editedExpiryDate = expiryDateInput.value;
-            if (editedStartDate < currentDate) {
-            openCustomModal('Start Date cannot be set to a before date.');
+        if (editedStartDate < currentDate) {
+            openCustomModal('Start Date cannot be set to a date before today.');
             return;
         }
 
@@ -281,48 +281,49 @@ function closeCustomModal() {
             openCustomModal('Expiry Date cannot be set to a date before today.');
             return;
         }
-            const offerInput = document.getElementById(`offerInput_${category}`);
-            const existingPercentage = parseInt(offerInput.value, 10) || 0;
-            fetch(`/admin/edit-offer/${category}/${editedStartDate}/${editedExpiryDate}/${existingPercentage}`, {
-                method: 'POST',
+
+        const offerInput = document.getElementById(`offerInput_${productId}`);
+        const existingPercentage = parseInt(offerInput.value, 10) || 0;
+
+        fetch(`/admin/edit-product-offer/${productId}/${editedStartDate}/${editedExpiryDate}/${existingPercentage}`, {
+            method: 'PUT',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                openCustomModal(`The Offer for ${productId} updated successfully`);
+            } else {
+                openCustomModal('Error updating product offer. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+
+
+    function deleteProductOffer(productId) {
+        if (confirm(`Are you sure you want to delete the offer for product ${productId}?`)) {
+            fetch(`/admin/delete-product-offer/${productId}`, {
+                method: 'DELETE',
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        openCustomModal(`The Offer for ${category} updated successfully`);
+                        openCustomModal(`Offer for product ${productId} deleted successfully`);
+                        window.location.reload();
                     } else {
-                        openCustomModal('Error updating offer. Please try again.');
+                        openCustomModal('Error deleting offer. Please try again.');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    openCustomModal('An error occurred. Please try again.');
+                    alert('An error occurred. Please try again.');
                 });
         }
-
-        function deleteOffer(categoryId) {
-            if (confirm(`Are you sure you want to delete the offer for ${categoryId}?`)) {
-                fetch(`/admin/delete-offer/${categoryId}`, {
-                    method: 'DELETE',
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            openCustomModal(`Offer for ${categoryId} deleted successfully`);
-                            window.location.reload();
-                        } else {
-                            openCustomModal('Error deleting offer. Please try again.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        openCustomModal('An error occurred. Please try again.');
-                    });
-            }
-        }
+    }
     </script>
-    
-    
 </body>
 
 </html>

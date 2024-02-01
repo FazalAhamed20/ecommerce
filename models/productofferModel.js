@@ -1,24 +1,24 @@
-// models/productOffer.js
+// models/ProductOffer.js
 const mongoose = require('mongoose');
 
 const productOfferSchema = new mongoose.Schema({
-  productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product', // Reference to the Product model
-    required: true,
-  },
-  offerPrice: {
-    type: Number,
-    required: true,
-  },
-  startDate: {
-    type: Date,
-    required: true,
-  },
-  endDate: {
-    type: Date,
-    required: true,
-  },
+    product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true,
+    },
+    discountPercentage: {
+        type: Number,
+        required: true,
+    },
+    startDate: {
+        type: Date,
+        required: true,
+    },
+    expiryDate: {
+        type: Date,
+        required: true,
+    },
 });
 
 const ProductOffer = mongoose.model('ProductOffer', productOfferSchema);

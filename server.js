@@ -10,13 +10,6 @@ const router = require('./routers/userrouter');
 const router1 = require('./routers/adminrouter');
 const cartCountMiddleware = require("./middlewares/cartCountMiddleware");
 
-
-
-
-
-
-
-
 app.use((req,res,next)=>{
     res.set("Cache-Control","no-store")
     next();
@@ -49,7 +42,7 @@ app.use(cartCountMiddleware);
 app.use('/', router);
 app.use('/', router1);
 
-const Port=8990
-app.listen(Port,()=>{
-    console.log(`server is running on  ${Port}`);
+const PORT=process.env.PORT || 8990
+app.listen(PORT,()=>{
+    console.log(`server is running on  ${PORT}`);
 })

@@ -4,8 +4,7 @@ const calculateTotals = (cartItems) => {
     (accumulator, item) => {
       let productPrice = 0;
       if (item.productId && typeof item.productId === "object") {
-        // Check if there is an offer price, otherwise use the regular price
-        productPrice = item.productId.Offerprice || item.productId.price || 0;
+        productPrice = item.productId.productOfferprice || item.productId.Offerprice || item.productId.price || 0;
       } else {
         console.warn(`Invalid product data for item: ${JSON.stringify(item)}`);
       }
