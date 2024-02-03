@@ -11,7 +11,7 @@ const { verifyUser, userExist ,checkUserStatus } = require("../middlewares/sessi
 
 
 //user side------------------------------------------------------->
-router.get("/user/home",checkUserStatus,controller.home);
+router.get("/",checkUserStatus,controller.home);
 router.get("/user/coffeemix",checkUserStatus,controller.coffeemix);
 router.get("/user/product",checkUserStatus,verifyUser,controller.product);
 router.get("/user/mainproduct/:productId",checkUserStatus,verifyUser, controller.mainproduct);
