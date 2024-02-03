@@ -78,7 +78,7 @@ req.session.user = {
     referralCode:user.referralCode
 };
 await cartItemCountMiddleware(req, res, () => {});
-res.redirect('/user/home');
+res.redirect('/');
         } else {
             req.flash('error1', 'Invalid email or password');
             return res.render('./user/login', { error1: req.flash('error1') });
