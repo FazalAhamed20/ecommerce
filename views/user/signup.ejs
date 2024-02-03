@@ -194,13 +194,16 @@
                 const result = await response.json();
                 if (result.valid) {
                     referralCodeStatus.innerHTML = 'Referral code is valid!';
+                    referralCodeStatus.style.color = 'green';
                     // If the referral code is valid, you can proceed with the form submission
                     return true;
                 } else {
                     referralCodeStatus.innerHTML = 'Referral code is invalid.';
+                    referralCodeStatus.style.color = 'red';
                 }
             } else {
                 referralCodeStatus.innerHTML = 'Error checking referral code.';
+                referralCodeStatus.style.color = 'red';
             }
         } catch (error) {
             console.error('Error checking referral code:', error);

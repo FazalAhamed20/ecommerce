@@ -134,9 +134,7 @@ html {
     transform: translateY(-2rem);
 }
 @media screen and (max-width: 1023px) {
-    .home {
-        padding-top: 6rem; /* Adjust as needed */
-    }
+   
 
     .home .row {
         flex-direction: column;
@@ -532,10 +530,57 @@ del {
       text-decoration: line-through;
       color: gray; /* You can set the color or any other styling as needed */
     }
+    @media (max-width: 767px) {
+    .home .row {
+        flex-direction: column;
+    }
+
+    .home .row .content,
+    .home .row .image {
+        flex: 1 1 100%;
+    }
+
+    .home .row .image img {
+        margin-top: 1rem; /* Adjust as needed */
+    }
+
+    .menu .box-container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* Adjust the width of other elements if necessary */
+    .menu .box-container .box {
+        flex: 1 1 100%; /* Adjust as needed */
+        margin-left: 0;
+    }
+
+    /* Add additional responsive adjustments as needed */
+}
+
+@media (max-width: 991px) {
+    .menu .box-container {
+        margin-left: 15px; /* Adjust as needed */
+        margin-right: 15px; /* Adjust as needed */
+    }
+
+    /* Adjust the width of other elements if necessary */
+    .menu .box-container .box {
+        flex: 1 1 calc(33.333% - 20px); /* Adjust as needed */
+        margin-left: 50px; /* Adjust as needed */
+    }
+
+    /* Add additional responsive adjustments as needed */
+}
+
+@media (max-width: 575px) {
+   
+}
 
 
 
 </style>
+<body>
 
 
 
@@ -699,6 +744,7 @@ del {
 
     <div class="credit"> | all rights reserved</div>
 </section>
+</body>
 
 
 
