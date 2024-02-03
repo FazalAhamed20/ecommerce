@@ -9,6 +9,7 @@ require('dotenv').config();
 const router = require('./routers/userrouter');
 const router1 = require('./routers/adminrouter');
 const cartCountMiddleware = require("./middlewares/cartCountMiddleware");
+const morgan=require('morgan')
 
 app.use((req,res,next)=>{
     res.set("Cache-Control","no-store")
@@ -18,6 +19,7 @@ app.use((req,res,next)=>{
 
  app.use(express.json());
  app.use(bodyParser.json());
+ app.use(morgan('tiny'));
 
 
 app.set('view engine', 'ejs');
