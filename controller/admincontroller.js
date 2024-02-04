@@ -7,6 +7,7 @@ const pdf = require("html-pdf");
 const fs = require("fs");
 const ejs = require("ejs");
 const CanceledOrder = require("../models/orderCancelModel");
+const puppeteer=require('puppeteer')
 //admin login------------------------------------------------------->
 const admin = (req, res) => {
   if (req.session.admin != null) {
@@ -272,8 +273,10 @@ const generateSalesReport = async (req, res) => {
         status: "delivered",
       })
       .populate("customer products.product");
+
     const formattedStartDate = startDate.format("YYYY-MM-DD HH:mm:ss");
     const formattedEndDate = endDate.format("YYYY-MM-DD HH:mm:ss");
+
     const templatePath = "views/admin/salesReport.ejs";
     const templateContent = fs.readFileSync(templatePath, "utf-8");
     const renderedHTML = ejs.render(templateContent, {
@@ -281,25 +284,27 @@ const generateSalesReport = async (req, res) => {
       endDate: formattedEndDate,
       orders,
     });
-    const pdfOptions = { format: "Letter" };
-    pdf.create(renderedHTML, pdfOptions).toStream((err, stream) => {
-      if (err) {
-        console.error("Error generating PDF:", err);
-        res.status(500).send("Internal server error");
-        return;
-      }
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename=SalesReport_${formattedStartDate}_to_${formattedEndDate}.pdf`
-      );
-      res.setHeader("Content-Type", "application/pdf");
-      stream.pipe(res);
-    });
+
+    const browser = await puppeteer.launch({ headless: 'new' });
+    const page = await browser.newPage();
+    await page.setContent(renderedHTML);
+
+    const pdfBuffer = await page.pdf({ format: 'Letter' });
+
+    await browser.close();
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=SalesReport_${formattedStartDate}_to_${formattedEndDate}.pdf`
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.send(pdfBuffer);
   } catch (error) {
     console.error("Error generating sales report:", error.message);
-    res.status(500).send("Internal server error");
+    res.status(500).send(`Internal server error: ${error.message}`);
   }
 };
+
 //module exports------------------------------------------------------->
 module.exports = {
   admin,
