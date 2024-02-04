@@ -8,7 +8,7 @@ const otp=generateOTP()
 //sending the generated otp to the user------------------------------------------------------->
 const otp1 = async function (req, res) {
     try {
-        const existingUser = await User.findOne({ email: req.body.email });
+        const existingUser = await User.findOne({ email: { $regex: new RegExp("^" + req.body.email, "i") } });
         if (existingUser) {
             req.flash('error', 'User with the provided email already exists');
             return res.render('./user/signup', { error: req.flash('error') });

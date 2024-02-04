@@ -40,11 +40,11 @@
     <% orders.forEach(order => { %>
       <tr>
         <td><%= order.orderID %></td>
-        <td><%= order.customer.name %></td>
+        <td><%= order.customer ? order.customer.name : 'Unknown Customer' %></td>
         <td><%= order.orderDate %></td>
         <td>
           <% order.products.forEach(product => { %>
-            <%= product.product.name %><br>
+            <%= product.product ? product.product.name : 'Unknown Product' %><br>
           <% }); %>
         </td>
         <td>
