@@ -179,8 +179,8 @@
     grid-template-columns: repeat(4, 1fr);
     
     justify-content: center;
-    width: 90%;
-    margin-left: 12%;
+    width: 85%;
+    margin-left: 15%;
     margin-right: auto;
 }
 
@@ -260,7 +260,7 @@ button:hover {
 </div>
   <div class="card-container">
 <% products.forEach(product => { %>
-<div class="card" style="width: 20rem;">
+<div class="card" style="width: 18rem;">
     <img src="/product-images/<%= product.image %>" class="card-img-top" alt="<%= product.name %>" onclick="openModal('<%= product.image %>')">
     <div class="card-body">
         <h5 class="card-title"><%= product.name %></h5>
