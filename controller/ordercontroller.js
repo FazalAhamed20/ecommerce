@@ -8,7 +8,7 @@ const CanceledOrder = require('../models/orderCancelModel');
 const Product = require('../models/productModel');
 const Wallet=require('../models/walletModel')
 const User=require('../models/userModel')
-const pdf = require('html-pdf');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const ejs = require('ejs');
 const Coupon=require('../models/couponModel')
@@ -360,37 +360,46 @@ const cancelProduct = async (req, res) => {
 const downloadInvoice = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-    const orderDetails = await orderModels.findOne({ orderID: orderId })
-    .populate({
-      path: 'products.product',
-      select: 'name price', 
-    })
-    .exec();
+    const orderDetails = await orderModels
+      .findOne({ orderID: orderId })
+      .populate({
+        path: 'products.product',
+        select: 'name price',
+      })
+      .exec();
+
     if (!orderDetails) {
       console.log('Order not found');
       return res.status(404).send('Order not found');
     }
+
     const templatePath = 'views/orders/invoice.ejs';
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
-    const renderedHTML = ejs.render(templateContent, { orderDetails,user:req.session.user });
-    const pdfOptions = { format: 'Letter' }; 
-    pdf.create(renderedHTML, pdfOptions).toStream((err, stream) => {
-      if (err) {
-        console.error('Error generating PDF:', err);
-        res.status(500).send('Internal server error');
-        return;
-      }
-      const currentDate = new Date();
+    const renderedHTML = ejs.render(templateContent, { orderDetails, user: req.session.user });
+
+    // Launch Puppeteer with headless: 'new'
+    const browser = await puppeteer.launch({ headless: 'new' });
+    const page = await browser.newPage();
+    await page.setContent(renderedHTML);
+
+    // Generate PDF
+    const pdfBuffer = await page.pdf({ format: 'Letter' });
+
+    // Close the browser
+    await browser.close();
+
+    const currentDate = new Date();
     const formattedDate = currentDate.toISOString().slice(0, 10);
-      res.setHeader('Content-Disposition', `attachment; filename=invoice_${formattedDate}.pdf`);
-      res.setHeader('Content-Type', 'application/pdf');
-      stream.pipe(res);
-    });
+
+    res.setHeader('Content-Disposition', `attachment; filename=invoice_${formattedDate}.pdf`);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(pdfBuffer);
   } catch (error) {
     console.error('Error in downloadInvoice:', error);
     res.status(500).send('Internal Server Error: ' + error.message);
   }
 };
+
 //modules------------------------------------------------------->
  module.exports={
     checkout,
