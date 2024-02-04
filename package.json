@@ -33,7 +33,6 @@
     "express-session": "^1.17.3",
     "flash": "^1.1.0",
     "fs": "^0.0.1-security",
-    "html-pdf": "^3.0.1",
     "js-image-zoom": "^0.7.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.1",
