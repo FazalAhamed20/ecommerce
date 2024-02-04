@@ -41,7 +41,7 @@ const ProductOffers = async (req, res) => {
         const startIndex = (page - 1) * ITEMS_PER_PAGE;
         const endIndex = startIndex + ITEMS_PER_PAGE;
         const paginatedProductData = productData.slice(startIndex, endIndex);
-        res.render('./productOffer/productOffer', {
+        res.render('./productoffer/productoffer', {
             productData: paginatedProductData,
             currentPage: page,
             totalPages,
