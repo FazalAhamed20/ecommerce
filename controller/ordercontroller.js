@@ -149,6 +149,7 @@ const createOrder = async (req, res) => {
     const userId = req.session.user._id;
     console.log(req.body);
     const { paymentMethod, selectedAddressIndex, couponCode } = req.body;
+    console.log({ paymentMethod, selectedAddressIndex, couponCode } );
 
     if (!paymentMethod || !selectedAddressIndex || !selectedAddressIndex.length) {
       req.flash('error', 'Address or Payment is not selected');
