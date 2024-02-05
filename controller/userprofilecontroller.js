@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const Address = require('../models/addressModel');
 const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
+const Wallet=require('../models/walletModel')
 const Coupon=require('../models/couponModel')
 const RateUs = require('../models/RateusModel');
 //user profile------------------------------------------------------->
@@ -10,10 +10,28 @@ const userprofile = (req, res) => {
     res.render('./userprofile/profile.ejs', { pageTitle: 'userprofile', user });
 };
 //main profile------------------------------------------------------->
-const usermain = (req, res) => {
-    const user = req.session.user;
-    console.log(user);
-    res.render('./userprofile/userprofile.ejs', { pageTitle: 'userprofile', user, successMessage: '', errorMessage: '' });
+const usermain = async (req, res) => {
+  try {
+      const userId = req.session.user._id;
+
+      // Fetch the wallet associated with the user from the database
+      const wallet = await Wallet.findOne({ user: userId }).exec();
+
+      const walletBalance = wallet ? wallet.balance : 0;
+
+      console.log( walletBalance);
+
+      res.render('./userprofile/userprofile.ejs', {
+          pageTitle: 'userprofile',
+          user: req.session.user,
+          walletBalance,
+          successMessage: '',
+          errorMessage: ''
+      });
+  } catch (error) {
+      console.error('Error fetching user wallet data:', error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
 };
 //user address------------------------------------------------------->
 const address = async (req, res) => {

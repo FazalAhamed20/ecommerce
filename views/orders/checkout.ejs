@@ -303,6 +303,10 @@ button {
 button:hover {
     background-color: #45a049;
 }
+.name-email-container {
+    display: flex;
+    flex-direction: column;
+}
 
 
 
@@ -392,20 +396,31 @@ button:hover {
                         </div>
                         <!-- Summary content here -->
                         <div class="col">
-                            <div class="step-checkout_summary" id="stepCheckoutSummary1">
-                                <div class="summary-box">
-                                    <h2>Summary - Your Details</h2>
-                                    <br>
-                                    <% if (user && user.name) { %>
-                                        <div class="name-email-container">
-                                            <p><span class="field-label"><strong>Name:</strong></span> <%= user.name %></p>
-                                            <p><span class="field-label"><strong>Email:</strong></span> <%= user.email %></p>
-                                        </div>
-                                    <% } else { %>
-                                        <p>User not found</p>
-                                    <% } %>
-                                </div>
+                          <div class="step-checkout_summary" id="stepCheckoutSummary1">
+                            <div class="summary-box">
+                                <h2>Summary - Your Details</h2>
                             </div>
+                                
+                            <div class="summary-box">
+                                
+                                <% if (user && user.name) { %>
+                                    <div class="name-email-container">
+                                        <p>
+                                            <span class="field-label"><strong>Name:</strong></span>
+                                            <%= user.name %>
+                                        </p>
+                                        <p>
+                                            <span class="field-label"><strong>Email:</strong></span>
+                                            <%= user.email %>
+                                        </p>
+                                    </div>
+                                <% } else { %>
+                                    <p>User not found</p>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        
                             <div class="step-checkout_summary" id="stepCheckoutSummary2">
                               <div class="summary-box">
                                 <div class="Orders">
@@ -456,7 +471,6 @@ button:hover {
                                           <div class="address-box">
                                               <input type="radio" name="selectedAddressIndex" id="hiddenSelectedAddressIndex_<%= index %>" value="<%= index  %>">
                                               <label style="font-size: large; font-weight: bold;" for="addressRadio_<%= index %>"> Address <%= index + 1 %></label>
-                                              <p><span class="field-label">Name:</span> <%= address.name %></p>
                                               <p><span class="field-label">Mobile:</span> <%= address.mobile %></p>
                                               <p><span class="field-label">Email:</span> <%= address.email %></p>
                                               <p><span class="field-label">Pincode:</span> <%= address.pincode %></p>

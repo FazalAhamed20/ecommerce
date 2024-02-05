@@ -645,27 +645,40 @@ del {
     <h1 style="margin-top: 40px;" class="heading">our offers <span>offers for you</span></h1>
     <% console.log(products); %>
     <div class="box-container">
-      <% for (let i = 0; i < 6 && i < products.length; i++) { %>
-        <% if (products[i].productOfferprice || products[i].Offerprice) { %>
-          <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
-            <img src="/assets/menu-<%= i + 1 %>.png" alt="">
-            <div class="content">
-              <h3><%= products[i].name %></h3>
-              <p><%= products[i].description %></p>
+        <% let displayedProducts = 0; %>
+        <% for (let i = 0; i < products.length && displayedProducts < 6; i++) { %>
+            <% if (products[i].productOfferprice || products[i].Offerprice) { %>
+                <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
+                    <img src="/assets/menu-<%= i + 1 %>.png" alt="">
+                    <div class="content">
+                        <h3><%= products[i].name %></h3>
+                        <p><%= products[i].description %></p>
 
-              <% if (products[i].productOfferprice) { %>
-                <!-- Display offer price if productOfferPrice exists -->
-                <span>Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del> </span>,<br>
-                <span>Offer Price:₹<%= products[i].productOfferprice.toFixed(2) %></span>
-              <% } else if (products[i].Offerprice) { %>
-                <!-- Display offer price if offerPrice exists -->
-                <span>Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del> </span>,<br>
-                <span>Offer Price: ₹<%= products[i].Offerprice.toFixed(2) %></span>
-              <% } %>
-            </div>
-          </a>
+                        <% if (products[i].productOfferprice) { %>
+                            <!-- Display offer price if productOfferPrice exists -->
+                            <span>Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del></span>,<br>
+                            <span>Offer Price: ₹<%= products[i].productOfferprice.toFixed(2) %></span>
+                        <% } else if (products[i].Offerprice) { %>
+                            <!-- Display offer price if offerPrice exists -->
+                            <span>Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del></span>,<br>
+                            <span>Offer Price: ₹<%= products[i].Offerprice.toFixed(2) %></span>
+                        <% } %>
+                    </div>
+                </a>
+                <% displayedProducts++; %>
+            <% } else if (displayedProducts < 6) { %>
+                <!-- Display products with regular price if no offer exists -->
+                <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
+                    <img src="/assets/menu-<%= i + 1 %>.png" alt="">
+                    <div class="content">
+                        <h3><%= products[i].name %></h3>
+                        <p><%= products[i].description %></p>
+                        <span>Price: ₹<%= products[i].price.toFixed(2) %></span>
+                    </div>
+                </a>
+                <% displayedProducts++; %>
+            <% } %>
         <% } %>
-      <% } %>
     </div>
 </section>
 

@@ -13,14 +13,14 @@ const home = async (req, res) => {
     try {
         const user = req.session.user;
 
-        // Fetch products with either offerPrice or productOfferPrice
+        // Fetch products with either Offerprice or productOfferprice
         const productsWithOffer = await Product.find({
             $or: [
-                { Offerprice: { $exists: true } },
-                { productOfferprice: { $exists: true } }
+                { Offerprice: { $ne: null } },
+                { productOfferprice: { $ne: null } }
             ]
         }).exec();
-        console.log(productsWithOffer);
+        console.log("offer price",productsWithOffer);
 
         const Rateus = await RateUs.find({ rating: { $gt: 4 } }).limit(4).populate('userId').exec();
         

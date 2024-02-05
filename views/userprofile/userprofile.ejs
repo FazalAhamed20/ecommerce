@@ -146,6 +146,9 @@
         <% if (user && user.name) { %>
             <p id="userName"><strong>Name:</strong> <%= user.name %></p>
             <p><strong>Email:</strong> <%= user.email %></p>
+            <% if (walletBalance !== undefined) { %>
+                <p><strong>Wallet Balance:</strong> <%= walletBalance %></p>
+            <% } %>
         <% } else { %>
             <p>User not found</p>
         <% } %>
@@ -223,7 +226,7 @@ function closeCustomModal() {
 
         // Redirect to /user/profile after a short delay (e.g., 3 seconds)
        
-            window.location.href = '/user/profile';
+            
       
     }
 

@@ -413,19 +413,19 @@
         </div>
         <div class="product-quantity">
           Quantity:
-
           <input
-            type="number"
-            value="<%= item.quantity %>"
-            min="1"
-            max="<%= item.productId.quantity %>"
-            data-product-id="<%= item.productId._id %>"
-            onchange="updateQuantity(this)"
+              type="number"
+              value="<%= item.quantity %>"
+              min="1"
+              max="<%= item.productId.quantity %>"
+              data-product-id="<%= item.productId._id %>"
+              onchange="updateQuantity(this)"
+              oninput="validateQuantity(this)"
           />
           <% if (item.productId.quantity <= 1) { %>
-          <span class="out-of-stock">Out of Stock</span>
+              <span class="out-of-stock">Out of Stock</span>
           <% } %>
-        </div>
+      </div>
         <div class="product-remove">
           <a
             href="javascript:void(0);"
@@ -489,6 +489,14 @@
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script>
+   function validateQuantity(input) {
+        // Ensure the value is not less than 1
+        if (input.value < 1) {
+            input.value = 1;
+        }
+    }
+</script>
 
 <script>
   async function updateCartTotals() {
