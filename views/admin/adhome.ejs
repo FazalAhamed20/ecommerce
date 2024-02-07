@@ -274,52 +274,56 @@ font-weight: 600;
 
 /* RESERVATION BOX */
 .reservation-box {
-  display:flex;
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
   height: auto;
-  padding:20px;
+  padding: 20px;
   border-radius: 7px;
-  background-color: rgba(255,255,255,1);
-  
+  background-color: rgba(255, 255, 255, 1);
 }
+
 .reservation-box .static {
-  position:relative;
+  position: relative;
   display: flex;
   align-items: center;
-  float:left;
+  float: left;
   width: auto;
   margin-right: 20px;
 }
+
 .reservation-box .flex {
-  position:relative;
+  position: relative;
   display: flex;
-  float:left;
+  float: left;
   flex-direction: table;
   align-items: center;
-  gap:20px;
-  width:auto;
+  gap: 20px;
+  width: auto;
 }
+
 .reservation-box .top {
   display: flex;
   flex-direction: table;
 }
+
 .reservation-box .bottom {
-  position:relative;
+  position: relative;
   width: 100%;
-  text-align: right; 
+  text-align: right;
 }
- 
+
 .reservation-box .info {
   width: auto;
   color: #000;
-  font-weight:500;
+  font-weight: 500;
   text-decoration: none;
   text-align: right;
   cursor: pointer;
   border-bottom: 2px solid transparent;
 }
+
 .reservation-box .info:hover,
 .reservation-box .info:focus,
 .reservation-box .info:active {
@@ -328,21 +332,63 @@ font-weight: 600;
 }
 
 /* RESERVATION BOX SMALL */
-.reservation-box.small, .reservation-box.small .flex {
+.reservation-box.small,
+.reservation-box.small .flex {
   flex-direction: column;
 }
+
 .reservation-box.small .top {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
 .reservation-box.small .static {
   margin-right: 0px;
-} 
+}
+
 .reservation-box.small .bottom {
   text-align: center;
 }
-.reservation-box.small .button-container {min-width: 217px;}
+
+.reservation-box.small .button-container {
+  min-width: 217px;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+  .reservation-box .flex,
+  .reservation-box.small .flex {
+    flex-direction: column;
+  }
+
+  .reservation-box .static,
+  .reservation-box.small .static {
+    margin-right: 0;
+  }
+
+  .reservation-box .top,
+  .reservation-box.small .top {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .reservation-box .bottom,
+  .reservation-box.small .bottom {
+    text-align: center;
+  }
+
+  .reservation-box .info,
+  .reservation-box.small .info {
+    text-align: center;
+  }
+
+  .reservation-box .button-container,
+  .reservation-box.small .button-container {
+    min-width: auto;
+  }
+}
 
 /* ------------ Testkit ------------ */
 .test {
