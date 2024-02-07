@@ -16,13 +16,36 @@
             flex-wrap: wrap;
         }
         .address-box {
-            /* Add your styles for each address box */
-            width: 48%; /* Adjust the width as needed */
-            margin: 1%; /* Adjust the margin as needed */
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+  }
+  input[type="radio"] {
+    margin-right: 5px;
+  }
+
+  .field-label {
+    font-weight: bold;
+  }
+
+  .address-box p {
+    margin: 5px 0;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .address-box {
+      padding: 15px;
+    }
+
+    input[type="radio"] {
+      margin-bottom: 10px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 5px;
+    }
+  }
         .payment-option {
             /* Add your styles for each payment option box */
             width: 100%; /* Adjust the width as needed */
@@ -468,18 +491,18 @@ button:hover {
                                   <h2>Summary - Shipping Address</h2>
                                   <% if (addresses && addresses.length > 0) { %>
                                       <% addresses.forEach(function(address, index) { %>
-                                          <div class="address-box">
-                                              <input type="radio" name="selectedAddressIndex" id="hiddenSelectedAddressIndex_<%= index %>" value="<%= index  %>">
-                                              <label style="font-size: large; font-weight: bold;" for="addressRadio_<%= index %>"> Address <%= index + 1 %></label>
-                                              <p><span class="field-label">Mobile:</span> <%= address.mobile %></p>
-                                              <p><span class="field-label">Email:</span> <%= address.email %></p>
-                                              <p><span class="field-label">Pincode:</span> <%= address.pincode %></p>
-                                              <p><span class="field-label">House Name:</span> <%= address.houseName %></p>
-                                              <p><span class="field-label">Locality:</span> <%= address.locality %></p>
-                                              <p><span class="field-label">City:</span> <%= address.city %></p>
-                                              <p><span class="field-label">District:</span> <%= address.district %></p>
-                                              <p><span class="field-label">State:</span> <%= address.state %></p>
-                                          </div>
+                                        <div class="address-box">
+                                          <input type="radio" name="selectedAddressIndex" id="hiddenSelectedAddressIndex_<%= index %>" value="<%= index %>">
+                                          <label style="font-size: large; font-weight: bold;" for="addressRadio_<%= index %>"> Address <%= index + 1 %></label>
+                                          <p><span class="field-label">Mobile:</span> <%= address.mobile %></p>
+                                          <p><span class="field-label">Email:</span> <%= address.email %></p>
+                                          <p><span class="field-label">Pincode:</span> <%= address.pincode %></p>
+                                          <p><span class="field-label">House Name:</span> <%= address.houseName %></p>
+                                          <p><span class="field-label">Locality:</span> <%= address.locality %></p>
+                                          <p><span class="field-label">City:</span> <%= address.city %></p>
+                                          <p><span class="field-label">District:</span> <%= address.district %></p>
+                                          <p><span class="field-label">State:</span> <%= address.state %></p>
+                                        </div>
                                       <% }); %>
                                   <% } else { %>
                                       <!-- Display plus icon or any other indication for no addresses available -->
