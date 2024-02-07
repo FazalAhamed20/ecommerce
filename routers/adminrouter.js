@@ -11,6 +11,7 @@ const upload = require("../middlewares/multer");
 const { verifyAdmin, adminExist } = require("../middlewares/session");
 //admin side------------------------------------------------------->
 router.get("/admin/login",controller2.admin);
+router.get("/admin", controller2.admin);
 router.all("/dashboard",adminExist,controller2.dashboard)
 router.get("/adhome",verifyAdmin,controller2.adhome)
 router.all("/adlog",verifyAdmin,controller2.users)

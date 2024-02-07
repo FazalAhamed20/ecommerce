@@ -262,6 +262,7 @@ const generateSalesReport = async (req, res) => {
     const startDate = req.query.startDate
       ? moment(req.query.startDate).startOf("day")
       : moment().startOf("day");
+      console.log(startDate);
     const endDate = req.query.endDate
       ? moment(req.query.endDate).endOf("day")
       : moment().endOf("day");

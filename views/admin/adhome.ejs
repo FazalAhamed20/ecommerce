@@ -282,7 +282,6 @@ font-weight: 600;
   padding: 20px;
   border-radius: 7px;
   background-color: rgba(255, 255, 255, 1);
-  z-index: -1;
 }
 
 .reservation-box .static {
@@ -462,22 +461,22 @@ font-weight: 600;
       <div class="top">
         <div class="static">
           <div class="input-container" id="date-picker-container">
-            <label for="date-from">Start-date</label>
-            <input type="date" id="startDate" class="date-field" name"date-from">
+            <label for="startDate">Start-date</label>
+            <input type="date" id="startDate" class="date-field" name="date-from">
           </div>
         </div>
         <div class="flex">
           <div class="input-container" id="date-picker-container">
-            <label for="date-from">end-date</label>
-            <input type="date" id="endDate" class="date-field" name"">
+            <label for="endDate">end-date</label>
+            <input type="date" id="endDate" class="date-field" name="date-to">
           </div>
-          <div class="button-container" >
+          <div class="button-container">
             <span class="button ok" onclick="downloadSalesReport()">Download</span>
-        </div>
-        
+          </div>
         </div>
       </div>
     </div>
+    
     <div style="width: 100%;"> 
       <h2>Recently Placed Orders</h2>
       <table class="recent-orders-table">
