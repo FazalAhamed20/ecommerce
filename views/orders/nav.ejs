@@ -4,85 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <!-- You can replace the Bootstrap link with the latest version -->
-
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
 
   <style>
-    .navbar-brand {
+    .navbar-brand, .navbar-toggler-icon, .navbar-toggler, .navbar-nav .nav-link, .navbar-toggler-icon {
       color: #fff;
     }
-
-    .navbar-toggler-icon,
-    .navbar-toggler {
-      color: #fff;
-      border: 1px solid #fff;
-    }
-
-    .navbar-nav .nav-link {
-      margin-left: -10px;
-      color: #fff;
-    }
-
-    .navbar-brand {
-      color: #fff;
-    }
-
-    .navbar-toggler-icon,
-    .navbar-toggler {
-      border: 1px solid #fff;
-    }
-
-    .navbar-nav .nav-link {
-      color: #fff;
-      margin-left: 10px;
-    }
-
+    .navbar-nav li {
+            margin-left: 20px;
+        }
+  
     .navbar-nav .dropdown-menu {
-      margin-left: 240px;
-      max-width: 10px; /* You can adjust this value as needed */
-      background: rgba(0, 0, 0, 0); /* Transparent background */
-      border: none; /* Remove border */
-      left: 90%; /* Move the dropdown to the middle */
-      transform: translateX(-50%); /* Center the dropdown */
+      max-width: 10px;
+      background: rgba(0, 0, 0, 0);
+      border: none;
+      left: 90%;
+      transform: translateX(-50%);
     }
-
+  
     .navbar-nav .dropdown-item {
-      max-width: 100px;
+      margin-left: -27px;
+      font-size: large;
       color: #fff;
       background-color: rgba(0, 0, 0, 0);
-      backdrop-filter: blur(30px); /* Adjust the blur radius as needed */
+      backdrop-filter: blur(30px);
       z-index: -1;
     }
-
+  
     .navbar-nav .nav-item.dropdown:hover .nav-link {
       background-color: transparent;
       color: #fff;
     }
-
-    .navbar-nav {
-      margin-left: 20px;
-    }
- 
-
-.navbar-toggler-icon {
-  background-color: #fff; /* Optionally, change the color of the toggler icon */
-}
-
-.nav-link {
-  color: #fff !important; /* Change the color of the navigation links */
-}
-
-@media (max-width: 991px) {
-    .navbar-nav {
-      margin-left: 0; /* Reset margin for small screens */
-    }
-  }
   
-
-    
+    .navbar-nav {
+      margin-left: 0px;
+    }
+  
+    .navbar-toggler-icon {
+      background-color: #fff;
+    }
+  
+    .nav-link {
+      color: #fff !important;
+      font-size: 15px;
+    }
+  
+    .custom-dropdown {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  
+    @media (max-width: 768px) {
+      .custom-dropdown {
+        width: 100%;
+        text-align: center;
+        left: 0;
+        right: 0;
+        margin: auto;
+        transform: none;
+      }
+    }
   </style>
+  
 </head>
 <body>
 
@@ -95,13 +80,12 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <form class="form-inline my-2 my-lg-0 mr-auto">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search Product..." aria-label="Search">
-        <button style="color: white;margin-left: -5px;" class="btn my-2 my-sm-0" type="submit">Search</button>
+      
       </form>
 
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a style="margin-left: 100px;" class="nav-link" href="/user/coffeemix"><i class="fa-solid fa-mug-saucer">Coffee</i></a>
+          <a class="nav-link" href="/user/coffeemix"><i class="fa-solid fa-mug-saucer">Coffee</i></a>
         </li>
 
         <!-- Add an empty list item to create space in the middle -->
@@ -116,7 +100,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/user/cart">
             <i class="fas fa-cart-shopping"></i>
-            <% if (cartCount >= 0) { %>
+            <% if (cartCount >=0) { %>
               <span id="cart-count" class="badge bg-danger">
                   <%= cartCount %>
               </span>
@@ -127,29 +111,32 @@
             
           </a>
       </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <% if (user) { %>
-              <%= user.name %> <!-- Display username when logged in -->
-            <% } else { %>
-              <i class="fas fa-user"></i> Account
-            <% } %>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <% if (user) { %>
+      <li class="nav-item dropdown text-center">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <% if (user) { %>
+            <%= user.name %> 
+          <% } else { %>
+            <i class="fas fa-user"></i> Account
+          <% } %>
+        </a>
+        <div class="dropdown-menu dropdown-menu-center custom-dropdown" aria-labelledby="navbarDropdown">
+          <% if (user) { %>
               <a class="dropdown-item" href="/user/profile">Profile</a>
               <a class="dropdown-item" href="/user/logout"><i class="fas fa-sign-out"></i> Logout</a>
-            <% } else { %>
+          <% } else { %>
               <a class="dropdown-item" href="/user/login"><i class="fas fa-user"></i> Log In</a>
-            <% } %>
-          </div>
-        </li>
+          <% } %>
+      </div>
+      
+      
+      </li>
+      
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- Bootstrap JS and Popper.js scripts -->
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

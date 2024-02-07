@@ -8,77 +8,66 @@
   <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
 
   <style>
-    .navbar-brand {
+    .navbar-brand, .navbar-toggler-icon, .navbar-toggler, .navbar-nav .nav-link, .navbar-toggler-icon {
       color: #fff;
     }
-
-    .navbar-toggler-icon,
-    .navbar-toggler {
-      color: #fff;
-      border: 1px solid #fff;
-    }
-
-    .navbar-nav .nav-link {
-      margin-left: -10px;
-      color: #fff;
-    }
-
-    .navbar-brand {
-      color: #fff;
-    }
-
-    .navbar-toggler-icon,
-    .navbar-toggler {
-      border: 1px solid #fff;
-    }
-
-    .navbar-nav .nav-link {
-      color: #fff;
-      margin-left: 20px;
-    }
-
+    .navbar-nav li {
+            margin-left: 20px;
+        }
+  
     .navbar-nav .dropdown-menu {
-      margin-left: 240px;
-      max-width: 10px; 
-      background: rgba(0, 0, 0, 0); 
+      max-width: 10px;
+      background: rgba(0, 0, 0, 0);
       border: none;
       left: 90%;
       transform: translateX(-50%);
     }
-
+  
     .navbar-nav .dropdown-item {
-      max-width: 100px;
+      margin-left: -27px;
       font-size: large;
-      margin-left: -30px;
-      
       color: #fff;
       background-color: rgba(0, 0, 0, 0);
       backdrop-filter: blur(30px);
       z-index: -1;
     }
-
+  
     .navbar-nav .nav-item.dropdown:hover .nav-link {
       background-color: transparent;
       color: #fff;
     }
-
+  
     .navbar-nav {
       margin-left: 0px;
     }
- 
-
-.navbar-toggler-icon {
-  background-color: #fff; 
-}
-
-.nav-link {
-  color: #fff !important;
-  font-size: 15px;
-}
-
-
-    
+  
+    .navbar-toggler-icon {
+      background-color: #fff;
+    }
+  
+    .nav-link {
+      color: #fff !important;
+      font-size: 15px;
+    }
+  
+    .custom-dropdown {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  
+    @media (max-width: 768px) {
+      .custom-dropdown {
+        width: 100%;
+        text-align: center;
+        left: 0;
+        right: 0;
+        margin: auto;
+        transform: none;
+      }
+    }
   </style>
+  
 </head>
 <body>
 
@@ -122,23 +111,26 @@
             
           </a>
       </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <% if (user) { %>
-              <%= user.name %> 
-            <% } else { %>
-              <i class="fas fa-user"></i> Account
-            <% } %>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <% if (user) { %>
+      <li class="nav-item dropdown text-center">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <% if (user) { %>
+            <%= user.name %> 
+          <% } else { %>
+            <i class="fas fa-user"></i> Account
+          <% } %>
+        </a>
+        <div class="dropdown-menu dropdown-menu-center custom-dropdown" aria-labelledby="navbarDropdown">
+          <% if (user) { %>
               <a class="dropdown-item" href="/user/profile">Profile</a>
               <a class="dropdown-item" href="/user/logout"><i class="fas fa-sign-out"></i> Logout</a>
-            <% } else { %>
+          <% } else { %>
               <a class="dropdown-item" href="/user/login"><i class="fas fa-user"></i> Log In</a>
-            <% } %>
-          </div>
-        </li>
+          <% } %>
+      </div>
+      
+      
+      </li>
+      
       </ul>
     </div>
   </div>
