@@ -1,164 +1,187 @@
 <!-- views/profile.ejs -->
 
-<%- include('header') -%>
-<%- include('nav', { user: user  }) -%>
+<%- include('header') -%> <%- include('nav', { user: user }) -%>
 
 <style>
-    /* Common styles for all screens */
-    body {
-        background-color: #EDC9A0;
-        margin: 0;
-        font-family: SoDoSans_Regular, Helvetica, sans-serif !important;
-        overflow-y: scroll;
-    }
-
-    .image-container {
-        text-align: center;
-        margin-top: -80px;
-    }
-
-    .image-container img {
-        margin-top: 80px;
-        width: 100%;
-        max-width: 400px;
-        height: auto;
-    }
-
-    p {
-        margin-top: -50px;
-        color: #4A2617;
-        font-size: 26px;
-        font-weight: bolder;
-    }
-
-    /* Responsive styles */
-    .cards-container {
-        margin-top: 20px;
-        background-color: white;
-        border-radius: 15px;
-        overflow: hidden;
-    }
-
-    .inner-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        padding: 20px; /* Adjust padding for smaller screens */
-    }
-
-    .card {
-        flex: 1 0 calc(100% - 20px); /* Full width on small screens, adjust as needed */
-        margin: 10px;
-        border-bottom: 1px solid #ccc;
-        border-left: 0;
-        border-right: 0;
-        border-top: 0;
-        border-radius: 0;
-    }
-
-    .card-body {
-        display: flex;
-        align-items: center;
-        padding: 20px;
-        font-size: 1.2em;
-        padding-left: 1rem;
-        font-family: SoDoSans_Semibold, Helvetica, sans-serif;
-        text-align: center; /* Center text on smaller screens */
-    }
-
-    .card-image {
-        width: 50px;
-        height: 50px;
-        margin-right: 20px;
-        filter: invert(100%) sepia(90%) saturate(7500%) hue-rotate(352deg) brightness(129%) contrast(150%);
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .card-body img:hover {
-        transform: scale(1.1);
-    }
-
-    a {
-        color: black;
-        text-decoration: none; /* Remove underline from links */
-    }
-
-    @media only screen and (max-width: 600px) {
-  .image-container {
-    padding-bottom: 75%; /* Adjust aspect ratio for smaller screens if needed */
+  /* Common styles for all screens */
+  body {
+    background-color: #edc9a0;
+    margin: 0;
+    font-family: SoDoSans_Regular, Helvetica, sans-serif !important;
+    overflow-y: scroll;
   }
-}
-@media only screen and (min-width: 901px) {
+
+  .image-container {
+    text-align: center;
+    margin-top: -80px;
+  }
+
+  .image-container img {
+    margin-top: 80px;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  p {
+    margin-top: -50px;
+    color: #4a2617;
+    font-size: 26px;
+    font-weight: bolder;
+  }
+
+  /* Responsive styles */
+  .cards-container {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .inner-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px; /* Adjust padding for smaller screens */
+  }
+
+  .card {
+    flex: 1 0 calc(100% - 20px); /* Full width on small screens, adjust as needed */
+    margin: 10px;
+    border-bottom: 1px solid #ccc;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    border-radius: 0;
+  }
+
+  .card-body {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    font-size: 1.2em;
+    padding-left: 1rem;
+    font-family: SoDoSans_Semibold, Helvetica, sans-serif;
+    text-align: center; /* Center text on smaller screens */
+  }
+
+  .card-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    filter: invert(100%) sepia(90%) saturate(7500%) hue-rotate(352deg)
+      brightness(129%) contrast(150%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .card-body img:hover {
+    transform: scale(1.1);
+  }
+
+  a {
+    color: black;
+    text-decoration: none; /* Remove underline from links */
+  }
+
+  @media only screen and (max-width: 600px) {
+    .image-container {
+      padding-bottom: 75%; /* Adjust aspect ratio for smaller screens if needed */
+    }
+  }
+  @media only screen and (min-width: 901px) {
     .card {
       flex: 1 0 calc(33.33% - 20px); /* Three cards per row */
     }
   }
 </style>
 
-
 <div class="image-container">
-    <img src="/assets/profile.png" alt="Description of the image">
-    <% if (user && user.name) { %>
-        <p><%= user.name %><br>Welcome Tier</p>
-    <% } else { %>
-        <p>Welcome Guest</p>
-    <% } %>
+  <img src="/assets/profile.png" alt="Description of the image" />
+  <% if (user && user.name) { %>
+  <p><%= user.name %><br />Welcome Tier</p>
+  <% } else { %>
+  <p>Welcome Guest</p>
+  <% } %>
 </div>
 
 <!-- Large card container -->
 <div class="cards-container">
-    <!-- Inner container inside the cards-container -->
-    <div class="inner-container">
-        <div class="card">
-            <a href="/user/mainprofile">
-                <div class="card-body">
-                    <img class="card-image" src="/assets/my_events.svg" alt="Description of the image">
-                    Profile
-                </div>
-            </a>
+  <!-- Inner container inside the cards-container -->
+  <div class="inner-container">
+    <div class="card">
+      <a href="/user/mainprofile">
+        <div class="card-body">
+          <img
+            class="card-image"
+            src="/assets/my_events.svg"
+            alt="Description of the image"
+          />
+          Profile
         </div>
-        <div class="card">
-            <a href="/user/userOrder">
-                <div class="card-body">
-                    <img class="card-image" src="/assets/orders.svg" alt="Description of the image">
-                    Orders
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/user/rewards">
-                <div class="card-body">
-                    <img class="card-image" src="/assets/REWARDS.svg" alt="Description of the image">
-                    Coffee Land Rewards
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/user/address/<%= user.id %>">
-                <div class="card-body">
-                    <img class="card-image" src="/assets/address.svg" alt="Description of the image">
-                    Address
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/user/rateus">
-                <div class="card-body">
-                    <img class="card-image" src="/assets/profile_rewards_star.svg" alt="Description of the image">
-                    Rate Us
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/user/logout">
-                <div class="card-body">
-                    <img class="card-image" src="/assets/logout.svg" alt="Description of the image">
-                    Log Out
-                </div>
-            </a>
-        </div>
+      </a>
     </div>
+    <div class="card">
+      <a href="/user/userOrder">
+        <div class="card-body">
+          <img
+            class="card-image"
+            src="/assets/orders.svg"
+            alt="Description of the image"
+          />
+          Orders
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="/user/rewards">
+        <div class="card-body">
+          <img
+            class="card-image"
+            src="/assets/REWARDS.svg"
+            alt="Description of the image"
+          />
+          Coffee Land Rewards
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="/user/address/<%= user.id %>">
+        <div class="card-body">
+          <img
+            class="card-image"
+            src="/assets/address.svg"
+            alt="Description of the image"
+          />
+          Address
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="/user/rateus">
+        <div class="card-body">
+          <img
+            class="card-image"
+            src="/assets/profile_rewards_star.svg"
+            alt="Description of the image"
+          />
+          Rate Us
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="/user/logout">
+        <div class="card-body">
+          <img
+            class="card-image"
+            src="/assets/logout.svg"
+            alt="Description of the image"
+          />
+          Log Out
+        </div>
+      </a>
+    </div>
+  </div>
 </div>
 
 <%- include('footer') -%>

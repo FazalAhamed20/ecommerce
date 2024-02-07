@@ -2,81 +2,83 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= pageTitle %></title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Razorpay Checkout</h1>
-    
+
     <p>Hello, <%= user.username %>!</p>
-    
+
     <p>Your order details:</p>
     <p>Order ID: <%= razorpayOrder.receipt %></p>
     <p>Amount: <%= razorpayOrder.amount / 100 %> INR</p>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
- 
-    <script>
-        var options = {
-            "key": "rzp_test_YCxRFmZdRfF2Qw",
-            "amount": "<%= totals.grandTotal * 100 %>", 
-            "currency": "INR",
-            "name": "Coffee Land",
-            "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
-            "order_id": "<%= razorpayOrder.id %>",
-            "handler": function (response) {
-                fetch('/process-payment', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            payment_id: response.razorpay_payment_id,
-            order_id: response.razorpay_order_id,
-            signature: response.razorpay_signature,
-            paymentMethod: "<%= paymentMethod %>",
-                        selectedAddressIndex: "<%= selectedAddressIndex %>",
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Payment details sent to the server:', data);
-        if (data.success) {
-                        window.location.href = '/user/confirm';
-                    }
-        
-    })
-    .catch(error => {
-        console.error('Error sending payment details to the server:', error);
-    });
 
-    return this; 
-},
-            "prefill": {
-                "name": "<%= user.name %>",
-                "email": "<%= user.email %>",
-                "contact": "<%= user.mobile %>"
+    <script>
+      var options = {
+        key: "rzp_test_YCxRFmZdRfF2Qw",
+        amount: "<%= totals.grandTotal * 100 %>",
+        currency: "INR",
+        name: "Coffee Land",
+        description: "Test Transaction",
+        image: "https://example.com/your_logo",
+        order_id: "<%= razorpayOrder.id %>",
+        handler: function (response) {
+          fetch("/process-payment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
             },
-            "notes": {
-                "address": "Razorpay Corporate Office"
-            },
-            "theme": {
-                "color": "#3399cc"
-            }
-        };
-        var rzp1 = new Razorpay(options);
-        rzp1.on('payment.failed', function (response) {
-            alert(response.error.code);
-            alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
-        });
-        rzp1.open();
-</script>
-</body>
+            body: JSON.stringify({
+              payment_id: response.razorpay_payment_id,
+              order_id: response.razorpay_order_id,
+              signature: response.razorpay_signature,
+              paymentMethod: "<%= paymentMethod %>",
+              selectedAddressIndex: "<%= selectedAddressIndex %>",
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Payment details sent to the server:", data);
+              if (data.success) {
+                window.location.href = "/user/confirm";
+              }
+            })
+            .catch((error) => {
+              console.error(
+                "Error sending payment details to the server:",
+                error
+              );
+            });
+
+          return this;
+        },
+        prefill: {
+          name: "<%= user.name %>",
+          email: "<%= user.email %>",
+          contact: "<%= user.mobile %>",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+      rzp1.open();
+    </script>
+  </body>
 </html>

@@ -1,18 +1,17 @@
-<%- include('header') -%>
-<%- include('nav', { user, cartCount: cartCount }) -%>
+<%- include('header') -%> <%- include('nav', { user, cartCount: cartCount }) -%>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap");
 
-:root {
+  :root {
     --main-color: #443;
     --border-radius: 95% 4% 97% 5% / 4% 94% 3% 95%;
     --border-radius-hover: 4% 95% 6% 95% / 95% 4% 92% 5%;
-    --border: .2rem solid var(--main-color);
-    --border-hover: .2rem dashed var(--main-color);
-}
+    --border: 0.2rem solid var(--main-color);
+    --border-hover: 0.2rem dashed var(--main-color);
+  }
 
-* {
-    font-family: 'Poppins', sans-serif;
+  * {
+    font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -20,29 +19,28 @@
     border: none;
     text-decoration: none;
     text-transform: capitalize;
-    transition: all .2s linear;
-}
+    transition: all 0.2s linear;
+  }
 
-html {
+  html {
     font-size: 65%;
     overflow-x: hidden;
     scroll-padding-top: 7rem;
     scroll-behavior: smooth;
-}
+  }
 
-
-.heading {
+  .heading {
     font-size: 9rem;
     text-transform: uppercase;
     color: transparent;
-    -webkit-text-stroke: .05rem var(--main-color);
-    letter-spacing: .2rem;
+    -webkit-text-stroke: 0.05rem var(--main-color);
+    letter-spacing: 0.2rem;
     text-align: center;
     pointer-events: none;
     position: absolute;
-}
+  }
 
-.heading span {
+  .heading span {
     position: relative;
     top: 50%;
     left: 50%;
@@ -50,11 +48,11 @@ html {
     width: 100%;
     color: var(--main-color);
     font-size: 3rem;
-}
+  }
 
-.btn {
+  .btn {
     display: inline-block;
-    padding: .9rem 1.5rem;
+    padding: 0.9rem 1.5rem;
     border: var(--border);
     border-radius: var(--border-radius);
     color: var(--main-color);
@@ -63,258 +61,252 @@ html {
     margin-top: 1rem;
     font-size: 1.7rem;
     margin-left: 40px;
-}
+  }
 
-.btn:hover {
+  .btn:hover {
     border-radius: var(--border-radius-hover);
     border: var(--border-hover);
-}
+  }
 
-    .home {
+  .home {
     background: url(/assets/home-bg.jpg) no-repeat;
     background-position: center;
     background-size: cover;
     margin-top: -5px;
-}
+  }
 
-.home .row {
+  .home .row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
-}
+  }
 
-.home .row .content {
+  .home .row .content {
     flex: 1 1 42rem;
-}
+  }
 
-.home .row .image {
+  .home .row .image {
     flex: 1 1 42rem;
     padding-top: 10rem;
     text-align: center;
-}
+  }
 
-.home .row .image img {
+  .home .row .image img {
     height: 35rem;
     animation: float 4s linear infinite;
-}
+  }
 
-@keyframes float {
-
+  @keyframes float {
     0%,
     100% {
-        transform: translateY(0rem);
+      transform: translateY(0rem);
     }
 
     50% {
-        transform: translateY(-7rem);
+      transform: translateY(-7rem);
     }
-}
+  }
 
-.home .row .content h3 {
+  .home .row .content h3 {
     font-size: 6.5rem;
     color: var(--main-color);
     text-transform: uppercase;
     margin-left: 40px;
-}
+  }
 
-.home .image-slider {
+  .home .image-slider {
     text-align: center;
     padding: 3rem 0;
-}
+  }
 
-.home .image-slider img {
+  .home .image-slider img {
     height: 9rem;
-    margin: 0 .5rem;
+    margin: 0 0.5rem;
     cursor: pointer;
     margin-top: 5rem;
-}
+  }
 
-.home .image-slider img:hover {
+  .home .image-slider img:hover {
     transform: translateY(-2rem);
-}
-@media screen and (max-width: 1023px) {
-   
-
+  }
+  @media screen and (max-width: 1023px) {
     .home .row {
-        flex-direction: column;
-        gap: 1rem;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     .home .row .content,
     .home .row .image {
-        flex: 1 1 100%; /* Full width on medium screens */
-        text-align: center;
-        margin: 0; /* Remove any margin */
+      flex: 1 1 100%; /* Full width on medium screens */
+      text-align: center;
+      margin: 0; /* Remove any margin */
     }
 
     .home .row .image img {
-        height: auto;
-        max-width: 100%;
+      height: auto;
+      max-width: 100%;
     }
-}
+  }
 
-/* Styles for small screens */
-@media screen and (max-width: 767px) {
+  /* Styles for small screens */
+  @media screen and (max-width: 767px) {
     .home {
-        padding-top: 6rem; /* Adjust as needed */
+      padding-top: 6rem; /* Adjust as needed */
     }
 
     .home .image-slider img {
-        margin-top: 2rem;
+      margin-top: 2rem;
     }
-}
+  }
 
-
-
-.about .row {
+  .about .row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
-}
+  }
 
-.about .row .image {
+  .about .row .image {
     flex: 1 1 42rem;
-}
+  }
 
-.about .row .image img {
+  .about .row .image img {
     width: 92%;
     animation: aboutImage 4s linear infinite;
-}
+  }
 
-@keyframes aboutImage {
-
+  @keyframes aboutImage {
     0%,
     100% {
-        transform: scale(.9);
-        border-radius: var(--border-radius-hover);
+      transform: scale(0.9);
+      border-radius: var(--border-radius-hover);
     }
 
     50% {
-        transform: scale(.8);
-        border-radius: var(--border-radius);
+      transform: scale(0.8);
+      border-radius: var(--border-radius);
     }
-}
+  }
 
-.about .row .content {
+  .about .row .content {
     flex: 1 1 42rem;
-}
+  }
 
-.about .row .content .title {
+  .about .row .content .title {
     color: var(--main-color);
     font-size: 3rem;
     line-height: 1.8;
-}
+  }
 
-.about .row .content p {
+  .about .row .content p {
     color: var(--main-color);
     font-size: 1.5rem;
     line-height: 1.8;
     padding: 1rem 0;
-}
+  }
 
-.about .row .content .icons-container {
+  .about .row .content .icons-container {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     padding-top: 3rem;
-}
+  }
 
-.about .row .content .icons-container .icons {
+  .about .row .content .icons-container .icons {
     flex: 1 1 15rem;
     padding: 1.5rem;
     text-align: center;
     border: var(--border);
     border-radius: var(--border-radius);
-}
+  }
 
-.about .row .content .icons-container .icons img {
+  .about .row .content .icons-container .icons img {
     height: 5rem;
-}
+  }
 
-.about .row .content .icons-container .icons h3 {
+  .about .row .content .icons-container .icons h3 {
     font-size: 1.7rem;
     padding-top: 1rem;
     color: var(--main-color);
-}
-/* Add this block to make the button centered on smaller screens */
-@media screen and (max-width: 767px) {
+  }
+  /* Add this block to make the button centered on smaller screens */
+  @media screen and (max-width: 767px) {
     .home .row .content h3,
     .btn {
-        margin-left: 0; /* Remove the left margin on smaller screens */
+      margin-left: 0; /* Remove the left margin on smaller screens */
     }
-}
+  }
 
-/* Add this block to adjust the padding on smaller screens */
-@media screen and (max-width: 600px) {
+  /* Add this block to adjust the padding on smaller screens */
+  @media screen and (max-width: 600px) {
     .home .row .content {
-        padding: 1rem; /* Adjust as needed */
+      padding: 1rem; /* Adjust as needed */
     }
-}
+  }
 
-/* Add this block to make the about section responsive */
-@media screen and (max-width: 1023px) {
+  /* Add this block to make the about section responsive */
+  @media screen and (max-width: 1023px) {
     .about .row .image,
     .about .row .content {
-        flex: 1 1 100%;
-        text-align: center;
-        margin: 0;
+      flex: 1 1 100%;
+      text-align: center;
+      margin: 0;
     }
-}
+  }
 
-/* Add this block to adjust the padding on smaller screens for the about section */
-@media screen and (max-width: 767px) {
+  /* Add this block to adjust the padding on smaller screens for the about section */
+  @media screen and (max-width: 767px) {
     .about .row .content,
     .about .row .image {
-        padding: 1rem; /* Adjust as needed */
+      padding: 1rem; /* Adjust as needed */
     }
-}
+  }
 
-/* Add this block to adjust the icon container on smaller screens */
-@media screen and (max-width: 767px) {
+  /* Add this block to adjust the icon container on smaller screens */
+  @media screen and (max-width: 767px) {
     .about .row .content .icons-container .icons {
-        flex: 1 1 100%;
+      flex: 1 1 100%;
     }
-}
-.about {
+  }
+  .about {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-}
+  }
 
-.heading {
+  .heading {
     margin-top: 40px;
     font-size: 9rem;
     text-transform: uppercase;
     color: transparent;
     -webkit-text-stroke: 0.05rem var(--main-color);
-    letter-spacing: .2rem;
+    letter-spacing: 0.2rem;
     pointer-events: none;
     position: relative;
-}
+  }
 
-.heading span {
+  .heading span {
     display: block;
     margin-top: -58px; /* Adjust the negative margin as needed */
-}
+  }
 
-/* Optional: Adjust the margin or padding for spacing */
-.about .heading {
+  /* Optional: Adjust the margin or padding for spacing */
+  .about .heading {
     margin-bottom: 20px;
-}
-.content{
+  }
+  .content {
     margin-right: 25px;
-}
+  }
 
-.menu {
+  .menu {
     background: url(/assets/menu-bg.jpg) no-repeat;
     background-position: center;
     background-size: cover;
-}
+  }
 
-.menu .box-container {
+  .menu .box-container {
     margin-top: 50px;
     display: flex;
     flex-wrap: wrap;
@@ -322,10 +314,9 @@ html {
     margin-left: 150px;
     margin-right: 150px;
     justify-content: center;
-   
-}
+  }
 
-.menu .box-container .box {
+  .menu .box-container .box {
     display: flex;
     align-items: center;
     margin-left: 6rem;
@@ -335,499 +326,485 @@ html {
     border-radius: var(--border-radius);
     gap: 1.5rem;
     margin-bottom: 20px;
+  }
 
-}
-
-
-.menu .box-container .box:hover {
+  .menu .box-container .box:hover {
     border: var(--border-hover);
     border-radius: var(--border-radius-hover);
-}
+  }
 
-.menu .box-container .box img {
+  .menu .box-container .box img {
     height: 8rem;
     margin-left: -6rem;
-}
+  }
 
-.menu .box-container .box .content h3 {
+  .menu .box-container .box .content h3 {
     font-size: 2.2rem;
     color: var(--main-color);
     line-height: 1.8;
-}
+  }
 
-.menu .box-container .box .content p {
+  .menu .box-container .box .content p {
     font-size: 1.6rem;
     color: var(--main-color);
     line-height: 1.8;
     padding: 1rem 0;
-}
+  }
 
-.menu .box-container .box .content span {
+  .menu .box-container .box .content span {
     font-size: 2rem;
     color: var(--main-color);
     line-height: 1.8;
-}
+  }
 
+  /* REVIEW */
 
-
-
-/* REVIEW */
-
-
-
-
-.review .review-slider {
+  .review .review-slider {
     padding: 7rem 0;
     margin-left: 30px;
-}
+  }
 
-.review .review-slider .box {
-   
+  .review .review-slider .box {
     border: var(--border);
     border-radius: var(--border-radius);
     text-align: center;
     position: relative;
     z-index: 0;
-  
+
     padding: 1.5rem; /* Adjust padding for the box */
     max-width: 500px; /* Set a maximum width for the box */
     margin: 0 auto; /* Center the box horizontally */
-}
+  }
 
-.review .review-slider .box .fa-quote-left {
+  .review .review-slider .box .fa-quote-left {
     position: absolute;
     top: 2rem;
     left: 2.5rem;
     font-size: 6rem;
     color: #ccc;
     z-index: -1;
-}
+  }
 
-.review .review-slider .box .fa-quote-right {
+  .review .review-slider .box .fa-quote-right {
     position: absolute;
     bottom: 2rem;
     right: 2.5rem;
     font-size: 6rem;
     color: #ccc;
     z-index: -1;
-}
+  }
 
-.review .review-slider .box:hover .fa-quote-left {
+  .review .review-slider .box:hover .fa-quote-left {
     top: -6.5rem;
-}
+  }
 
-.review .review-slider .box:hover .fa-quote-right {
+  .review .review-slider .box:hover .fa-quote-right {
     bottom: -6.5rem;
-}
+  }
 
-.review .review-slider .box img {
+  .review .review-slider .box img {
     height: 7rem;
     width: 7rem;
     border-radius: 50%;
-    margin-bottom: .7rem;
-}
+    margin-bottom: 0.7rem;
+  }
 
-.review .review-slider .box .stars {
-    padding: .5rem 0
-}
+  .review .review-slider .box .stars {
+    padding: 0.5rem 0;
+  }
 
-.review .review-slider .box .stars i {
+  .review .review-slider .box .stars i {
     font-size: 1.7rem;
     color: var(--main-color);
-}
+  }
 
-.review .review-slider .box p {
+  .review .review-slider .box p {
     font-size: 1.6rem;
     color: var(--main-color);
     padding: 1rem 0;
     line-height: 1.8;
-}
+  }
 
-.review .review-slider .box h3 {
+  .review .review-slider .box h3 {
     font-size: 2.2rem;
     color: var(--main-color);
     line-height: 1.8;
-}
+  }
 
-.review .review-slider .box span {
+  .review .review-slider .box span {
     font-size: 1.5rem;
     color: var(--main-color);
-}
+  }
 
-.swiper-pagination-bullet {
+  .swiper-pagination-bullet {
     height: 1.5rem;
     width: 1.5rem;
     border-radius: 0;
-}
+  }
 
-.swiper-pagination-bullet-active {
+  .swiper-pagination-bullet-active {
     background: var(--main-color);
-}
+  }
 
-.swiper-container {
-            width: 100%;
-            margin: 0 auto;
-        }
+  .swiper-container {
+    width: 100%;
+    margin: 0 auto;
+  }
 
-        .swiper-wrapper {
-            display: flex;
-            justify-content: space-between; /* Adjust as needed */
-        }
+  .swiper-wrapper {
+    display: flex;
+    justify-content: space-between; /* Adjust as needed */
+  }
 
-        .swiper-slide {
-            width: calc(33.333% - 20px); /* Adjust as needed */
-            box-sizing: border-box;
-        }
+  .swiper-slide {
+    width: calc(33.333% - 20px); /* Adjust as needed */
+    box-sizing: border-box;
+  }
 
-
-        .footer .box-container {
+  .footer .box-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr));
     gap: 1.5rem;
-}
+  }
 
-.footer .box-container .box h3 {
+  .footer .box-container .box h3 {
     margin-left: 10.5rem;
     font-size: 2.5rem;
     padding: 1rem 0;
     color: var(--main-color);
-}
+  }
 
-.footer .box-container .box a {
+  .footer .box-container .box a {
     display: block;
     font-size: 1.5rem;
     padding: 1rem 0;
     color: var(--main-color);
-}
+  }
 
-.footer .box-container .box a i {
-    padding-right: .5rem;
-}
+  .footer .box-container .box a i {
+    padding-right: 0.5rem;
+  }
 
-.footer .box-container .box a:hover i {
+  .footer .box-container .box a:hover i {
     padding-right: 2rem;
-}
+  }
 
-.footer .credit {
+  .footer .credit {
     text-align: center;
     font-size: 2rem;
     padding: 2rem 1rem;
     margin-top: 1rem;
     color: var(--main-color);
-}
+  }
 
-.footer .credit span {
+  .footer .credit span {
     border-bottom: var(--border-hover);
-}
-#video-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
+  }
+  #video-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
 
-#video {
-  width: 100%;
-  height: auto;
-}
-del {
-      text-decoration: line-through;
-      color: gray; /* You can set the color or any other styling as needed */
-    }
-    @media (max-width: 767px) {
+  #video {
+    width: 100%;
+    height: auto;
+  }
+  del {
+    text-decoration: line-through;
+    color: gray; /* You can set the color or any other styling as needed */
+  }
+  @media (max-width: 767px) {
     .home .row {
-        flex-direction: column;
+      flex-direction: column;
     }
 
     .home .row .content,
     .home .row .image {
-        flex: 1 1 100%;
+      flex: 1 1 100%;
     }
 
     .home .row .image img {
-        margin-top: 1rem; /* Adjust as needed */
+      margin-top: 1rem; /* Adjust as needed */
     }
 
     .menu .box-container {
-        margin-left: 0;
-        margin-right: 0;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     /* Adjust the width of other elements if necessary */
     .menu .box-container .box {
-        flex: 1 1 100%; /* Adjust as needed */
-        margin-left: 0;
+      flex: 1 1 100%; /* Adjust as needed */
+      margin-left: 0;
     }
 
     /* Add additional responsive adjustments as needed */
-}
+  }
 
-@media (max-width: 991px) {
+  @media (max-width: 991px) {
     .menu .box-container {
-        margin-left: 15px; /* Adjust as needed */
-        margin-right: 15px; /* Adjust as needed */
+      margin-left: 15px; /* Adjust as needed */
+      margin-right: 15px; /* Adjust as needed */
     }
 
     /* Adjust the width of other elements if necessary */
     .menu .box-container .box {
-        flex: 1 1 calc(33.333% - 20px); /* Adjust as needed */
-        margin-left: 50px; /* Adjust as needed */
+      flex: 1 1 calc(33.333% - 20px); /* Adjust as needed */
+      margin-left: 50px; /* Adjust as needed */
     }
 
     /* Add additional responsive adjustments as needed */
-}
+  }
 
-@media only screen and (max-width: 768px) {
-        .swiper-wrapper {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .swiper-slide {
-            flex: 0 0 auto;
-            width: 100%;
-            scroll-snap-align: start;
-        }
-    }
-    @media only screen and (max-width: 768px) {
-        .swiper-wrapper {
-            display: block;
-            .swiper-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        }
-
-        .swiper-slide {
-            width: 100%;
-        }
+  @media only screen and (max-width: 768px) {
+    .swiper-wrapper {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
     }
 
+    .swiper-slide {
+      flex: 0 0 auto;
+      width: 100%;
+      scroll-snap-align: start;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    .swiper-wrapper {
+      display: block;
+      .swiper-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    }
 
-
-
+    .swiper-slide {
+      width: 100%;
+    }
+  }
 </style>
 <body>
-
-
-
-<div id="video-container">
+  <div id="video-container">
     <video id="video" autoplay muted loop>
-        <source src="/assets/coffee3.mp4" type="video/mp4">
+      <source src="/assets/coffee3.mp4" type="video/mp4" />
     </video>
-</div>
-<section>
-<div class="home" id="home">
-    <div class="row">
+  </div>
+  <section>
+    <div class="home" id="home">
+      <div class="row">
         <div class="content">
-            <h3>fresh coffee in the morning</h3>
-            <a href="/user/reminder" class="btn">Remind Me</a>
+          <h3>fresh coffee in the morning</h3>
+          <a href="/user/reminder" class="btn">Remind Me</a>
         </div>
 
         <div class="image">
-            <img src="/assets/home-img-1.png" class="main-home-image" alt="">
+          <img src="/assets/home-img-1.png" class="main-home-image" alt="" />
         </div>
-    </div>
+      </div>
 
-    <div class="image-slider">
-        <img src="/assets/home-img-1.png" alt="">
-        <img src="/assets/home-img-2.png" alt="">
-        <img src="/assets/home-img-3.png" alt="">
+      <div class="image-slider">
+        <img src="/assets/home-img-1.png" alt="" />
+        <img src="/assets/home-img-2.png" alt="" />
+        <img src="/assets/home-img-3.png" alt="" />
+      </div>
     </div>
-</div>
-</section>
-<section>
-<div class="about" id="about">
-    <h1 class="heading">about us <span>why choose us</span></h1>
+  </section>
+  <section>
+    <div class="about" id="about">
+      <h1 class="heading">about us <span>why choose us</span></h1>
 
-    <div class="row">
+      <div class="row">
         <div class="image">
-            <img src="/assets/about-img.png" alt="">
+          <img src="/assets/about-img.png" alt="" />
         </div>
 
         <div class="content">
-            <h3 class="title">what's make our coffee special!</h3>
-            <p>It's more than just a blend; it's a crafted experience. From the first sip to the cozy ambiance, we've designed every detail to make your visit extraordinary. Discover the magic in every cup. Welcome to your coffee escape. ✨</p>
-            <a href="/user/product" class="btn">Shop Now</a>
-            <div class="icons-container">
-                <div class="icons">
-                    <img src="/assets/about-icon-1.png" alt="">
-                    <h3>Quality coffee</h3>
-                </div>
-                <div class="icons">
-                    <img src="/assets/about-icon-2.png" alt="">
-                    <h3>Many branches</h3>
-                </div>
-                <div class="icons">
-                    <img src="/assets/about-icon-3.png" alt="">
-                    <h3>Fast delivery</h3>
-                </div>
+          <h3 class="title">what's make our coffee special!</h3>
+          <p>
+            It's more than just a blend; it's a crafted experience. From the
+            first sip to the cozy ambiance, we've designed every detail to make
+            your visit extraordinary. Discover the magic in every cup. Welcome
+            to your coffee escape. ✨
+          </p>
+          <a href="/user/product" class="btn">Shop Now</a>
+          <div class="icons-container">
+            <div class="icons">
+              <img src="/assets/about-icon-1.png" alt="" />
+              <h3>Quality coffee</h3>
             </div>
+            <div class="icons">
+              <img src="/assets/about-icon-2.png" alt="" />
+              <h3>Many branches</h3>
+            </div>
+            <div class="icons">
+              <img src="/assets/about-icon-3.png" alt="" />
+              <h3>Fast delivery</h3>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</section>
-<section class="menu" id="menu">
-    <h1 style="margin-top: 40px;" class="heading">our offers <span>offers for you</span></h1>
+  </section>
+  <section class="menu" id="menu">
+    <h1 style="margin-top: 40px" class="heading">
+      our offers <span>offers for you</span>
+    </h1>
     <% console.log(products); %>
     <div class="box-container">
-        <% let displayedProducts = 0; %>
-        <% for (let i = 0; i < products.length && displayedProducts < 6; i++) { %>
-            <% if (products[i].productOfferprice || products[i].Offerprice) { %>
-                <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
-                    <img src="/assets/menu-<%= i + 1 %>.png" alt="">
-                    <div class="content">
-                        <h3><%= products[i].name %></h3>
-                        <p><%= products[i].description %></p>
+      <% let displayedProducts = 0; %> <% for (let i = 0; i < products.length &&
+      displayedProducts < 6; i++) { %> <% if (products[i].productOfferprice ||
+      products[i].Offerprice) { %>
+      <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
+        <img src="/assets/menu-<%= i + 1 %>.png" alt="" />
+        <div class="content">
+          <h3><%= products[i].name %></h3>
+          <p><%= products[i].description %></p>
 
-                        <% if (products[i].productOfferprice) { %>
-                            <!-- Display offer price if productOfferPrice exists -->
-                            <span>Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del></span>,<br>
-                            <span>Offer Price: ₹<%= products[i].productOfferprice.toFixed(2) %></span>
-                        <% } else if (products[i].Offerprice) { %>
-                            <!-- Display offer price if offerPrice exists -->
-                            <span>Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del></span>,<br>
-                            <span>Offer Price: ₹<%= products[i].Offerprice.toFixed(2) %></span>
-                        <% } %>
-                    </div>
-                </a>
-                <% displayedProducts++; %>
-            <% } else if (displayedProducts < 6) { %>
-                <!-- Display products with regular price if no offer exists -->
-                <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
-                    <img src="/assets/menu-<%= i + 1 %>.png" alt="">
-                    <div class="content">
-                        <h3><%= products[i].name %></h3>
-                        <p><%= products[i].description %></p>
-                        <span>Price: ₹<%= products[i].price.toFixed(2) %></span>
-                    </div>
-                </a>
-                <% displayedProducts++; %>
-            <% } %>
-        <% } %>
+          <% if (products[i].productOfferprice) { %>
+          <!-- Display offer price if productOfferPrice exists -->
+          <span
+            >Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del></span
+          >,<br />
+          <span
+            >Offer Price: ₹<%= products[i].productOfferprice.toFixed(2) %></span
+          >
+          <% } else if (products[i].Offerprice) { %>
+          <!-- Display offer price if offerPrice exists -->
+          <span
+            >Regular Price:<del>₹<%= products[i].price.toFixed(2) %></del></span
+          >,<br />
+          <span>Offer Price: ₹<%= products[i].Offerprice.toFixed(2) %></span>
+          <% } %>
+        </div>
+      </a>
+      <% displayedProducts++; %> <% } else if (displayedProducts < 6) { %>
+      <!-- Display products with regular price if no offer exists -->
+      <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
+        <img src="/assets/menu-<%= i + 1 %>.png" alt="" />
+        <div class="content">
+          <h3><%= products[i].name %></h3>
+          <p><%= products[i].description %></p>
+          <span>Price: ₹<%= products[i].price.toFixed(2) %></span>
+        </div>
+      </a>
+      <% displayedProducts++; %> <% } %> <% } %>
     </div>
-</section>
+  </section>
 
+  <!-- Assuming your EJS template is named "userhome.ejs" -->
 
-<!-- Assuming your EJS template is named "userhome.ejs" -->
-
-<section class="review" id="review">
+  <section class="review" id="review">
     <h1 class="heading">reviews <span>what people say</span></h1>
 
     <div class="swiper review-slider">
-        <div class="swiper-wrapper">
+      <div class="swiper-wrapper">
+        <% Rateus.forEach(review => { %>
+        <div class="swiper-slide box">
+          <i class="fas fa-quote-left"></i>
+          <i class="fas fa-quote-right"></i>
 
-            <% Rateus.forEach(review => { %>
-                <div class="swiper-slide box">
-                    <i class="fas fa-quote-left"></i>
-                    <i class="fas fa-quote-right"></i>
-            
-                    <div class="stars">
-                        <% for (let i = 1; i <= review.rating; i++) { %>
-                            <i class="fas fa-star" style="color: goldenrod;"></i>
-                        <% } %>
-                    </div>
-            
-                    <p><%= review.feedback %></p>
-            
-                    <% if (review.userId) { %>
-                        <h3><%= review.userId.name %></h3>
-                        <span><%= review.role %></span>
-                    <% } else { %>
-                        <h3>Unknown User</h3>
-                        <span><%= review.role %></span>
-                    <% } %>
-                </div>
-            <% }); %>
+          <div class="stars">
+            <% for (let i = 1; i <= review.rating; i++) { %>
+            <i class="fas fa-star" style="color: goldenrod"></i>
+            <% } %>
+          </div>
 
+          <p><%= review.feedback %></p>
+
+          <% if (review.userId) { %>
+          <h3><%= review.userId.name %></h3>
+          <span><%= review.role %></span>
+          <% } else { %>
+          <h3>Unknown User</h3>
+          <span><%= review.role %></span>
+          <% } %>
         </div>
-        <div class="swiper-pagination"></div>
+        <% }); %>
+      </div>
+      <div class="swiper-pagination"></div>
     </div>
-</section>
+  </section>
 
-<section class="footer">
+  <section class="footer">
     <div class="box-container">
-        <div class="box">
-            <h3>our branches</h3>
-            <a href="#"><i class="fas fa-arrow-right"></i> Palakkad</a>
-            <a href="#"><i class="fas fa-arrow-right"></i> Wayanad</a>
-            <a href="#"><i class="fas fa-arrow-right"></i> Kollam</a>
-            <a href="#"><i class="fas fa-arrow-right"></i> Kozhikode</a>
-            <a href="#"><i class="fas fa-arrow-right"></i> Kannur</a>
-        </div>
+      <div class="box">
+        <h3>our branches</h3>
+        <a href="#"><i class="fas fa-arrow-right"></i> Palakkad</a>
+        <a href="#"><i class="fas fa-arrow-right"></i> Wayanad</a>
+        <a href="#"><i class="fas fa-arrow-right"></i> Kollam</a>
+        <a href="#"><i class="fas fa-arrow-right"></i> Kozhikode</a>
+        <a href="#"><i class="fas fa-arrow-right"></i> Kannur</a>
+      </div>
 
-        <div class="box">
-            <h3>quick links</h3>
-            <a href="#home"><i class="fas fa-arrow-right"></i> home</a>
-            <a href="#about"><i class="fas fa-arrow-right"></i> about</a>
-            <a href="#menu"><i class="fas fa-arrow-right"></i> menu</a>
-            <a href="#review"><i class="fas fa-arrow-right"></i> review</a>
-        </div>
+      <div class="box">
+        <h3>quick links</h3>
+        <a href="#home"><i class="fas fa-arrow-right"></i> home</a>
+        <a href="#about"><i class="fas fa-arrow-right"></i> about</a>
+        <a href="#menu"><i class="fas fa-arrow-right"></i> menu</a>
+        <a href="#review"><i class="fas fa-arrow-right"></i> review</a>
+      </div>
 
-        <div class="box">
-            <h3>contact info</h3>
-            <a href="#"><i class="fas fa-phone"></i> +91-9360854754</a>
-            <a href="#"><i class="fas fa-envelope"></i> fazalahamed628@gmail.com</a>
-            <a href="#"><i class="fas fa-envelope"></i> Kozhikode,Kerala</a>
-        </div>
+      <div class="box">
+        <h3>contact info</h3>
+        <a href="#"><i class="fas fa-phone"></i> +91-9360854754</a>
+        <a href="#"><i class="fas fa-envelope"></i> fazalahamed628@gmail.com</a>
+        <a href="#"><i class="fas fa-envelope"></i> Kozhikode,Kerala</a>
+      </div>
 
-        <div class="box">
-            <h3>contact info</h3>
-            <a href="#"><i class="fab fa-facebook-f"></i> facebook</a>
-            <a href="#"><i class="fab fa-twitter"></i> twitter</a>
-            <a href="#"><i class="fab fa-instagram"></i> instagram</a>
-            <a href="#"><i class="fab fa-linkedin"></i> linkedin</a>
-            <a href="#"><i class="fab fa-twitter"></i> twitter</a>
-        </div>
+      <div class="box">
+        <h3>contact info</h3>
+        <a href="#"><i class="fab fa-facebook-f"></i> facebook</a>
+        <a href="#"><i class="fab fa-twitter"></i> twitter</a>
+        <a href="#"><i class="fab fa-instagram"></i> instagram</a>
+        <a href="#"><i class="fab fa-linkedin"></i> linkedin</a>
+        <a href="#"><i class="fab fa-twitter"></i> twitter</a>
+      </div>
     </div>
     <div class="alan-btn"></div>
 
-    <div class="credit"> | all rights reserved</div>
-</section>
+    <div class="credit">| all rights reserved</div>
+  </section>
 </body>
 
-
-
-
-
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script type="text/javascript"
- src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://studio.alan.app/web/lib/alan_lib.min.js"
+></script>
 <script>
-var alanBtnInstance = alanBtn({
-  key: "09dcd2b62b77cc3233ceab58f8c78b692e956eca572e1d8b807a3e2338fdd0dc/stage",
-  onCommand: function (commandData) {
-    if (commandData.command === "product") {
-      console.log('Going to the product');
-      
-      // Try to navigate
-      try {
-        window.location.href = '/user/product';
-      } catch (error) {
-        console.error('Error navigating:', error.message);
+  var alanBtnInstance = alanBtn({
+    key: "09dcd2b62b77cc3233ceab58f8c78b692e956eca572e1d8b807a3e2338fdd0dc/stage",
+    onCommand: function (commandData) {
+      if (commandData.command === "product") {
+        console.log("Going to the product");
+
+        // Try to navigate
+        try {
+          window.location.href = "/user/product";
+        } catch (error) {
+          console.error("Error navigating:", error.message);
+        }
       }
-    }
-  },
-  rootEl: document.getElementById("alan-btn"),
-});
-
+    },
+    rootEl: document.getElementById("alan-btn"),
+  });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var mySwiper = new Swiper('.review-slider', {
-            slidesPerView: 'auto',
-            spaceBetween: 20,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    var mySwiper = new Swiper(".review-slider", {
+      slidesPerView: "auto",
+      spaceBetween: 20,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
     });
+  });
 </script>
-
 
 <%- include('footer') -%>

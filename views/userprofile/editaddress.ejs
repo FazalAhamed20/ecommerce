@@ -2,18 +2,17 @@
 
 <%- include('header') -%>
 
-
 <style>
   body {
-    background-color: #F5F5F5;
-    font-family: 'Quicksand', sans-serif;
+    background-color: #f5f5f5;
+    font-family: "Quicksand", sans-serif;
     transition: background-color 0.5s ease;
   }
 
   .edit-address-container {
     max-width: 400px;
     margin: 50px auto;
-    background-color: #8D6E63;
+    background-color: #8d6e63;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -21,7 +20,7 @@
 
   .field-label {
     font-weight: bold;
-    color: #F5F5F5;
+    color: #f5f5f5;
     display: block;
     margin-bottom: 8px;
   }
@@ -44,7 +43,7 @@
   }
 
   .edit-address-form button {
-    background-color: #4A90E2;
+    background-color: #4a90e2;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -63,30 +62,79 @@
 
   <div class="edit-address-form">
     <form action="/user/editaddressform/<%= address._id %>" method="post">
-
       <label for="mobile" class="field-label">Mobile:</label>
-      <input type="text" id="mobile" name="mobile"  value="<%= address.mobile %>" required>
+      <input
+        type="text"
+        id="mobile"
+        name="mobile"
+        value="<%= address.mobile %>"
+        required
+      />
 
       <label for="email" class="field-label">Email:</label>
-      <input type="email" id="email" name="email" value="<%= address.email %>"  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="<%= address.email %>"
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        required
+      />
 
       <label for="pincode" class="field-label">Pincode:</label>
-      <input type="text" id="pincode" name="pincode"  pattern="[0-9]{6}"  value="<%= address.pincode %>" required>
+      <input
+        type="text"
+        id="pincode"
+        name="pincode"
+        pattern="[0-9]{6}"
+        value="<%= address.pincode %>"
+        required
+      />
 
       <label for="houseName" class="field-label">House Name:</label>
-      <input type="text" id="houseName" name="houseName" value="<%= address.houseName %>" required>
+      <input
+        type="text"
+        id="houseName"
+        name="houseName"
+        value="<%= address.houseName %>"
+        required
+      />
 
       <label for="locality" class="field-label">Locality:</label>
-      <input type="text" id="locality" name="locality" value="<%= address.locality %>" required>
+      <input
+        type="text"
+        id="locality"
+        name="locality"
+        value="<%= address.locality %>"
+        required
+      />
 
       <label for="city" class="field-label">City:</label>
-      <input type="text" id="city" name="city" value="<%= address.city %>" required>
+      <input
+        type="text"
+        id="city"
+        name="city"
+        value="<%= address.city %>"
+        required
+      />
 
       <label for="district" class="field-label">District:</label>
-      <input type="text" id="district" name="district" value="<%= address.district %>" required>
+      <input
+        type="text"
+        id="district"
+        name="district"
+        value="<%= address.district %>"
+        required
+      />
 
       <label for="state" class="field-label">State:</label>
-      <input type="text" id="state" name="state" value="<%= address.state %>" required>
+      <input
+        type="text"
+        id="state"
+        name="state"
+        value="<%= address.state %>"
+        required
+      />
 
       <button type="submit">Update Address</button>
     </form>

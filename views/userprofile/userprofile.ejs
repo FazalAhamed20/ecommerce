@@ -1,96 +1,95 @@
 <!-- views/userprofile/userprofile.ejs -->
 
-<%- include('header') -%>
-<%- include('nav', { user: user}) -%>
+<%- include('header') -%> <%- include('nav', { user: user}) -%>
 
 <style>
-    body {
-        background-color: #EDC9A0;
-        margin: 0;
-        font-family: SoDoSans_Regular, Helvetica, sans-serif !important;
-        overflow-y: scroll;
-    }
+  body {
+    background-color: #edc9a0;
+    margin: 0;
+    font-family: SoDoSans_Regular, Helvetica, sans-serif !important;
+    overflow-y: scroll;
+  }
 
-    .profile-container {
-        max-width: 600px;
-        margin: 100px auto;
-        padding: 20px;
-        background-color: white;
-        border-radius: 15px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+  .profile-container {
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
 
-    .details {
-        margin-bottom: 20px;
-    }
+  .details {
+    margin-bottom: 20px;
+  }
 
-    .details p {
-        margin: 0;
-        line-height: 1.5;
-    }
+  .details p {
+    margin: 0;
+    line-height: 1.5;
+  }
 
-    .edit-button {
-        background-color: #4A2617;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+  .edit-button {
+    background-color: #4a2617;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-    .form-container {
-        display: none;
-        max-width: 400px;
-        margin-top: 20px;
-        padding: 20px;
-        background-color: white;
-        border-radius: 15px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+  .form-container {
+    display: none;
+    max-width: 400px;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
 
-    label {
-        display: block;
-        margin-bottom: 10px;
-    }
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
 
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
 
-    .update-button {
-        background-color: #4A2617;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+  .update-button {
+    background-color: #4a2617;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-    .success-message {
-        color: green;
-        margin-top: 10px;
-    }
+  .success-message {
+    color: green;
+    margin-top: 10px;
+  }
 
-    .error-message {
-        color: red;
-        margin-top: 10px;
-    }
-    .forgot-password-button {
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  .forgot-password-button {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #4A2617;
+    background-color: #4a2617;
     color: white;
     text-decoration: none;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
-  button{
+  button {
     color: white;
     background-color: green;
   }
@@ -103,12 +102,12 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-}
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 
-/* Modal Content */
-.modal-content {
+  /* Modal Content */
+  .modal-content {
     background-color: #41a9d5;
     color: black;
     margin: 15% auto;
@@ -117,143 +116,164 @@
     width: 30%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
-}
+  }
 
-/* Close Button */
-.close {
+  /* Close Button */
+  .close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-}
+  }
 
-.close:hover,
-.close:focus {
+  .close:hover,
+  .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-}
+  }
 </style>
 <div id="customModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeCustomModal()">&times;</span>
-        <p id="customModalMessage"></p>
-    </div>
+  <div class="modal-content">
+    <span class="close" onclick="closeCustomModal()">&times;</span>
+    <p id="customModalMessage"></p>
+  </div>
 </div>
 
 <div class="profile-container">
-    <div class="details">
-        <% if (user && user.name) { %>
-            <p id="userName"><strong>Name:</strong> <%= user.name %></p>
-            <p><strong>Email:</strong> <%= user.email %></p>
-            <% if (walletBalance !== undefined) { %>
-                <p><strong>Wallet Balance:</strong> <%= walletBalance %></p>
-            <% } %>
-        <% } else { %>
-            <p>User not found</p>
-        <% } %>
-    </div>
-    <div class="details">
-        <p>Refer a friend and earn it!</p>
-        <% if (user && user.name) { %>
-            <p id="referralCode"><strong>Referral code:</strong> <%= user.referralCode %></p>
-            <button onclick="copyReferralCode()">Copy Referral Code</button>
-        <% } else { %>
-            <p>User not found</p>
-        <% } %>
-    </div>
-    
-    
-    
-
-    <% if (typeof successMessage !== 'undefined' && successMessage) { %>
-        <p class="success-message"><%= successMessage %></p>
+  <div class="details">
+    <% if (user && user.name) { %>
+    <p id="userName"><strong>Name:</strong> <%= user.name %></p>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <% if (walletBalance !== undefined) { %>
+    <p><strong>Wallet Balance:</strong> <%= walletBalance %></p>
+    <% } %> <% } else { %>
+    <p>User not found</p>
     <% } %>
-    
-    <!-- Display error message if available -->
-    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
-        <p class="error-message"><%= errorMessage %></p>
+  </div>
+  <div class="details">
+    <p>Refer a friend and earn it!</p>
+    <% if (user && user.name) { %>
+    <p id="referralCode">
+      <strong>Referral code:</strong> <%= user.referralCode %>
+    </p>
+    <button onclick="copyReferralCode()">Copy Referral Code</button>
+    <% } else { %>
+    <p>User not found</p>
     <% } %>
-    <a href="/user/forgot-password" class="forgot-password-button">Forgot Password?</a>
+  </div>
 
-    <button class="edit-button" onclick="toggleForm()">Edit Profile</button>
+  <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+  <p class="success-message"><%= successMessage %></p>
+  <% } %>
 
-    <div class="form-container" id="editForm">
-        <h2>Edit Profile</h2>
-        <form action="/user/edituser" method="post" onsubmit="prepareFormData();">
-            <!-- Hidden input to store JSON representation of the user -->
-            <input type="hidden" id="userData" name="userData" value='<%- JSON.stringify(user) %>'>
+  <!-- Display error message if available -->
+  <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+  <p class="error-message"><%= errorMessage %></p>
+  <% } %>
+  <a href="/user/forgot-password" class="forgot-password-button"
+    >Forgot Password?</a
+  >
 
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" value="<%= user && user.name ? user.name : '' %>" required>
+  <button class="edit-button" onclick="toggleForm()">Edit Profile</button>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<%= user && user.email ? user.email : '' %>" required>
+  <div class="form-container" id="editForm">
+    <h2>Edit Profile</h2>
+    <form action="/user/edituser" method="post" onsubmit="prepareFormData();">
+      <!-- Hidden input to store JSON representation of the user -->
+      <input
+        type="hidden"
+        id="userData"
+        name="userData"
+        value="<%- JSON.stringify(user) %>"
+      />
 
-            <label for="currentPassword">Current Password</label>
-            <input type="password" id="currentPassword" name="currentPassword" required>
+      <label for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="<%= user && user.name ? user.name : '' %>"
+        required
+      />
 
-            <a href="/user/profile"><button type="submit" class="update-button">Update Profile</button></a>
-        </form>
-    </div>
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="<%= user && user.email ? user.email : '' %>"
+        required
+      />
+
+      <label for="currentPassword">Current Password</label>
+      <input
+        type="password"
+        id="currentPassword"
+        name="currentPassword"
+        required
+      />
+
+      <a href="/user/profile"
+        ><button type="submit" class="update-button">Update Profile</button></a
+      >
+    </form>
+  </div>
 </div>
 
 <script>
-    function openCustomModal(message) {
-    const modal = document.getElementById('customModal');
-    const modalMessage = document.getElementById('customModalMessage');
-    
+  function openCustomModal(message) {
+    const modal = document.getElementById("customModal");
+    const modalMessage = document.getElementById("customModalMessage");
+
     modalMessage.textContent = message;
-    modal.style.display = 'block';
-}
+    modal.style.display = "block";
+  }
 
-// Function to close the custom modal
-function closeCustomModal() {
-    const modal = document.getElementById('customModal');
-    modal.style.display = 'none';
-}
-    function toggleForm() {
-        const form = document.getElementById('editForm');
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  // Function to close the custom modal
+  function closeCustomModal() {
+    const modal = document.getElementById("customModal");
+    modal.style.display = "none";
+  }
+  function toggleForm() {
+    const form = document.getElementById("editForm");
+    form.style.display = form.style.display === "none" ? "block" : "none";
+  }
+
+  function prepareFormData() {
+    // Get the user data from the hidden input and parse it
+    var userData = JSON.parse(document.getElementById("userData").value);
+
+    // Call the refreshPage function with the user data
+    refreshPage(userData);
+
+    // Redirect to /user/profile after a short delay (e.g., 3 seconds)
+  }
+
+  function refreshPage(updatedUser) {
+    // Update the displayed name instantly
+    document.getElementById("userName").innerText = "Name: " + updatedUser.name;
+
+    // Show success message (if available)
+    if (updatedUser.successMessage) {
+      openCustomModal(updatedUser.successMessage);
     }
-
-    function prepareFormData() {
-        // Get the user data from the hidden input and parse it
-        var userData = JSON.parse(document.getElementById('userData').value);
-
-        // Call the refreshPage function with the user data
-        refreshPage(userData);
-
-        // Redirect to /user/profile after a short delay (e.g., 3 seconds)
-       
-            
-      
-    }
-
-    function refreshPage(updatedUser) {
-        // Update the displayed name instantly
-        document.getElementById('userName').innerText = 'Name: ' + updatedUser.name;
-
-        // Show success message (if available)
-        if (updatedUser.successMessage) {
-            openCustomModal(updatedUser.successMessage);
-        }
-        window.location.href = '/user/profile';
-        // Hide the form
-        toggleForm();
-    }
+    window.location.href = "/user/profile";
+    // Hide the form
+    toggleForm();
+  }
 </script>
 <script>
-    function copyReferralCode() {
-        var referralCodeElement = document.querySelector('#referralCode');
-        var range = document.createRange();
-        range.selectNode(referralCodeElement);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand('copy');
-        window.getSelection().removeAllRanges();
-        openCustomModal('Referral code copied! Share it with your friends.');
-    }
+  function copyReferralCode() {
+    var referralCodeElement = document.querySelector("#referralCode");
+    var range = document.createRange();
+    range.selectNode(referralCodeElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+    openCustomModal("Referral code copied! Share it with your friends.");
+  }
 </script>
 
 <%- include('footer') -%>

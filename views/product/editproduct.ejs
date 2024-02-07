@@ -2,234 +2,290 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="https://image.ibb.co/n5gUtm/icon_1.png"
+    />
     <title>Edit Product</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        h1 {
-            color: #4CAF50;
-            text-transform: uppercase;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+      h1 {
+        color: #4caf50;
+        text-transform: uppercase;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            box-sizing: border-box;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-        }
+      form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        box-sizing: border-box;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+      }
 
-        label {
-            margin: 10px 0;
-            color: #555;
-        }
+      label {
+        margin: 10px 0;
+        color: #555;
+      }
 
-        input, textarea, select {
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+      input,
+      textarea,
+      select {
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
 
-        #newImageSection {
-            display: none;
-            margin-top: 10px;
-        }
+      #newImageSection {
+        display: none;
+        margin-top: 10px;
+      }
 
-        img {
-            max-width: 50px;
-            max-height: 50px;
-            margin-bottom: 10px;
-        }
+      img {
+        max-width: 50px;
+        max-height: 50px;
+        margin-bottom: 10px;
+      }
 
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-        }
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+      }
 
-        .checkbox-group label {
-            margin: 0;
-            margin-right: 10px;
-        }
+      .checkbox-group label {
+        margin: 0;
+        margin-right: 10px;
+      }
 
-        button {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: background-color 0.3s ease-in-out;
-        }
+      button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        transition: background-color 0.3s ease-in-out;
+      }
 
-        button:hover {
-            background-color: #45a049;
-        }
+      button:hover {
+        background-color: #45a049;
+      }
 
-        a {
-            color: #4CAF50;
-            text-decoration: none;
-            display: block;
-            margin-top: 15px;
-            font-size: 14px;
-            text-align: center;
-        }
-        #image-preview {
-            max-width: 100px;
-            max-height: 100px;
-        }
-        #image-preview-container{
-            display: none;
-        }
-        #newImageError{
-            color: red;
-        }
+      a {
+        color: #4caf50;
+        text-decoration: none;
+        display: block;
+        margin-top: 15px;
+        font-size: 14px;
+        text-align: center;
+      }
+      #image-preview {
+        max-width: 100px;
+        max-height: 100px;
+      }
+      #image-preview-container {
+        display: none;
+      }
+      #newImageError {
+        color: red;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <h1>Edit Product</h1>
 
-<h1>Edit Product</h1>
+    <form
+      action="/product/updateproduct/<%= product._id %>"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <label for="name">Product Name:</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="<%= product.name %>"
+        required
+      />
 
-<form action="/product/updateproduct/<%= product._id %>" method="post" enctype="multipart/form-data">
-    
-    
+      <label for="description">Product Description:</label>
+      <textarea id="description" name="description" required>
+<%= product.description %></textarea
+      >
 
-    <label for="name">Product Name:</label>
-    <input type="text" id="name" name="name" value="<%= product.name %>" required>
-    
-    <label for="description">Product Description:</label>
-    <textarea id="description" name="description" required><%= product.description %></textarea>
-    
-    <label for="price">Product Price:</label>
-    <input type="number" id="price" name="price" value="<%= product.price %>" required min="0">
-    <label for="quantity">Product Quantity:</label>
-    <input type="number" id="quantity" name="quantity" value="<%= product.quantity || 0 %>" required min="0">
+      <label for="price">Product Price:</label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        value="<%= product.price %>"
+        required
+        min="0"
+      />
+      <label for="quantity">Product Quantity:</label>
+      <input
+        type="number"
+        id="quantity"
+        name="quantity"
+        value="<%= product.quantity || 0 %>"
+        required
+        min="0"
+      />
 
-    <label for="ingredients">Product Ingredients:</label>
-    <textarea id="ingredients" name="ingredients" required><%= product.ingredients %></textarea>
-    
-    <div class="checkbox-group">
+      <label for="ingredients">Product Ingredients:</label>
+      <textarea id="ingredients" name="ingredients" required>
+<%= product.ingredients %></textarea
+      >
+
+      <div class="checkbox-group">
         <label for="updateImage">Update Image:</label>
-        <input type="checkbox" id="updateImage" name="updateImage">
-    </div>
-    
-    <div class="checkbox-group">
+        <input type="checkbox" id="updateImage" name="updateImage" />
+      </div>
+
+      <div class="checkbox-group">
         <label for="existingImage">Existing Image:</label>
         <% if (product.image) { %>
-            <img src="/product-images/<%= product.image %>" alt="<%= product.name %>">
-            <br>
-            <label>Delete Existing Image:</label>
-            <input type="checkbox" name="deleteExistingImage">
-        <% } else { %>
-            No image available
-        <% } %>
-    </div>
+        <img
+          src="/product-images/<%= product.image %>"
+          alt="<%= product.name %>"
+        />
+        <br />
+        <label>Delete Existing Image:</label>
+        <input type="checkbox" name="deleteExistingImage" />
+        <% } else { %> No image available <% } %>
+      </div>
 
-    <div id="newImageSection">
+      <div id="newImageSection">
         <label for="newImage">Upload New Image:</label>
         <!-- Update the onchange attribute -->
-        <input type="file" id="image" name="image" accept="image/*" onchange="validateImageType('image');">
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept="image/*"
+          onchange="validateImageType('image');"
+        />
         <div id="image-preview-container">
-            <img id="image-preview" src="#">
+          <img id="image-preview" src="#" />
         </div>
         <div id="newImageError" class="error-message"></div>
-    </div>
-    
+      </div>
 
-    <label for="category">Product Category:</label>
-    <select id="category" name="category" required>
+      <label for="category">Product Category:</label>
+      <select id="category" name="category" required>
         <% categories.forEach(category => { %>
-            <option value="<%= category._id %>" <% if (product.category && product.category._id.equals(category._id)) { %>selected<% } %>><%= category.name %></option>
+        <option
+          value="<%= category._id %>"
+          <%
+          if
+          (product.category
+          &&
+          product.category._id.equals(category._id))
+          {
+          %
+        >
+          selected<% } %>><%= category.name %>
+        </option>
         <% }); %>
-    </select>
-    
-    <button type="submit">Update Product</button>
+      </select>
+
+      <button type="submit">Update Product</button>
     </form>
-    
+
     <a href="/product">Back to Products</a>
-<script>
-    // Initial call to displayImagePreview to handle existing image
-    document.getElementById('updateImage').addEventListener('change', function () {
-        var newImageSection = document.getElementById('newImageSection');
-        newImageSection.style.display = this.checked ? 'block' : 'none';
-    });
+    <script>
+      // Initial call to displayImagePreview to handle existing image
+      document
+        .getElementById("updateImage")
+        .addEventListener("change", function () {
+          var newImageSection = document.getElementById("newImageSection");
+          newImageSection.style.display = this.checked ? "block" : "none";
+        });
 
-
-    // Update the error handling in the script
-    function validateImageType(inputId) {
+      // Update the error handling in the script
+      function validateImageType(inputId) {
         const input = document.getElementById(inputId);
-        const errorElement = document.getElementById('newImageError'); // Corrected the error div id
-        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const errorElement = document.getElementById("newImageError"); // Corrected the error div id
+        const imagePreviewContainer = document.getElementById(
+          "image-preview-container"
+        );
 
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+        const allowedTypes = [
+          "image/jpeg",
+          "image/png",
+          "image/gif",
+          "image/svg+xml",
+          "image/webp",
+        ];
         const maxFileSizeMB = 5; // Set a maximum file size limit (in megabytes)
 
         if (input.files.length > 0) {
-            const fileType = input.files[0].type;
-            const fileSizeMB = input.files[0].size / (1024 * 1024);
+          const fileType = input.files[0].type;
+          const fileSizeMB = input.files[0].size / (1024 * 1024);
 
-            if (!allowedTypes.includes(fileType)) {
-                errorElement.textContent = 'Please choose a valid image file (JPEG, PNG, GIF, SVG, WebP).';
-                input.value = ''; // Clear the file input
-                imagePreviewContainer.style.display = 'none';
-            } else if (fileSizeMB > maxFileSizeMB) {
-                errorElement.textContent = `File size exceeds the maximum limit of ${maxFileSizeMB} MB.`;
-                input.value = ''; // Clear the file input
-                imagePreviewContainer.style.display = 'none';
-            } else {
-                errorElement.textContent = '';
-                displayImagePreview();
-            }
+          if (!allowedTypes.includes(fileType)) {
+            errorElement.textContent =
+              "Please choose a valid image file (JPEG, PNG, GIF, SVG, WebP).";
+            input.value = ""; // Clear the file input
+            imagePreviewContainer.style.display = "none";
+          } else if (fileSizeMB > maxFileSizeMB) {
+            errorElement.textContent = `File size exceeds the maximum limit of ${maxFileSizeMB} MB.`;
+            input.value = ""; // Clear the file input
+            imagePreviewContainer.style.display = "none";
+          } else {
+            errorElement.textContent = "";
+            displayImagePreview();
+          }
         } else {
-            // No file selected, reset error and show the container
-            errorElement.textContent = '';
-            imagePreviewContainer.style.display = 'block';
+          // No file selected, reset error and show the container
+          errorElement.textContent = "";
+          imagePreviewContainer.style.display = "block";
         }
-    }
+      }
 
-    function displayImagePreview() {
-        const imageInput = document.getElementById('image');
-        const imagePreview = document.getElementById('image-preview');
-        const imagePreviewContainer = document.getElementById('image-preview-container').style.display = 'block';
+      function displayImagePreview() {
+        const imageInput = document.getElementById("image");
+        const imagePreview = document.getElementById("image-preview");
+        const imagePreviewContainer = (document.getElementById(
+          "image-preview-container"
+        ).style.display = "block");
 
         if (imageInput.files.length > 0) {
-            const reader = new FileReader();
+          const reader = new FileReader();
 
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result;
-                imagePreviewContainer.style.display = 'block';
-            };
+          reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreviewContainer.style.display = "block";
+          };
 
-            reader.readAsDataURL(imageInput.files[0]);
+          reader.readAsDataURL(imageInput.files[0]);
         } else {
-            // Hide the image preview container if no file is selected
-            imagePreviewContainer.style.display = 'none';
+          // Hide the image preview container if no file is selected
+          imagePreviewContainer.style.display = "none";
         }
-    }
-
-</script>
-
-
-</body>
+      }
+    </script>
+  </body>
 </html>

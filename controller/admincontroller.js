@@ -5,7 +5,7 @@ const Chart = require("chart.js");
 const fs = require("fs");
 const ejs = require("ejs");
 const CanceledOrder = require("../models/orderCancelModel");
-const puppeteer=require('puppeteer')
+const puppeteer = require("puppeteer");
 //admin login------------------------------------------------------->
 const admin = (req, res) => {
   if (req.session.admin != null) {
@@ -262,7 +262,7 @@ const generateSalesReport = async (req, res) => {
     const startDate = req.query.startDate
       ? moment(req.query.startDate).startOf("day")
       : moment().startOf("day");
-      console.log(startDate);
+    console.log(startDate);
     const endDate = req.query.endDate
       ? moment(req.query.endDate).endOf("day")
       : moment().endOf("day");
@@ -284,11 +284,11 @@ const generateSalesReport = async (req, res) => {
       orders,
     });
 
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.setContent(renderedHTML);
 
-    const pdfBuffer = await page.pdf({ format: 'Letter' });
+    const pdfBuffer = await page.pdf({ format: "Letter" });
 
     await browser.close();
 

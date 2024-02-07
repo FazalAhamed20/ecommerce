@@ -1,146 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
-  <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
 
-  <style>
-    .navbar-brand, .navbar-toggler-icon, .navbar-toggler, .navbar-nav .nav-link, .navbar-toggler-icon {
-      color: #fff;
-    }
-    .navbar-nav li {
-            margin-left: 20px;
-        }
-  
-    .navbar-nav .dropdown-menu {
-      max-width: 10px;
-      background: rgba(0, 0, 0, 0);
-      border: none;
-      left: 90%;
-      transform: translateX(-50%);
-    }
-  
-    .navbar-nav .dropdown-item {
-      margin-left: -27px;
-      font-size: large;
-      color: #fff;
-      background-color: rgba(0, 0, 0, 0);
-      backdrop-filter: blur(30px);
-      z-index: -1;
-    }
-  
-    .navbar-nav .nav-item.dropdown:hover .nav-link {
-      background-color: transparent;
-      color: #fff;
-    }
-  
-    .navbar-nav {
-      margin-left: 0px;
-    }
-  
-    .navbar-toggler-icon {
-      background-color: #fff;
-    }
-  
-    .nav-link {
-      color: #fff !important;
-      font-size: 15px;
-    }
-  
-    .custom-dropdown {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-  
-    @media (max-width: 768px) {
-      .custom-dropdown {
-        width: 100%;
-        text-align: center;
-        left: 0;
-        right: 0;
-        margin: auto;
-        transform: none;
+    <style>
+      .navbar-brand,
+      .navbar-toggler-icon,
+      .navbar-toggler,
+      .navbar-nav .nav-link,
+      .navbar-toggler-icon {
+        color: #fff;
       }
-    }
-  </style>
-  
-</head>
-<body>
+      .navbar-nav li {
+        margin-left: 20px;
+      }
 
-<nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Coffee Land</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      .navbar-nav .dropdown-menu {
+        max-width: 10px;
+        background: rgba(0, 0, 0, 0);
+        border: none;
+        left: 90%;
+        transform: translateX(-50%);
+      }
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <form class="form-inline my-2 my-lg-0 mr-auto">
-      
-      </form>
+      .navbar-nav .dropdown-item {
+        margin-left: -27px;
+        font-size: large;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0);
+        backdrop-filter: blur(30px);
+        z-index: -1;
+      }
 
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="/user/coffeemix"><i class="fa-solid fa-mug-saucer">Coffee</i></a>
-        </li>
+      .navbar-nav .nav-item.dropdown:hover .nav-link {
+        background-color: transparent;
+        color: #fff;
+      }
 
-        <!-- Add an empty list item to create space in the middle -->
-        <li class="nav-item"></li>
+      .navbar-nav {
+        margin-left: 0px;
+      }
 
-        <li class="nav-item">
-          <a class="nav-link" href="/"><i class="fas fa-house"></i></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/product"><i class="fas fa-mug-hot"></i></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/cart">
-            <i class="fas fa-cart-shopping"></i>
-            <% if (cartCount >=0) { %>
-              <span id="cart-count" class="badge bg-danger">
+      .navbar-toggler-icon {
+        background-color: #fff;
+      }
+
+      .nav-link {
+        color: #fff !important;
+        font-size: 15px;
+      }
+
+      .custom-dropdown {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      @media (max-width: 768px) {
+        .custom-dropdown {
+          width: 100%;
+          text-align: center;
+          left: 0;
+          right: 0;
+          margin: auto;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Coffee Land</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <form class="form-inline my-2 my-lg-0 mr-auto"></form>
+
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/user/coffeemix"
+                ><i class="fa-solid fa-mug-saucer">Coffee</i></a
+              >
+            </li>
+
+            <!-- Add an empty list item to create space in the middle -->
+            <li class="nav-item"></li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/"><i class="fas fa-house"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/product"
+                ><i class="fas fa-mug-hot"></i
+              ></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user/cart">
+                <i class="fas fa-cart-shopping"></i>
+                <% if (cartCount >=0) { %>
+                <span id="cart-count" class="badge bg-danger">
                   <%= cartCount %>
-              </span>
-          <% } else { %>
-              <% cartCount = 0; %>
-          <% } %>
-          
-            
-          </a>
-      </li>
-      <li class="nav-item dropdown text-center">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <% if (user) { %>
-            <%= user.name %> 
-          <% } else { %>
-            <i class="fas fa-user"></i> Account
-          <% } %>
-        </a>
-        <div class="dropdown-menu dropdown-menu-center custom-dropdown" aria-labelledby="navbarDropdown">
-          <% if (user) { %>
-              <a class="dropdown-item" href="/user/profile">Profile</a>
-              <a class="dropdown-item" href="/user/logout"><i class="fas fa-sign-out"></i> Logout</a>
-          <% } else { %>
-              <a class="dropdown-item" href="/user/login"><i class="fas fa-user"></i> Log In</a>
-          <% } %>
+                </span>
+                <% } else { %> <% cartCount = 0; %> <% } %>
+              </a>
+            </li>
+            <li class="nav-item dropdown text-center">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <% if (user) { %> <%= user.name %> <% } else { %>
+                <i class="fas fa-user"></i> Account <% } %>
+              </a>
+              <div
+                class="dropdown-menu dropdown-menu-center custom-dropdown"
+                aria-labelledby="navbarDropdown"
+              >
+                <% if (user) { %>
+                <a class="dropdown-item" href="/user/profile">Profile</a>
+                <a class="dropdown-item" href="/user/logout"
+                  ><i class="fas fa-sign-out"></i> Logout</a
+                >
+                <% } else { %>
+                <a class="dropdown-item" href="/user/login"
+                  ><i class="fas fa-user"></i> Log In</a
+                >
+                <% } %>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      
-      
-      </li>
-      
-      </ul>
-    </div>
-  </div>
-</nav>
+    </nav>
 
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-
-</body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
 </html>

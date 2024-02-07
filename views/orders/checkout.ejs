@@ -1,193 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="https://image.ibb.co/n5gUtm/icon_1.png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <title>Checkout</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<style>
-     .summary-box {
-            /* Add your styles for the summary box if needed */
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .address-box {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin: 10px;
-  }
-  input[type="radio"] {
-    margin-right: 5px;
-  }
-
-  .field-label {
-    font-weight: bold;
-  }
-
-  .address-box p {
-    margin: 5px 0;
-  }
-
-  @media only screen and (max-width: 768px) {
-    .address-box {
-      padding: 15px;
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <style>
+    .summary-box {
+      /* Add your styles for the summary box if needed */
+      display: flex;
+      flex-wrap: wrap;
     }
-
+    .address-box {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin: 10px;
+    }
     input[type="radio"] {
-      margin-bottom: 10px;
+      margin-right: 5px;
     }
 
     .field-label {
-      display: block;
-      margin-bottom: 5px;
+      font-weight: bold;
     }
-  }
-        .payment-option {
-            /* Add your styles for each payment option box */
-            width: 100%; /* Adjust the width as needed */
-            margin-bottom: 10px; /* Adjust the margin as needed */
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
 
-        /* Additional styles for payment option icons */
-        .payment-icon {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-        .payment-checkbox {
-            margin-right: 10px;
-        }
- 
+    .address-box p {
+      margin: 5px 0;
+    }
 
-.btn-checkout {
-  color: #ffffff;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: bold;
-  background-color: #424242;
-  width: 210px;
-  height: 80px;
-  padding: 0;
-  border: 0;
-  margin: 10px;
-  margin-left: 200px;
-  outline: 0;
-  flex-grow: 0;
-  flex-shrink: 0;
-  overflow: hidden;
-  position: relative;
-  border-radius: 12px;
-  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.4);
-}
+    @media only screen and (max-width: 768px) {
+      .address-box {
+        padding: 15px;
+      }
 
-.truck {
-  background-image: url("https://assets.codepen.io/430361/truck.svg");
-  width: 160px;
-  height: 100px;
-  display: block;
-  position: absolute;
-  top: calc(50% - 50px);
-  left: calc(50% - 80px);
-  opacity: 0;
-  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.75));
-}
+      input[type="radio"] {
+        margin-bottom: 10px;
+      }
 
-.parcel {
-  background-color: #ffbc47;
-  width: 30px;
-  height: 30px;
-  display: block;
-  position: absolute;
-  bottom: calc(50% - 50px);
-  left: calc(50% - 15px);
-  opacity: 0;
-  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.75));
-}
+      .field-label {
+        display: block;
+        margin-bottom: 5px;
+      }
+    }
+    .payment-option {
+      /* Add your styles for each payment option box */
+      width: 100%; /* Adjust the width as needed */
+      margin-bottom: 10px; /* Adjust the margin as needed */
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
 
-.parcel > span {
-  height: 3px;
-  content: "";
-  background-color: #ffbc47;
-  width: 15px;
-  height: 3px;
-  position: absolute;
-  top: -3px;
-}
+    /* Additional styles for payment option icons */
+    .payment-icon {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    .payment-checkbox {
+      margin-right: 10px;
+    }
 
-.parcel > span:first-child {
-  left: 0;
-  transform-origin: bottom left;
-}
+    .btn-checkout {
+      color: #ffffff;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: bold;
+      background-color: #424242;
+      width: 210px;
+      height: 80px;
+      padding: 0;
+      border: 0;
+      margin: 10px;
+      margin-left: 200px;
+      outline: 0;
+      flex-grow: 0;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+      border-radius: 12px;
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.4);
+    }
 
-.parcel > span:last-child {
-  right: 0;
-  transform-origin: bottom right;
-}
+    .truck {
+      background-image: url("https://assets.codepen.io/430361/truck.svg");
+      width: 160px;
+      height: 100px;
+      display: block;
+      position: absolute;
+      top: calc(50% - 50px);
+      left: calc(50% - 80px);
+      opacity: 0;
+      filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.75));
+    }
 
-.checkout,
-.thank-you {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: calc(50% - 25px);
-  left: 0;
-}
+    .parcel {
+      background-color: #ffbc47;
+      width: 30px;
+      height: 30px;
+      display: block;
+      position: absolute;
+      bottom: calc(50% - 50px);
+      left: calc(50% - 15px);
+      opacity: 0;
+      filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.75));
+    }
 
-.thank-you {
-  opacity: 0;
-}
+    .parcel > span {
+      height: 3px;
+      content: "";
+      background-color: #ffbc47;
+      width: 15px;
+      height: 3px;
+      position: absolute;
+      top: -3px;
+    }
 
+    .parcel > span:first-child {
+      left: 0;
+      transform-origin: bottom left;
+    }
+
+    .parcel > span:last-child {
+      right: 0;
+      transform-origin: bottom right;
+    }
+
+    .checkout,
+    .thank-you {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: calc(50% - 25px);
+      left: 0;
+    }
+
+    .thank-you {
+      opacity: 0;
+    }
 
     .Orders {
-        text-align: left;
+      text-align: left;
     }
-
-   
 
     p {
-        margin: 10px 0;
+      margin: 10px 0;
     }
 
+    .order_head {
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
 
-.order_head {
-	
-	font-weight: 900;
-	font-size: 1.2rem;
-}
+    hr {
+      border: none;
+      border-top: 0.5px solid black;
+    }
 
-hr {
-	border: none;
-	border-top: 0.5px solid black;
-}
+    .order_price {
+      display: grid;
+      grid-template-columns: repeat(1, 4fr);
+      margin-top: 20px;
+    }
+    .price,
+    .total_price {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
 
-.order_price {
-	display: grid;
-	grid-template-columns: repeat(1, 4fr);
-	margin-top: 20px;
-}
-.price,
-.total_price {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 20px;
-}
-
-.dark {
-	font-weight: bold;
-}
-h3{
-  align-items: center;
-}
-body {
+    .dark {
+      font-weight: bold;
+    }
+    h3 {
+      align-items: center;
+    }
+    body {
       margin: 0;
       display: flex;
       justify-content: center;
@@ -207,144 +208,138 @@ body {
       margin: 0;
     }
     .flash-message.error {
-  color: red;
-}
-.coupon {
-    margin-top: 20px;
-  }
+      color: red;
+    }
+    .coupon {
+      margin-top: 20px;
+    }
 
-  .coupon label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
+    .coupon label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
 
-  .coupon-input {
-    display: flex;
-    gap: 10px;
-  }
+    .coupon-input {
+      display: flex;
+      gap: 10px;
+    }
 
-  .coupon-input input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
+    .coupon-input input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
 
-  .coupon-input button {
-    padding: 8px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+    .coupon-input button {
+      padding: 8px 15px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-  .coupon-input button:hover {
-    background-color: #45a049;
-  }
-  #couponButton.applied {
-  background-color: red;
-}
+    .coupon-input button:hover {
+      background-color: #45a049;
+    }
+    #couponButton.applied {
+      background-color: red;
+    }
 
-.add-address-button {
-    background-color: #4CAF50; /* Green background color */
-    color: white; /* White text color */
-    border: none; /* Remove border */
-    padding: 5px 10px; /* Add padding */
-    text-align: center; /* Center-align text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Make it inline-block */
-    font-size: 16px; /* Set font size */
-    cursor: pointer; /* Add cursor pointer */
-    border-radius: 5px; /* Add border-radius */
-}
+    .add-address-button {
+      background-color: #4caf50; /* Green background color */
+      color: white; /* White text color */
+      border: none; /* Remove border */
+      padding: 5px 10px; /* Add padding */
+      text-align: center; /* Center-align text */
+      text-decoration: none; /* Remove underline */
+      display: inline-block; /* Make it inline-block */
+      font-size: 16px; /* Set font size */
+      cursor: pointer; /* Add cursor pointer */
+      border-radius: 5px; /* Add border-radius */
+    }
 
-.add-address-button:hover {
-    background-color: #45a049; /* Darker green color on hover */
-}
-/* Style for the modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
+    .add-address-button:hover {
+      background-color: #45a049; /* Darker green color on hover */
+    }
+    /* Style for the modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%; /* Adjust the width as needed */
-    max-width: 400px; /* Set a maximum width if desired */
-}
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 50%; /* Adjust the width as needed */
+      max-width: 400px; /* Set a maximum width if desired */
+    }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-.form-label {
-    display: block;
-    margin-top: 10px;
-}
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .form-label {
+      display: block;
+      margin-top: 10px;
+    }
 
-.form-input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-}
-.no-address{
-  margin-left: 30px;
-}
-/* Style for the Save Address button */
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    .form-input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .no-address {
+      margin-left: 30px;
+    }
+    /* Style for the Save Address button */
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-button:hover {
-    background-color: #45a049;
-}
-.name-email-container {
-    display: flex;
-    flex-direction: column;
-}
-
-
-
- 
-
-       
-</style>
-<body>
+    button:hover {
+      background-color: #45a049;
+    }
+    .name-email-container {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+  <body>
     <div class="container">
       <div>
-        <h3><% if (messages.error && messages.error.length > 0) { %>
-          <div class="flash-message error">
-            <%= messages.error[0] %>
-          </div>
-        <% } %></h3>
+        <h3>
+          <% if (messages.error && messages.error.length > 0) { %>
+          <div class="flash-message error"><%= messages.error[0] %></div>
+          <% } %>
+        </h3>
       </div>
       <!-- Modal -->
       <div id="addAddressModal" class="modal">
@@ -353,661 +348,882 @@ button:hover {
           <h2>Add New Address</h2>
           <form id="addressForm">
             <label for="mobile" class="form-label">Mobile</label>
-            <input type="text" id="mobile" name="mobile" class="form-input" required>
-      
+            <input
+              type="text"
+              id="mobile"
+              name="mobile"
+              class="form-input"
+              required
+            />
+
             <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" name="email" class="form-input" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required>
-      
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+              required
+            />
+
             <label for="pincode" class="form-label">Pincode</label>
-            <input type="text" id="pincode" name="pincode" class="form-input" pattern="[0-9]{6}" required>
-      
+            <input
+              type="text"
+              id="pincode"
+              name="pincode"
+              class="form-input"
+              pattern="[0-9]{6}"
+              required
+            />
+
             <label for="houseName" class="form-label">House Name</label>
-            <input type="text" id="houseName" name="houseName" class="form-input" required>
-      
+            <input
+              type="text"
+              id="houseName"
+              name="houseName"
+              class="form-input"
+              required
+            />
+
             <label for="locality" class="form-label">Locality</label>
-            <input type="text" id="locality" name="locality" class="form-input" required>
-      
+            <input
+              type="text"
+              id="locality"
+              name="locality"
+              class="form-input"
+              required
+            />
+
             <label for="city" class="form-label">City</label>
-            <input type="text" id="city" name="city" class="form-input" required>
-      
+            <input
+              type="text"
+              id="city"
+              name="city"
+              class="form-input"
+              required
+            />
+
             <label for="district" class="form-label">District</label>
-            <input type="text" id="district" name="district" class="form-input" required>
-      
+            <input
+              type="text"
+              id="district"
+              name="district"
+              class="form-input"
+              required
+            />
+
             <label for="state" class="form-label">State</label>
-            <input type="text" id="state" name="state" class="form-input" required>
-      
-            <button type="button" onclick="saveAddress()" class="form-button">Save Address</button>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              class="form-input"
+              required
+            />
+
+            <button type="button" onclick="saveAddress()" class="form-button">
+              Save Address
+            </button>
           </form>
         </div>
       </div>
-      
-     
-      <form id="checkoutForm" action="/create-order" method="POST" onsubmit="return handleFormSubmission();">
-        
+
+      <form
+        id="checkoutForm"
+        action="/create-order"
+        method="POST"
+        onsubmit="return handleFormSubmission();"
+      >
         <div class="step-checkout">
-            <ul class="step-checkout_list" id="checkoutList">
-                <!-- Checkout items/tabs -->
-                <li role="button" class="step-checkout_item active" id="stepCheckoutItem1" tabindex="1"><span>Your details</span></li>
-                <li role="button" class="step-checkout_item" id="stepCheckoutItem2" tabindex="1"><span>Order Summary</span></li>
-                <li role="button" class="step-checkout_item" id="stepCheckoutItem3" tabindex="1"><span>Shipping address</span></li>
-                <li role="button" class="step-checkout_item" id="stepCheckoutItem4" tabindex="1"><span>Payment</span></li>
-                <li class="step-checkout_content">
-                    <!-- Split Checkout steps from the Summary -->
-                    <div class="grid-x">
-                        <!-- Checkout step content here -->
-                        <div class="col">
-                            <div class="step-checkout_item_content" id="stepCheckoutContent1">
-                                <div class="step-box">
-                                    <h2>Step 1</h2>
-                                </div>
-                            </div>
-                            <div class="step-checkout_item_content" id="stepCheckoutContent2">
-                                <div class="step-box">
-                                    <h2>Step 2</h2>
-                                </div>
-                            </div>
-                            <div class="step-checkout_item_content" id="stepCheckoutContent3">
-                                <div class="step-box">
-                                    <h2>Step 3</h2>
-                                </div>
-                            </div>
-                            <div class="step-checkout_item_content" id="stepCheckoutContent4">
-                                <div class="step-box">
-                                    <h2>Step 4</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Summary content here -->
-                        <div class="col">
-                          <div class="step-checkout_summary" id="stepCheckoutSummary1">
-                            <div class="summary-box">
-                                <h2>Summary - Your Details</h2>
-                            </div>
-                                
-                            <div class="summary-box">
-                                
-                                <% if (user && user.name) { %>
-                                    <div class="name-email-container">
-                                        <p>
-                                            <span class="field-label"><strong>Name:</strong></span>
-                                            <%= user.name %>
-                                        </p>
-                                        <p>
-                                            <span class="field-label"><strong>Email:</strong></span>
-                                            <%= user.email %>
-                                        </p>
-                                    </div>
-                                <% } else { %>
-                                    <p>User not found</p>
-                                <% } %>
-                            </div>
-                        </div>
-                        
-                        
-                            <div class="step-checkout_summary" id="stepCheckoutSummary2">
-                              <div class="summary-box">
-                                <div class="Orders">
-                                  <section class="order_summary">
-                                    <h2 class="order_head">Order Summary</h2>
-                                    <div class="order_price">
-                                      <hr />
-                                      <strong>
-                                        <div class="price">
-                                          <p> Price:</p>
-                                          <p>₹<%= totals.subtotal %></p>
-                                        </div>
-                                        <div class="price">
-                                          <p>Shipping:</p>
-                                          <p>₹<%= totals.shipping %></p>
-                                        </div>
-                                        <div class="price">
-                                          <p>Tax:</p>
-                                          <p>₹<%= totals.tax.toFixed(2) %></p>
-                                        </div>
-                                        <div class="coupon">
-                                          <label for="couponCode">Coupon Code:</label>
-                                          <div class="coupon-input">
-                                            <input type="text" id="couponCode" name="couponCode" placeholder="Enter coupon code">
-                                            <button type="button" id="couponButton"  onclick="return applyOrRemoveCoupon()">Apply Coupon</button>
-                                            <div id="couponMessage"></div>
-                                          </div>
-                                        </div>
-                                        <br />
-                                        <hr />
-                                        <div class="total_price">
-                                          <p class="dark">Total:</p>
-                                          <p class="dark">₹<span id="grandTotal"><%= totals.grandTotal.toFixed(2) %></span></p>
-                                        </div>
-                                      </strong>
-                                    </div>
-                                  </section>
-                                </div>
-                              </div>
-                            </div>
-                            
-                          
-                            <div class="step-checkout_summary" id="stepCheckoutSummary3">
-                              <div class="summary-box">
-                                  <h2>Summary - Shipping Address</h2>
-                                  <% if (addresses && addresses.length > 0) { %>
-                                      <% addresses.forEach(function(address, index) { %>
-                                        <div class="address-box">
-                                          <input type="radio" name="selectedAddressIndex" id="hiddenSelectedAddressIndex_<%= index %>" value="<%= index %>">
-                                          <label style="font-size: large; font-weight: bold;" for="addressRadio_<%= index %>"> Address <%= index + 1 %></label>
-                                          <p><span class="field-label">Mobile:</span> <%= address.mobile %></p>
-                                          <p><span class="field-label">Email:</span> <%= address.email %></p>
-                                          <p><span class="field-label">Pincode:</span> <%= address.pincode %></p>
-                                          <p><span class="field-label">House Name:</span> <%= address.houseName %></p>
-                                          <p><span class="field-label">Locality:</span> <%= address.locality %></p>
-                                          <p><span class="field-label">City:</span> <%= address.city %></p>
-                                          <p><span class="field-label">District:</span> <%= address.district %></p>
-                                          <p><span class="field-label">State:</span> <%= address.state %></p>
-                                        </div>
-                                      <% }); %>
-                                  <% } else { %>
-                                      <!-- Display plus icon or any other indication for no addresses available -->
-                                      <div class="no-address">
-                                        <p><strong>Add Address</strong></p>
-                                        <button class="add-address-button" onclick="return addAddress()">
-                                            <strong>+</strong>
-                                        </button>
-                                    </div>
-                                    
-                                  <% } %>
-                              </div>
-                          </div>
-                          
-                            
-                            <div class="step-checkout_summary" id="stepCheckoutSummary4">
-                                <div class="summary-box">
-                                    <h2>Summary - Payment </h2>
-
-                                    <div class="payment-option">
-                                      <input type="radio" class="payment-radio" name="paymentMethod" id="walletRadio" value="Wallet">
-                                      <i class="fas fa-wallet payment-icon"></i>
-                                      Wallet: ₹<span id="walletAmount"><%= wallet ? wallet.balance : '0'%></span>
-                                    </div>
-                                    
-                                    
-                                  
-                                   
-
-                                  <!-- Payment Option 2 -->
-                                  <div class="payment-option">
-                                      <input type="radio" class="payment-radio" name="paymentMethod" id="paypalRadio" value="RazorPay">
-                                      <i class="far fa-credit-card payment-icon"></i>
-                                      RazorPay
-                                  </div>
-
-                                  <!-- Payment Option 3 -->
-                                  <div class="payment-option">
-                                      <input type="radio" class="payment-radio" name="paymentMethod" id="codRadio" value="Cash on Delivery">
-                                      <i class="fas fa-money-bill-alt payment-icon"></i>
-                                      Cash on Delivery
-                                  </div>
-                            
-                                    
-                                </div>
-                                <button type="submit" id="btn_checkout" class="btn-checkout" onclick="submitForm()">
-                                  <span class="truck"></span>
-                                  <span class="product"></span>
-                                  <span class="parcel">
-                                      <span></span>
-                                      <span></span>
-                                  </span>
-                                  <span class="checkout">ORDER</span>
-                                  <span class="thank-you">THANK YOU!</span>
-                              </button>
-                                  
-                            </div>
-                        
-                        </div>
+          <ul class="step-checkout_list" id="checkoutList">
+            <!-- Checkout items/tabs -->
+            <li
+              role="button"
+              class="step-checkout_item active"
+              id="stepCheckoutItem1"
+              tabindex="1"
+            >
+              <span>Your details</span>
+            </li>
+            <li
+              role="button"
+              class="step-checkout_item"
+              id="stepCheckoutItem2"
+              tabindex="1"
+            >
+              <span>Order Summary</span>
+            </li>
+            <li
+              role="button"
+              class="step-checkout_item"
+              id="stepCheckoutItem3"
+              tabindex="1"
+            >
+              <span>Shipping address</span>
+            </li>
+            <li
+              role="button"
+              class="step-checkout_item"
+              id="stepCheckoutItem4"
+              tabindex="1"
+            >
+              <span>Payment</span>
+            </li>
+            <li class="step-checkout_content">
+              <!-- Split Checkout steps from the Summary -->
+              <div class="grid-x">
+                <!-- Checkout step content here -->
+                <div class="col">
+                  <div
+                    class="step-checkout_item_content"
+                    id="stepCheckoutContent1"
+                  >
+                    <div class="step-box">
+                      <h2>Step 1</h2>
                     </div>
-                </li>
-            </ul>
+                  </div>
+                  <div
+                    class="step-checkout_item_content"
+                    id="stepCheckoutContent2"
+                  >
+                    <div class="step-box">
+                      <h2>Step 2</h2>
+                    </div>
+                  </div>
+                  <div
+                    class="step-checkout_item_content"
+                    id="stepCheckoutContent3"
+                  >
+                    <div class="step-box">
+                      <h2>Step 3</h2>
+                    </div>
+                  </div>
+                  <div
+                    class="step-checkout_item_content"
+                    id="stepCheckoutContent4"
+                  >
+                    <div class="step-box">
+                      <h2>Step 4</h2>
+                    </div>
+                  </div>
+                </div>
+                <!-- Summary content here -->
+                <div class="col">
+                  <div class="step-checkout_summary" id="stepCheckoutSummary1">
+                    <div class="summary-box">
+                      <h2>Summary - Your Details</h2>
+                    </div>
+
+                    <div class="summary-box">
+                      <% if (user && user.name) { %>
+                      <div class="name-email-container">
+                        <p>
+                          <span class="field-label"
+                            ><strong>Name:</strong></span
+                          >
+                          <%= user.name %>
+                        </p>
+                        <p>
+                          <span class="field-label"
+                            ><strong>Email:</strong></span
+                          >
+                          <%= user.email %>
+                        </p>
+                      </div>
+                      <% } else { %>
+                      <p>User not found</p>
+                      <% } %>
+                    </div>
+                  </div>
+
+                  <div class="step-checkout_summary" id="stepCheckoutSummary2">
+                    <div class="summary-box">
+                      <div class="Orders">
+                        <section class="order_summary">
+                          <h2 class="order_head">Order Summary</h2>
+                          <div class="order_price">
+                            <hr />
+                            <strong>
+                              <div class="price">
+                                <p>Price:</p>
+                                <p>₹<%= totals.subtotal %></p>
+                              </div>
+                              <div class="price">
+                                <p>Shipping:</p>
+                                <p>₹<%= totals.shipping %></p>
+                              </div>
+                              <div class="price">
+                                <p>Tax:</p>
+                                <p>₹<%= totals.tax.toFixed(2) %></p>
+                              </div>
+                              <div class="coupon">
+                                <label for="couponCode">Coupon Code:</label>
+                                <div class="coupon-input">
+                                  <input
+                                    type="text"
+                                    id="couponCode"
+                                    name="couponCode"
+                                    placeholder="Enter coupon code"
+                                  />
+                                  <button
+                                    type="button"
+                                    id="couponButton"
+                                    onclick="return applyOrRemoveCoupon()"
+                                  >
+                                    Apply Coupon
+                                  </button>
+                                  <div id="couponMessage"></div>
+                                </div>
+                              </div>
+                              <br />
+                              <hr />
+                              <div class="total_price">
+                                <p class="dark">Total:</p>
+                                <p class="dark">
+                                  ₹<span id="grandTotal"
+                                    ><%= totals.grandTotal.toFixed(2) %></span
+                                  >
+                                </p>
+                              </div>
+                            </strong>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="step-checkout_summary" id="stepCheckoutSummary3">
+                    <div class="summary-box">
+                      <h2>Summary - Shipping Address</h2>
+                      <% if (addresses && addresses.length > 0) { %> <%
+                      addresses.forEach(function(address, index) { %>
+                      <div class="address-box">
+                        <input
+                          type="radio"
+                          name="selectedAddressIndex"
+                          id="hiddenSelectedAddressIndex_<%= index %>"
+                          value="<%= index %>"
+                        />
+                        <label
+                          style="font-size: large; font-weight: bold"
+                          for="addressRadio_<%= index %>"
+                        >
+                          Address <%= index + 1 %></label
+                        >
+                        <p>
+                          <span class="field-label">Mobile:</span> <%=
+                          address.mobile %>
+                        </p>
+                        <p>
+                          <span class="field-label">Email:</span> <%=
+                          address.email %>
+                        </p>
+                        <p>
+                          <span class="field-label">Pincode:</span> <%=
+                          address.pincode %>
+                        </p>
+                        <p>
+                          <span class="field-label">House Name:</span> <%=
+                          address.houseName %>
+                        </p>
+                        <p>
+                          <span class="field-label">Locality:</span> <%=
+                          address.locality %>
+                        </p>
+                        <p>
+                          <span class="field-label">City:</span> <%=
+                          address.city %>
+                        </p>
+                        <p>
+                          <span class="field-label">District:</span> <%=
+                          address.district %>
+                        </p>
+                        <p>
+                          <span class="field-label">State:</span> <%=
+                          address.state %>
+                        </p>
+                      </div>
+                      <% }); %> <% } else { %>
+                      <!-- Display plus icon or any other indication for no addresses available -->
+                      <div class="no-address">
+                        <p><strong>Add Address</strong></p>
+                        <button
+                          class="add-address-button"
+                          onclick="return addAddress()"
+                        >
+                          <strong>+</strong>
+                        </button>
+                      </div>
+
+                      <% } %>
+                    </div>
+                  </div>
+
+                  <div class="step-checkout_summary" id="stepCheckoutSummary4">
+                    <div class="summary-box">
+                      <h2>Summary - Payment</h2>
+
+                      <div class="payment-option">
+                        <input
+                          type="radio"
+                          class="payment-radio"
+                          name="paymentMethod"
+                          id="walletRadio"
+                          value="Wallet"
+                        />
+                        <i class="fas fa-wallet payment-icon"></i>
+                        Wallet: ₹<span id="walletAmount"
+                          ><%= wallet ? wallet.balance : '0'%></span
+                        >
+                      </div>
+
+                      <!-- Payment Option 2 -->
+                      <div class="payment-option">
+                        <input
+                          type="radio"
+                          class="payment-radio"
+                          name="paymentMethod"
+                          id="paypalRadio"
+                          value="RazorPay"
+                        />
+                        <i class="far fa-credit-card payment-icon"></i>
+                        RazorPay
+                      </div>
+
+                      <!-- Payment Option 3 -->
+                      <div class="payment-option">
+                        <input
+                          type="radio"
+                          class="payment-radio"
+                          name="paymentMethod"
+                          id="codRadio"
+                          value="Cash on Delivery"
+                        />
+                        <i class="fas fa-money-bill-alt payment-icon"></i>
+                        Cash on Delivery
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      id="btn_checkout"
+                      class="btn-checkout"
+                      onclick="submitForm()"
+                    >
+                      <span class="truck"></span>
+                      <span class="product"></span>
+                      <span class="parcel">
+                        <span></span>
+                        <span></span>
+                      </span>
+                      <span class="checkout">ORDER</span>
+                      <span class="thank-you">THANK YOU!</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </form>
     </div>
-    
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 
-  
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-  
-<script>
-  function handleFormSubmission() {
-    // Apply coupon logic
-    var couponApplied = applyOrRemoveCoupon();
+  <script>
+    function handleFormSubmission() {
+      // Apply coupon logic
+      var couponApplied = applyOrRemoveCoupon();
 
-    // Add address logic
-    var addressAdded = addAddress();
+      // Add address logic
+      var addressAdded = addAddress();
 
-   
-
-    // Return true if both coupon and address operations are successful, else return false
-    return couponApplied && addressAdded;
-}
-  function chooseAddress(index) {
+      // Return true if both coupon and address operations are successful, else return false
+      return couponApplied && addressAdded;
+    }
+    function chooseAddress(index) {
       // Update the hidden input field with the selected address index
-      document.getElementById('hiddenSelectedAddressIndex').value = index;
-  }
-</script>
+      document.getElementById("hiddenSelectedAddressIndex").value = index;
+    }
+  </script>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-  const radioButtons = document.querySelectorAll('.choose-radio');
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const radioButtons = document.querySelectorAll(".choose-radio");
 
-  radioButtons.forEach(function (radioButton) {
-    radioButton.addEventListener('change', function () {
-      const index = this.getAttribute('data-index');
-      chooseAddress(index);
+      radioButtons.forEach(function (radioButton) {
+        radioButton.addEventListener("change", function () {
+          const index = this.getAttribute("data-index");
+          chooseAddress(index);
+        });
+      });
     });
-  });
-});
 
-function submitForm() {
-  document.getElementById('checkoutForm').submit();
-}
-
-</script>
-<script>
+    function submitForm() {
+      document.getElementById("checkoutForm").submit();
+    }
+  </script>
+  <script>
     const checkoutList = document.getElementById("checkoutList");
-    checkoutList.addEventListener('click', e => {
-        const listItems = document.querySelectorAll('.step-checkout_item');
-        const listItem = e.target.closest('.step-checkout_item');
-        if (!listItem) return;
-        listItems.forEach(item => item.classList.remove('active'));
-        listItem.classList.add('active');
-        const summaries = document.querySelectorAll('.step-checkout_summary');
-        summaries.forEach(summary => summary.style.display = 'none');
-        const itemId = listItem.id.replace('Item', 'Summary');
-        const relatedSummary = document.getElementById(itemId);
-        if (relatedSummary) {
-            relatedSummary.style.display = 'block';
-        }
+    checkoutList.addEventListener("click", (e) => {
+      const listItems = document.querySelectorAll(".step-checkout_item");
+      const listItem = e.target.closest(".step-checkout_item");
+      if (!listItem) return;
+      listItems.forEach((item) => item.classList.remove("active"));
+      listItem.classList.add("active");
+      const summaries = document.querySelectorAll(".step-checkout_summary");
+      summaries.forEach((summary) => (summary.style.display = "none"));
+      const itemId = listItem.id.replace("Item", "Summary");
+      const relatedSummary = document.getElementById(itemId);
+      if (relatedSummary) {
+        relatedSummary.style.display = "block";
+      }
     });
     window.onload = () => {
-        const defaultActiveItem = document.querySelector('.step-checkout_item.active');
-        if (defaultActiveItem) {
-            const itemId = defaultActiveItem.id.replace('Item', 'Summary');
-            const relatedSummary = document.getElementById(itemId);
-            document.querySelectorAll('.step-checkout_summary').forEach(summary => summary.style.display = 'none');
-            if (relatedSummary) {
-                relatedSummary.style.display = 'block';
-            }
+      const defaultActiveItem = document.querySelector(
+        ".step-checkout_item.active"
+      );
+      if (defaultActiveItem) {
+        const itemId = defaultActiveItem.id.replace("Item", "Summary");
+        const relatedSummary = document.getElementById(itemId);
+        document
+          .querySelectorAll(".step-checkout_summary")
+          .forEach((summary) => (summary.style.display = "none"));
+        if (relatedSummary) {
+          relatedSummary.style.display = "block";
         }
+      }
     };
-</script>
-<script>
+  </script>
+  <script>
     class CheckoutAnimation {
-  constructor(elm) {
-    this.elm = document.querySelector(elm);
-    this.tl = gsap.timeline();
-    this.truck = this.elm.querySelector('.truck');
-    this.parcel = this.elm.querySelector('.parcel');
-    this.coverLeft = this.parcel.querySelector("span:first-child");
-    this.coverRight = this.parcel.querySelector("span:last-child");
-    this.checkout = this.elm.querySelector('.checkout');
-    this.thankYou = this.elm.querySelector('.thank-you');
-    this.originalHeight = this.truck.clientHeight;
-  }
+      constructor(elm) {
+        this.elm = document.querySelector(elm);
+        this.tl = gsap.timeline();
+        this.truck = this.elm.querySelector(".truck");
+        this.parcel = this.elm.querySelector(".parcel");
+        this.coverLeft = this.parcel.querySelector("span:first-child");
+        this.coverRight = this.parcel.querySelector("span:last-child");
+        this.checkout = this.elm.querySelector(".checkout");
+        this.thankYou = this.elm.querySelector(".thank-you");
+        this.originalHeight = this.truck.clientHeight;
+      }
 
-  morphButton() {
-    const TIME = 0.3;
+      morphButton() {
+        const TIME = 0.3;
 
-    this.tl.fromTo(this.elm, {
-      height: this.originalHeight
-    }, {
-      height: this.elm.clientWidth,
-      duration: TIME,
-      ease: "elastic.out(1, " + TIME + ")"
-    });
+        this.tl.fromTo(
+          this.elm,
+          {
+            height: this.originalHeight,
+          },
+          {
+            height: this.elm.clientWidth,
+            duration: TIME,
+            ease: "elastic.out(1, " + TIME + ")",
+          }
+        );
 
-    this.tl.fromTo(this.thankYou, {
-      opacity: 0,
-      translateY: "100px",
-      duration: 0
-    }, {
-      opacity: 0,
-      translateY: "100px"
-    });
+        this.tl.fromTo(
+          this.thankYou,
+          {
+            opacity: 0,
+            translateY: "100px",
+            duration: 0,
+          },
+          {
+            opacity: 0,
+            translateY: "100px",
+          }
+        );
 
-    this.tl.fromTo(this.checkout, {
-      opacity: 1
-    }, {
-      opacity: 0,
-      duration: TIME,
-      ease: "power2.out"
-    }, "-=" + (TIME * 3));
-  }
+        this.tl.fromTo(
+          this.checkout,
+          {
+            opacity: 1,
+          },
+          {
+            opacity: 0,
+            duration: TIME,
+            ease: "power2.out",
+          },
+          "-=" + TIME * 3
+        );
+      }
 
-  truckEntrance() {
-    const TIME = 0.3;
-    const width = (this.elm.clientWidth / 2) + this.truck.clientWidth;
+      truckEntrance() {
+        const TIME = 0.3;
+        const width = this.elm.clientWidth / 2 + this.truck.clientWidth;
 
-    this.tl.fromTo(this.truck, {
-      opacity: 1,
-      translateX: (-width) + "px",
-      skewX: "45deg"
-    }, {
-      translateX: "0px",
-      skewX: "0deg",
-      duration: 0.5,
-      ease: "back.out"
-    }, "-=" + (TIME * 2));
-  }
+        this.tl.fromTo(
+          this.truck,
+          {
+            opacity: 1,
+            translateX: -width + "px",
+            skewX: "45deg",
+          },
+          {
+            translateX: "0px",
+            skewX: "0deg",
+            duration: 0.5,
+            ease: "back.out",
+          },
+          "-=" + TIME * 2
+        );
+      }
 
-  parcelEntrance() {
-    const TIME = 0.65;
-    const OPEN_ANGLE = 210;
+      parcelEntrance() {
+        const TIME = 0.65;
+        const OPEN_ANGLE = 210;
 
-    this.tl.fromTo(this.parcel, {
-      opacity: 0,
-      translateY: -(this.parcel.clientHeight * 3)
-    }, {
-      opacity: 1,
-      translateY: 0,
-      duration: TIME,
-      ease: "bounce.out"
-    }, "-=" + TIME);
+        this.tl.fromTo(
+          this.parcel,
+          {
+            opacity: 0,
+            translateY: -(this.parcel.clientHeight * 3),
+          },
+          {
+            opacity: 1,
+            translateY: 0,
+            duration: TIME,
+            ease: "bounce.out",
+          },
+          "-=" + TIME
+        );
 
-    this.tl.fromTo(this.coverLeft, {
-      rotate: "0deg"
-    }, {
-      rotate: -(OPEN_ANGLE) + "deg",
-      ease: "bounce.out",
-      duration: TIME
-    }, "-=" + (TIME / 2));
+        this.tl.fromTo(
+          this.coverLeft,
+          {
+            rotate: "0deg",
+          },
+          {
+            rotate: -OPEN_ANGLE + "deg",
+            ease: "bounce.out",
+            duration: TIME,
+          },
+          "-=" + TIME / 2
+        );
 
-    this.tl.fromTo(this.coverRight, {
-      rotate: "0deg"
-    }, {
-      rotate: OPEN_ANGLE + "deg",
-      ease: "bounce.out",
-      duration: TIME
-    }, "-=" + (TIME + 0.1));
-  }
+        this.tl.fromTo(
+          this.coverRight,
+          {
+            rotate: "0deg",
+          },
+          {
+            rotate: OPEN_ANGLE + "deg",
+            ease: "bounce.out",
+            duration: TIME,
+          },
+          "-=" + (TIME + 0.1)
+        );
+      }
 
-  parcelClose() {
-    const TIME = 0.25;
+      parcelClose() {
+        const TIME = 0.25;
 
-    this.tl.to(this.coverLeft, {
-      rotate: "0deg",
-      ease: "bounce.out",
-      duration: TIME
-    });
+        this.tl.to(this.coverLeft, {
+          rotate: "0deg",
+          ease: "bounce.out",
+          duration: TIME,
+        });
 
-    this.tl.to(this.coverRight, {
-      rotate: "0deg",
-      ease: "bounce.out",
-      duration: TIME
-    }, "-=" + (TIME / 1.7));
-  }
+        this.tl.to(
+          this.coverRight,
+          {
+            rotate: "0deg",
+            ease: "bounce.out",
+            duration: TIME,
+          },
+          "-=" + TIME / 1.7
+        );
+      }
 
-  parcelPutIn() {
-    const TIME = 0.2;
-    const parcelWidth = this.parcel.clientWidth / 2;
-    const truckWidth = this.truck.clientWidth / 2;
+      parcelPutIn() {
+        const TIME = 0.2;
+        const parcelWidth = this.parcel.clientWidth / 2;
+        const truckWidth = this.truck.clientWidth / 2;
 
-    this.tl.fromTo(this.parcel, {
-      bottom: "calc(50% - " + (this.truck.clientHeight / 2) + "px)"
-    }, {
-      bottom: "calc(50% - " + (this.parcel.clientHeight / 2) + "px)",
-      ease: "power2.out",
-      duration: TIME
-    });
+        this.tl.fromTo(
+          this.parcel,
+          {
+            bottom: "calc(50% - " + this.truck.clientHeight / 2 + "px)",
+          },
+          {
+            bottom: "calc(50% - " + this.parcel.clientHeight / 2 + "px)",
+            ease: "power2.out",
+            duration: TIME,
+          }
+        );
 
-    this.tl.fromTo(this.parcel, {
-      left: "calc(50% - " + parcelWidth + "px)"
-    }, {
-      left: "calc(50% + " + parcelWidth + "px)",
-      ease: "power2.out",
-      duration: TIME
-    });
+        this.tl.fromTo(
+          this.parcel,
+          {
+            left: "calc(50% - " + parcelWidth + "px)",
+          },
+          {
+            left: "calc(50% + " + parcelWidth + "px)",
+            ease: "power2.out",
+            duration: TIME,
+          }
+        );
 
-    this.tl.to(this.parcel, {
-      left: "calc(50% - " + (truckWidth + (parcelWidth * 4)) + "px)",
-      ease: "power2.out",
-      duration: TIME
-    });
+        this.tl.to(this.parcel, {
+          left: "calc(50% - " + (truckWidth + parcelWidth * 4) + "px)",
+          ease: "power2.out",
+          duration: TIME,
+        });
 
-    this.tl.fromTo(this.parcel, {
-      scale: 1
-    }, {
-      left: "calc(50% - " + (truckWidth + parcelWidth) + "px)",
-      scale: 0,
-      ease: "power2.out",
-      duration: TIME
-    });
-  }
+        this.tl.fromTo(
+          this.parcel,
+          {
+            scale: 1,
+          },
+          {
+            left: "calc(50% - " + (truckWidth + parcelWidth) + "px)",
+            scale: 0,
+            ease: "power2.out",
+            duration: TIME,
+          }
+        );
+      }
 
-  truckExit() {
-    const width = (this.elm.clientWidth / 2) + this.truck.clientWidth;
+      truckExit() {
+        const width = this.elm.clientWidth / 2 + this.truck.clientWidth;
 
-    this.tl.to(this.truck, {
-      translateX: width + "px",
-      skewX: "-45deg",
-      duration: 0.5,
-      ease: "back.in"
-    });
-  }
+        this.tl.to(this.truck, {
+          translateX: width + "px",
+          skewX: "-45deg",
+          duration: 0.5,
+          ease: "back.in",
+        });
+      }
 
-  returnButton() {
-    const TIME = 0.3;
+      returnButton() {
+        const TIME = 0.3;
 
-    this.tl.to(this.elm, {
-      height: this.originalHeight,
-      duration: TIME,
-      ease: "elastic.out(1, 0.3)",
-      delay: 0.5
-    }, "-=" + (TIME * 2));
+        this.tl.to(
+          this.elm,
+          {
+            height: this.originalHeight,
+            duration: TIME,
+            ease: "elastic.out(1, 0.3)",
+            delay: 0.5,
+          },
+          "-=" + TIME * 2
+        );
 
-    this.tl.to(this.thankYou, {
-      translateY: "0px",
-      ease: "elastic.out(1, 0.3)",
-      duration: TIME,
-      delay: 0.3
-    }, "-=" + TIME);
+        this.tl.to(
+          this.thankYou,
+          {
+            translateY: "0px",
+            ease: "elastic.out(1, 0.3)",
+            duration: TIME,
+            delay: 0.3,
+          },
+          "-=" + TIME
+        );
 
-    this.tl.to(this.thankYou, {
-      opacity: 1,
-      ease: "power2.out",
-      duration: TIME
-    }, "-=" + TIME);
-  }
+        this.tl.to(
+          this.thankYou,
+          {
+            opacity: 1,
+            ease: "power2.out",
+            duration: TIME,
+          },
+          "-=" + TIME
+        );
+      }
 
-  reset(resetTime) {
-    const TIME = 0.3;
+      reset(resetTime) {
+        const TIME = 0.3;
 
-    this.tl.to(this.checkout, {
-      opacity: 1,
-      duration: TIME,
-      ease: "power2.out",
-      delay: resetTime
-    });
+        this.tl.to(this.checkout, {
+          opacity: 1,
+          duration: TIME,
+          ease: "power2.out",
+          delay: resetTime,
+        });
 
-    this.tl.to(this.thankYou, {
-      opacity: 0,
-      duration: TIME,
-      ease: "power2.out"
-    }, "-=" + TIME);
+        this.tl.to(
+          this.thankYou,
+          {
+            opacity: 0,
+            duration: TIME,
+            ease: "power2.out",
+          },
+          "-=" + TIME
+        );
 
-    this.tl.to(this.thankYou, {
-      translateY: "100px",
-      duration: 0
-    });
-  }
+        this.tl.to(this.thankYou, {
+          translateY: "100px",
+          duration: 0,
+        });
+      }
 
-  start(resetTime) {
-    if (this.tl.isActive() === false) {
-      this.morphButton();
-      this.parcelEntrance();
-      this.parcelClose();
-      this.truckEntrance();
-      this.parcelPutIn();
-      this.truckExit();
-      this.returnButton();
-      this.reset(resetTime);
+      start(resetTime) {
+        if (this.tl.isActive() === false) {
+          this.morphButton();
+          this.parcelEntrance();
+          this.parcelClose();
+          this.truckEntrance();
+          this.parcelPutIn();
+          this.truckExit();
+          this.returnButton();
+          this.reset(resetTime);
+        }
+      }
     }
-  }
-}
 
-const checkout = new CheckoutAnimation("#btn_checkout");
+    const checkout = new CheckoutAnimation("#btn_checkout");
 
-checkout.elm.addEventListener("click", (evt) => {
-  checkout.start(3);
-});
+    checkout.elm.addEventListener("click", (evt) => {
+      checkout.start(3);
+    });
+  </script>
+  <script>
+    async function applyOrRemoveCoupon() {
+      const couponCode = document.getElementById("couponCode").value;
+      const couponButton = document.getElementById("couponButton");
+      var couponMessage = document.getElementById("couponMessage");
 
-</script>
-<script>
-  async function applyOrRemoveCoupon() {
-    const couponCode = document.getElementById('couponCode').value;
-    const couponButton = document.getElementById('couponButton');
-    var couponMessage = document.getElementById('couponMessage');
+      try {
+        const response = await fetch(`/validate-coupon?code=${couponCode}`);
+        const data = await response.json();
 
-    try {
-      const response = await fetch(`/validate-coupon?code=${couponCode}`);
-      const data = await response.json();
+        if (data.valid) {
+          const discountedTotal = parseFloat(data.discountedTotal);
 
-      if (data.valid) {
-        const discountedTotal = parseFloat(data.discountedTotal);
+          if (!isNaN(discountedTotal)) {
+            document.getElementById(
+              "grandTotal"
+            ).textContent = `${discountedTotal.toFixed(2)}`;
 
-        if (!isNaN(discountedTotal)) {
-          document.getElementById('grandTotal').textContent = `${discountedTotal.toFixed(2)}`;
-          
-          if (couponButton.classList.contains('applied')) {
-            await removeCoupon(couponCode);
+            if (couponButton.classList.contains("applied")) {
+              await removeCoupon(couponCode);
+            } else {
+              couponMessage.innerHTML = "Coupon applied successfully!";
+              couponButton.textContent = "Remove Coupon";
+              couponButton.classList.add("applied");
+            }
           } else {
-            couponMessage.innerHTML = 'Coupon applied successfully!';
-            couponButton.textContent = 'Remove Coupon';
-            couponButton.classList.add('applied'); 
+            document.getElementById("couponCode").value = "";
+            couponMessage.innerHTML = "An error occurred. Please try again.";
           }
         } else {
-          document.getElementById('couponCode').value = '';
-          couponMessage.innerHTML = 'An error occurred. Please try again.';
+          document.getElementById("couponCode").value = "";
+          couponMessage.innerHTML = data.message;
         }
-      } else {
-        document.getElementById('couponCode').value = '';
-        couponMessage.innerHTML = data.message;
+      } catch (error) {
+        console.error("Error validating coupon:", error);
+        couponMessage.innerHTML = "An error occurred. Please try again.";
       }
-    } catch (error) {
-      console.error('Error validating coupon:', error);
-      couponMessage.innerHTML = 'An error occurred. Please try again.';
     }
-  }
 
-  async function removeCoupon(couponCode) {
-    try {
+    async function removeCoupon(couponCode) {
+      try {
         const response = await fetch(`/remove-coupon?code=${couponCode}`, {
-            method: 'POST'
+          method: "POST",
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            // Update UI to reflect the removed coupon
-            document.getElementById('couponButton').textContent = 'Apply Coupon';
-            document.getElementById('grandTotal').textContent = '<%= totals.grandTotal.toFixed(2) %>'; // Replace with the original total
-            document.getElementById('couponButton').classList.remove('applied');
-            document.getElementById('couponMessage').innerHTML = 'Coupon removed successfully!';
-            
-            // Clear the input box value
-            document.getElementById('couponCode').value = '';
+          // Update UI to reflect the removed coupon
+          document.getElementById("couponButton").textContent = "Apply Coupon";
+          document.getElementById("grandTotal").textContent =
+            "<%= totals.grandTotal.toFixed(2) %>"; // Replace with the original total
+          document.getElementById("couponButton").classList.remove("applied");
+          document.getElementById("couponMessage").innerHTML =
+            "Coupon removed successfully!";
+
+          // Clear the input box value
+          document.getElementById("couponCode").value = "";
         } else {
-            // Handle error response from the server
-            console.error('Error removing coupon:', data.error);
-            document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
+          // Handle error response from the server
+          console.error("Error removing coupon:", data.error);
+          document.getElementById("couponMessage").innerHTML =
+            "An error occurred. Please try again.";
         }
-    } catch (error) {
-        console.error('Error removing coupon:', error);
-        document.getElementById('couponMessage').innerHTML = 'An error occurred. Please try again.';
-    }
-}
-</script>
-<script>
-   function addAddress() {
-      return false; // Returning false prevents the form submission
-  }
-  // Get the modal
-  var modal = document.getElementById('addAddressModal');
-
-  // Get the button that opens the modal
-  var addAddressButton = document.querySelector('.add-address-button');
-
-  // Get the <span> element that closes the modal
-  var closeModalButton = document.querySelector('.close');
-
-  // When the user clicks the button, open the modal
-  addAddressButton.onclick = function() {
-      modal.style.display = 'block';
-  };
-
-  // When the user clicks on <span> (x), close the modal
-  closeModalButton.onclick = function() {
-      closeModal();
-  };
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-      if (event.target === modal) {
-          closeModal();
+      } catch (error) {
+        console.error("Error removing coupon:", error);
+        document.getElementById("couponMessage").innerHTML =
+          "An error occurred. Please try again.";
       }
-  };
+    }
+  </script>
+  <script>
+    function addAddress() {
+      return false; // Returning false prevents the form submission
+    }
+    // Get the modal
+    var modal = document.getElementById("addAddressModal");
 
-  function closeModal() {
-      modal.style.display = 'none';
-      // You can optionally reset the form fields here
-  }
+    // Get the button that opens the modal
+    var addAddressButton = document.querySelector(".add-address-button");
 
- 
-</script>
-<script>
-  async function saveAddress() {
-    // Get the form data
-    const formData = {
-      mobile: document.getElementById('mobile').value,
-      email: document.getElementById('email').value,
-      pincode: document.getElementById('pincode').value,
-      houseName: document.getElementById('houseName').value,
-      locality: document.getElementById('locality').value,
-      city: document.getElementById('city').value,
-      district: document.getElementById('district').value,
-      state: document.getElementById('state').value,
+    // Get the <span> element that closes the modal
+    var closeModalButton = document.querySelector(".close");
+
+    // When the user clicks the button, open the modal
+    addAddressButton.onclick = function () {
+      modal.style.display = "block";
     };
 
-    try {
-      // Make a POST request to the server to save the address
-      const response = await fetch('/save-address', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // When the user clicks on <span> (x), close the modal
+    closeModalButton.onclick = function () {
+      closeModal();
+    };
 
-      if (response.ok) {
-        // Address saved successfully
-        closeModal(); // Close the modal after saving
-        console.log('Address saved successfully');
-        window.location.reload();
-      } else {
-        // Handle error response from the server
-        const data = await response.json();
-        console.error('Error saving address:', data.error);
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
+
+    function closeModal() {
+      modal.style.display = "none";
+      // You can optionally reset the form fields here
+    }
+  </script>
+  <script>
+    async function saveAddress() {
+      // Get the form data
+      const formData = {
+        mobile: document.getElementById("mobile").value,
+        email: document.getElementById("email").value,
+        pincode: document.getElementById("pincode").value,
+        houseName: document.getElementById("houseName").value,
+        locality: document.getElementById("locality").value,
+        city: document.getElementById("city").value,
+        district: document.getElementById("district").value,
+        state: document.getElementById("state").value,
+      };
+
+      try {
+        // Make a POST request to the server to save the address
+        const response = await fetch("/save-address", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          // Address saved successfully
+          closeModal(); // Close the modal after saving
+          console.log("Address saved successfully");
+          window.location.reload();
+        } else {
+          // Handle error response from the server
+          const data = await response.json();
+          console.error("Error saving address:", data.error);
+          // Display an error message if needed
+        }
+      } catch (error) {
+        console.error("Error saving address:", error);
         // Display an error message if needed
       }
-    } catch (error) {
-      console.error('Error saving address:', error);
-      // Display an error message if needed
     }
-  }
-</script>
-
-
-
-
-
-
-
-
+  </script>
 </html>

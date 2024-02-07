@@ -1,7 +1,7 @@
 const cartModels = require("../models/cartModel");
 const mongoose = require("mongoose");
 const Product = require("../models/productModel");
-const {calculateTotals}=require('../util/helperfunction')
+const { calculateTotals } = require("../util/helperfunction");
 //user cart------------------------------------------------------->
 const usercart = async (req, res) => {
   try {

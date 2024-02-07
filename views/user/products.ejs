@@ -1,21 +1,19 @@
 <!-- views/products.ejs -->
 
-<%- include('header') -%>
-<%- include('nav', { user: user }) -%>
+<%- include('header') -%> <%- include('nav', { user: user }) -%>
 
 <style>
-
-   body {
-    background-color: #EDC9A0;
+  body {
+    background-color: #edc9a0;
     margin: 0;
     padding: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-}
+  }
 
-.sidenav {
+  .sidenav {
     height: 100%;
     width: 0;
     position: fixed;
@@ -26,44 +24,45 @@
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px; /* Adjust as needed */
-}
+  }
 
-.sidenav a {
+  .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 18px;
     color: white;
     display: block;
     transition: 0.3s;
-}
+  }
 
-.sidenav a:hover {
-    color: #04AA6D;
-}
+  .sidenav a:hover {
+    color: #04aa6d;
+  }
 
-.sidenav a, #toggleButton {
+  .sidenav a,
+  #toggleButton {
     cursor: pointer;
-}
+  }
 
-#toggleButton {
+  #toggleButton {
     margin-top: 70px;
     margin-left: 20px;
- 
+
     z-index: 2;
     left: 20px;
     top: 20px;
     font-size: 24px;
-    color: #543D34;
-}
+    color: #543d34;
+  }
 
-#content {
+  #content {
     margin-left: 250px;
     padding: 16px;
     transition: margin-left 0.5s;
-}
+  }
 
-/* Card styles */
-.card {
+  /* Card styles */
+  .card {
     width: calc(25% - 20px); /* Adjusted width calculation */
     margin: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -73,30 +72,30 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-}
+  }
 
-.card:hover {
+  .card:hover {
     transform: scale(1.05);
-}
+  }
 
-.card img {
+  .card img {
     max-width: 100%;
     max-height: 150px;
     border-radius: 8px;
     cursor: pointer;
-}
+  }
 
-.card-body {
+  .card-body {
     flex: 1;
     padding: 1rem;
-    background-color: #FFF9F1;
+    background-color: #fff9f1;
     border-radius: 0 0 8px 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
+  }
 
-.card-title {
+  .card-title {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     text-align: center;
@@ -106,24 +105,24 @@
     font-weight: 700;
     width: 100%;
     height: 100%;
-}
+  }
 
-.card-text {
-    color: #1E1E1E;
+  .card-text {
+    color: #1e1e1e;
     font-size: 16px;
     font-family: Playfair Display;
     font-weight: 400;
     text-align: center;
-}
+  }
 
-.btn-container {
+  .btn-container {
     display: flex;
     justify-content: center;
     align-items: center;
-}
+  }
 
-.btn-primary {
-    background-color: #F9C06A;
+  .btn-primary {
+    background-color: #f9c06a;
     color: black;
     text-decoration: none;
     padding: 8px 12px;
@@ -131,14 +130,13 @@
     display: inline-block;
     font-size: 0.9rem;
     margin-top: -0.5rem;
-}
+  }
 
-.btn-primary:hover {
-    background-color: #9B6B42;
-}
+  .btn-primary:hover {
+    background-color: #9b6b42;
+  }
 
-/* Modal styles and pagination styles remain unchanged */
-
+  /* Modal styles and pagination styles remain unchanged */
 
   .modal {
     display: none;
@@ -163,154 +161,166 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-   
-}
-@media screen and (max-width: 1200px) {
+  }
+  @media screen and (max-width: 1200px) {
     .card {
-        width: calc(33.33% - 20px);
+      width: calc(33.33% - 20px);
     }
-}
+  }
 
-@media screen and (max-width: 900px) {
+  @media screen and (max-width: 900px) {
     .card {
-        width: calc(50% - 20px);
+      width: calc(50% - 20px);
     }
-}
+  }
 
-@media screen and (max-width: 600px) {
+  @media screen and (max-width: 600px) {
     .card {
-        width: calc(100% - 20px);
-        margin-left: 0;
-        margin-right: 0;
+      width: calc(100% - 20px);
+      margin-left: 0;
+      margin-right: 0;
     }
-}
-.pagination-container {
+  }
+  .pagination-container {
     display: flex;
     justify-content: center;
     gap: 10px;
     align-items: center;
     margin-top: 20px; /* Adjust as needed */
-}
+  }
 
-.pagination {
+  .pagination {
     list-style: none;
     display: flex;
-}
+  }
 
-.pagination li {
+  .pagination li {
     margin: 0 5px; /* Adjust spacing between pagination items */
-}
+  }
 
-.pagination a {
+  .pagination a {
     text-decoration: none;
     padding: 8px 12px;
     border: 1px solid #ddd; /* Border color */
     color: #ffff; /* Text color */
     border-radius: 4px;
-    background-color: #3E2723;
+    background-color: #3e2723;
     margin-left: 10px;
-}
-.search-container{
+  }
+  .search-container {
     margin-top: ayto;
     margin-left: 15%;
-}
-#searchInput {
+  }
+  #searchInput {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 5px;
     font-size: 16px;
-}
+  }
 
-button {
+  button {
     padding: 8px 15px;
-    border: 1px solid #543D34;
+    border: 1px solid #543d34;
     border-radius: 4px;
-    background-color: #3E2723;
+    background-color: #3e2723;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
-}
+  }
 
-button:hover {
-    background-color: #543D34;
-}
+  button:hover {
+    background-color: #543d34;
+  }
+</style>
 
+<div id="toggleButton" onclick="toggleSidebar()">☰ Categories</div>
 
-
-
-  </style>
-  
-
-
-  <div id="toggleButton" onclick="toggleSidebar()">☰ Categories</div>
-
-    <!-- Sidebar -->
-    <div id="sidenav" class="sidenav">
-        <div id="closeButton" style="color: white;margin-left: 50px;" onclick="closeSidebar()">✕</div>
-        <a href="/user/product" onclick="getAllProducts()">All Products</a>
-        <% categories.forEach(category => { %>
-            <a href="/products?category=<%= category._id %>" onclick="getProductsByCategory('<%= category._id %>')"><%= category.name %></a>
-        <% }); %>
-        
-    </div>
-  
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search products...">
-    <button onclick="searchProducts()">Search</button>
+<!-- Sidebar -->
+<div id="sidenav" class="sidenav">
+  <div
+    id="closeButton"
+    style="color: white; margin-left: 50px"
+    onclick="closeSidebar()"
+  >
+    ✕
+  </div>
+  <a href="/user/product" onclick="getAllProducts()">All Products</a>
+  <% categories.forEach(category => { %>
+  <a
+    href="/products?category=<%= category._id %>"
+    onclick="getProductsByCategory('<%= category._id %>')"
+    ><%= category.name %></a
+  >
+  <% }); %>
 </div>
-  <div class="card-container">
-<% products.forEach(product => { %>
-<div class="card" style="width: 18rem;">
-    <img src="/product-images/<%= product.image %>" class="card-img-top" alt="<%= product.name %>" onclick="openModal('<%= product.image %>')">
+
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Search products..." />
+  <button onclick="searchProducts()">Search</button>
+</div>
+<div class="card-container">
+  <% products.forEach(product => { %>
+  <div class="card" style="width: 18rem">
+    <img
+      src="/product-images/<%= product.image %>"
+      class="card-img-top"
+      alt="<%= product.name %>"
+      onclick="openModal('<%= product.image %>')"
+    />
     <div class="card-body">
-        <h5 class="card-title"><%= product.name %></h5>
-        <p class="card-text"><%= product.ingredients %></p>
-        <a href="/user/mainproduct/<%= product._id %>" class="btn btn-primary">Order Now</a>
+      <h5 class="card-title"><%= product.name %></h5>
+      <p class="card-text"><%= product.ingredients %></p>
+      <a href="/user/mainproduct/<%= product._id %>" class="btn btn-primary"
+        >Order Now</a
+      >
     </div>
   </div>
   <% }); %>
-  </div>
+</div>
 
 <div id="myModal" class="modal" onclick="closeModal()">
-    <span class="close-btn">&times;</span>
-    <img id="modalImg" src="" alt="Modal Image">
+  <span class="close-btn">&times;</span>
+  <img id="modalImg" src="" alt="Modal Image" />
 </div>
 
 <div class="pagination-container">
-    <div class="pagination">
-        <% if (currentPage > 1) { %>
-            <a href="?category=<%= categoryId %>&page=<%= currentPage - 1 %>">Previous</a>
-        <% } %>
-        
-        <a href="?category=<%= categoryId %>&page=<%= currentPage %>" class="active"><%= currentPage %></a>
-        
-        <% if (currentPage < totalPages) { %>
-            <a href="?category=<%= categoryId %>&page=<%= currentPage + 1 %>">Next</a>
-        <% } %>
-    </div>
-</div>
+  <div class="pagination">
+    <% if (currentPage > 1) { %>
+    <a href="?category=<%= categoryId %>&page=<%= currentPage - 1 %>"
+      >Previous</a
+    >
+    <% } %>
 
+    <a href="?category=<%= categoryId %>&page=<%= currentPage %>" class="active"
+      ><%= currentPage %></a
+    >
+
+    <% if (currentPage < totalPages) { %>
+    <a href="?category=<%= categoryId %>&page=<%= currentPage + 1 %>">Next</a>
+    <% } %>
+  </div>
+</div>
 
 <%- include('footer') -%>
 
 <script>
-    function toggleSidebar() {
+  function toggleSidebar() {
     var sidenav = document.getElementById("sidenav");
     var content = document.getElementById("content");
     var toggleButton = document.getElementById("toggleButton");
 
     if (sidenav.style.width === "250px") {
-        sidenav.style.width = "0";
-        content.style.marginLeft = "0";
-        toggleButton.style.left = "20px";
+      sidenav.style.width = "0";
+      content.style.marginLeft = "0";
+      toggleButton.style.left = "20px";
     } else {
-        sidenav.style.width = "250px";
-        content.style.marginLeft = "250px";
-        toggleButton.style.left = "270px";
+      sidenav.style.width = "250px";
+      content.style.marginLeft = "250px";
+      toggleButton.style.left = "270px";
     }
-}
-function closeSidebar() {
+  }
+  function closeSidebar() {
     var sidenav = document.getElementById("sidenav");
     var content = document.getElementById("content");
     var toggleButton = document.getElementById("toggleButton");
@@ -320,56 +330,52 @@ function closeSidebar() {
     content.style.marginLeft = "0";
     toggleButton.style.left = "20px";
     closeButton.style.display = "none";
-}
+  }
 
-
-
-function getCategoryIdFromUrl() {
+  function getCategoryIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('category');
-}
+    return urlParams.get("category");
+  }
 
-function openModal(imageSrc) {
-    document.getElementById('modalImg').src = "/product-images/" + imageSrc;
-    document.getElementById('myModal').style.display = "flex";
-}
+  function openModal(imageSrc) {
+    document.getElementById("modalImg").src = "/product-images/" + imageSrc;
+    document.getElementById("myModal").style.display = "flex";
+  }
 
-function closeModal() {
-    document.getElementById('myModal').style.display = "none";
-}
+  function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+  }
 
-function getProductsByCategory(categoryId, page) {
+  function getProductsByCategory(categoryId, page) {
     fetch(`/api/products/category/${categoryId}?page=${page}`)
-        .then(response => response.json())
-        .then(products => {
-            const productsData = products;
-            const cardContainer = document.querySelector('.card-container');
+      .then((response) => response.json())
+      .then((products) => {
+        const productsData = products;
+        const cardContainer = document.querySelector(".card-container");
 
-            productsData.forEach((product, index) => {
-                const card = cardContainer.children[index];
-                const img = card.querySelector('.card-img-top');
-                const title = card.querySelector('.card-title');
-                const text = card.querySelector('.card-text');
+        productsData.forEach((product, index) => {
+          const card = cardContainer.children[index];
+          const img = card.querySelector(".card-img-top");
+          const title = card.querySelector(".card-title");
+          const text = card.querySelector(".card-text");
 
-                img.src = `/product-images/${product.image}`;
-                img.alt = product.name;
-                title.textContent = product.name;
-                text.textContent = product.ingredients;
-            });
+          img.src = `/product-images/${product.image}`;
+          img.alt = product.name;
+          title.textContent = product.name;
+          text.textContent = product.ingredients;
+        });
 
-            while (cardContainer.children.length > productsData.length) {
-                cardContainer.removeChild(cardContainer.lastChild);
-            }
-        })
-        .catch(error => console.error('Error fetching products:', error));
-}
-function searchProducts() {
-        const searchQuery = document.getElementById('searchInput').value;
-        const url = `/user/product?page=1&search=${encodeURIComponent(searchQuery)}`;
-        window.location.href = url;
-    }
-
-
-
-    </script>
-    
+        while (cardContainer.children.length > productsData.length) {
+          cardContainer.removeChild(cardContainer.lastChild);
+        }
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+  }
+  function searchProducts() {
+    const searchQuery = document.getElementById("searchInput").value;
+    const url = `/user/product?page=1&search=${encodeURIComponent(
+      searchQuery
+    )}`;
+    window.location.href = url;
+  }
+</script>

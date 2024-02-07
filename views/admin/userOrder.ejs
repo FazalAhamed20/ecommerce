@@ -128,11 +128,17 @@
                 transform: translateY(0);
             }
         }
-
-        .pagination {
+        .pagination-container {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
-    text-align: center;
-    margin-left: 38%;
+}
+
+.pagination {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 5px; /* Adjust the gap as needed */
 }
 
 .pagination a {
@@ -141,7 +147,6 @@
     text-decoration: none;
     color: black;
     border: 1px solid #45a049;
-    margin: 0 4px;
     border-radius: 4px;
 }
 
@@ -164,6 +169,7 @@
 .pagination .disabled a:hover {
     background-color: transparent;
 }
+
 .modal {
             display: none;
             position: fixed;
@@ -221,6 +227,92 @@
     background-color: #4caf50;
     color: white;
 }
+@media only screen and (max-width: 768px) {
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 10px;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 10px;
+        margin: 5px 0;
+        text-align: left;
+        width: 100%;
+        display: block;
+    }
+
+    td.description {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    th,
+    td:before {
+        display: none;
+    }
+
+    /* Styles for status and pagination on smaller screens */
+    .updateStatusBtn {
+        background-color: #4caf50;
+        color: white;
+        margin-top: 10px; /* Adjust margin as needed */
+        padding: 8px; /* Adjust padding as needed */
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px; /* Adjust margin as needed */
+    }
+
+    .pagination a {
+        display: inline-block;
+        padding: 8px 16px;
+        text-decoration: none;
+        color: black;
+        border: 1px solid #45a049;
+        margin: 0 4px;
+        border-radius: 4px;
+    }
+
+    .pagination a.active {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .pagination a:hover {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .pagination .disabled a {
+        pointer-events: none;
+        cursor: default;
+        color: #ccc;
+    }
+
+    .pagination .disabled a:hover {
+        background-color: transparent;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .modal {
+        width: 90%;
+        max-width: 300px;
+        margin: 10% auto;
+    }
+}
+
 
     </style>
 </head>
@@ -239,15 +331,16 @@
                     <form action="/updateOrderStatus" method="POST" id="orderStatusForm">
                     <thead>
                         <tr>
-                            <th colspan="2">Order ID: <%= order.orderID %></th>
-                            <th colspan="1">Total Price: ₹<%= order.totals.grandTotal %></th>
-                            <th colspan="2">
+                            <td colspan="2">
+                                <strong style="color: #333;">Order ID: <%= order.orderID %></strong>
+                                <br>
+                                <strong style="color: #333;">Total Price: ₹<%= order.totals.grandTotal %></strong>
+                            </td>
+                            <td colspan="2">
                                 <% if (order.status === 'delivered') { %>
                                     <div id="successMessage" class="text-success">Successfully Delivered</div>
                                 <% } else if (order.status === 'cancelled') { %>
-                                    <div id="cancelledMessage" class="text-danger">
-                                        Order Cancelled
-                                    </div>
+                                    <div id="cancelledMessage" class="text-danger">Order Cancelled</div>
                                 <% } else { %>
                                     Status:
                                     <select class="orderStatusDropdown" name="orderStatus_<%= order.orderID %>" data-orderid="<%= order.orderID %>" <%= order.status === 'delivered' ? 'disabled' : '' %>>
@@ -258,8 +351,9 @@
                                     </select>
                                     <button type="submit" class="updateStatusBtn">Update Status</button>
                                 <% } %>
-                            </th>
+                            </td>
                         </tr>
+                        
                     </thead>
                     <tbody>
                         <% order.products.forEach(product => { %>
@@ -280,12 +374,14 @@
                 </table>
                 <% }); %>  
         </form>
-        <div class="pagination">
+        <div class="pagination-container"></div>
+        <ul class="pagination">
             <a href="?page=<%= currentPage - 1 %>" class="<%= currentPage === 1 ? 'disabled' : '' %>">Previous</a>
             <% for (let i = 1; i <= 3; i++) { %>
                 <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
             <% } %>
             <a href="?page=<%= currentPage + 1 %>" class="<%= currentPage === totalPages ? 'disabled' : '' %>">Next</a>
+            </ul>
         </div>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
