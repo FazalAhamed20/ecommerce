@@ -576,6 +576,30 @@ del {
     /* Add additional responsive adjustments as needed */
 }
 
+@media only screen and (max-width: 768px) {
+        .swiper-wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .swiper-slide {
+            flex: 0 0 auto;
+            width: 100%;
+            scroll-snap-align: start;
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .swiper-wrapper {
+            display: block;
+        }
+
+        .swiper-slide {
+            width: 100%;
+        }
+    }
 
 
 
