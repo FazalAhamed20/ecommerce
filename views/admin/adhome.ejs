@@ -421,6 +421,23 @@ font-weight: 600;
     width: 100%;
     height: auto;
 }
+@media (min-width: 768px) {
+    /* Adjust the max-width and aspect ratio as needed */
+    .responsive-chart {
+        max-width: 100%;
+        
+        height: auto;
+    }
+}
+
+@media (min-width: 1200px) {
+    /* Adjust the max-width and aspect ratio as needed */
+    .responsive-chart {
+        max-width: 100%; 
+      
+        height: auto;
+    }
+}
 
 </style>
 
@@ -449,7 +466,7 @@ font-weight: 600;
       <p><%= totalUsers %></p>
     </div>
 
-    <div style="width: 80%;" class="dashboard-graph-container">
+    <div style="width: 100%;" class="dashboard-graph-container">
       <div class="time-interval-selector">
         <label for="time-interval">Select Time Interval: </label>
         <select id="time-interval" onchange="updateChart()">
