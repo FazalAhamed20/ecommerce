@@ -224,6 +224,27 @@
       display: flex;
       gap: 10px;
     }
+    @media (max-width: 768px) {
+            /* Adjust styles for smaller screens */
+            .coupon {
+                text-align: center; /* Center the content on smaller screens */
+            }
+
+            .coupon-input {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #couponCode {
+                width: 100%; /* Make the input full width */
+                margin-bottom: 10px;
+            }
+
+            #couponButton {
+                width: 100%; /* Make the button full width */
+            }
+        }
 
     .coupon-input input {
       flex: 1;
