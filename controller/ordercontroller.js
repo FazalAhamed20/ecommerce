@@ -3,7 +3,6 @@ const cartModels = require('../models/cartModel');
 const Address = require('../models/addressModel');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
-const moment = require('moment');
 const CanceledOrder = require('../models/orderCancelModel');
 const Product = require('../models/productModel');
 const Wallet=require('../models/walletModel')
@@ -12,7 +11,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const ejs = require('ejs');
 const Coupon=require('../models/couponModel')
-const {generateOrderID,getCurrentTime}=require('../util/helperfunction')
+const {generateOrderID,getCurrentTime,formatDate}=require('../util/helperfunction')
 require('dotenv').config();
 //Razorpay Instance------------------------------------------------------->
 var instance = new Razorpay({
@@ -22,17 +21,15 @@ var instance = new Razorpay({
 //Order data------------------------------------------------------->
 const createOrderData = async (userId, paymentMethod, selectedAddress, couponCode) => {
   const orderID = generateOrderID();
-  const currentDate = moment();
-  const orderDate = currentDate.format('ddd MMM DD YYYY');
+  const currentDate = new Date();
+  const orderDate = formatDate(currentDate);
   const orderDateTime = new Date();
-const hours = orderDateTime.getHours().toString().padStart(2, '0');
-const minutes = orderDateTime.getMinutes().toString().padStart(2, '0');
-const seconds = orderDateTime.getSeconds().toString().padStart(2, '0');
-const orderTime = `${hours}:${minutes}:${seconds}`;
-  const orderDateTimeWithTime = moment(orderDateTime).set('hour', orderTime.split(':')[0]).set('minute', orderTime.split(':')[1]);
-  const deliveryDateTime = moment(orderDateTimeWithTime).add(40, 'minutes');
-  const deliveryDate = deliveryDateTime.format('ddd MMM DD YYYY ');
-  const deliveryTime = deliveryDateTime.format('HH:mm');
+  const orderTime = getCurrentTime();
+  orderDateTime.setHours(parseInt(orderTime.split(':')[0], 10));
+orderDateTime.setMinutes(parseInt(orderTime.split(':')[1], 10));
+const deliveryDateTime = new Date(orderDateTime.getTime() + 40 * 60000);
+const deliveryDate = formatDate(deliveryDateTime);
+const deliveryTime = getCurrentTime();
   const appliedCoupon = await Coupon.findOne({ couponCode });
   const cart = await cartModels.findOne({ userId });
   if (cart) {
@@ -191,7 +188,6 @@ const createOrder = async (req, res) => {
       userWallet.balance -= orderTotal;
       await userWallet.save();
       const newOrder = new orderModels(orderData);
-      console.log(newOrder);
       const savedOrder = await newOrder.save();
       await cartModels.findOneAndDelete({ userId });
       setTimeout(() => {

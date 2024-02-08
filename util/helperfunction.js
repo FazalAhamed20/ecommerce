@@ -1,4 +1,3 @@
-const moment = require("moment");
 const calculateTotals = (cartItems) => {
   const totals = cartItems.reduce(
     (accumulator, item) => {
@@ -47,7 +46,10 @@ function generateOrderID() {
   return "ORD#" + sixDigitID;
 }
 function getCurrentTime() {
-  return moment().format("HH:mm");
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
 }
 function generateReferralCode() {
   const characters =
@@ -63,6 +65,17 @@ function generateReferralCode() {
 function generateOTP() {
   return Math.floor(1000 + Math.random() * 9000);
 }
+function formatDate(date) {
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const month = months[date.getMonth()];
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${dayOfWeek} ${month} ${day} ${year}`;
+}
 
 module.exports = {
   calculateTotals,
@@ -71,4 +84,5 @@ module.exports = {
   getCurrentTime,
   generateReferralCode,
   generateOTP,
+  formatDate
 };
