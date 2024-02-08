@@ -109,7 +109,7 @@ const otpresend = function (req, res) {
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     res.render("./user/resetpassword", {
       email: email,
-      errorMessage1: "OTP has been sent",
+      errorMessage10: "OTP has been sent",
     });
   });
 };
