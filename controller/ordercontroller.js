@@ -25,7 +25,7 @@ const createOrderData = async (userId, paymentMethod, selectedAddress, couponCod
   const currentDate = moment();
   const orderDate = currentDate.format('ddd MMM DD YYYY');
   const orderDateTime = moment();
-  const orderTime = getCurrentTime();
+  const orderTime = orderDateTime.format('HH:mm:ss');
   const orderDateTimeWithTime = moment(orderDateTime).set('hour', orderTime.split(':')[0]).set('minute', orderTime.split(':')[1]);
   const deliveryDateTime = moment(orderDateTimeWithTime).add(40, 'minutes');
   const deliveryDate = deliveryDateTime.format('ddd MMM DD YYYY ');
@@ -188,6 +188,7 @@ const createOrder = async (req, res) => {
       userWallet.balance -= orderTotal;
       await userWallet.save();
       const newOrder = new orderModels(orderData);
+      console.log(newOrder);
       const savedOrder = await newOrder.save();
       await cartModels.findOneAndDelete({ userId });
       setTimeout(() => {
