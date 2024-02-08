@@ -373,10 +373,11 @@ const downloadInvoice = async (req, res) => {
       console.log('Order not found');
       return res.status(404).send('Order not found');
     }
-
+    const orderedDate = orderDetails.orderDate;
+    const formattedDate = orderedDate.toLocaleDateString('en-IN');
     const templatePath = 'views/orders/invoice.ejs';
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
-    const renderedHTML = ejs.render(templateContent, { orderDetails, user: req.session.user });
+    const renderedHTML = ejs.render(templateContent, { orderDetails, user: req.session.user,formattedDate });
 
     // Launch Puppeteer with headless: 'new'
     const browser = await puppeteer.launch({ headless: 'new' });
@@ -389,10 +390,10 @@ const downloadInvoice = async (req, res) => {
     // Close the browser
     await browser.close();
 
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().slice(0, 10);
+    
+    const name = "Coffee Land"
 
-    res.setHeader('Content-Disposition', `attachment; filename=invoice_${formattedDate}.pdf`);
+    res.setHeader('Content-Disposition', `attachment; filename=invoice_${name}.pdf`);
     res.setHeader('Content-Type', 'application/pdf');
     res.send(pdfBuffer);
   } catch (error) {
