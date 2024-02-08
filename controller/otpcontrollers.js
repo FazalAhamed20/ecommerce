@@ -113,7 +113,7 @@ const verify = async function (req, res) {
       res.status(500).send("Internal Server Error");
     }
   } else {
-    res.render("./admin/otp", { msg: "OTP is incorrect or Time Expires" });
+    res.render("./admin/otp", { msg10: "OTP is incorrect or Time Expires" });
   }
 };
 //Resend otp to the user------------------------------------------------------->

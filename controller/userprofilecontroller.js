@@ -205,12 +205,12 @@ const rewards = async (req, res) => {
 };
 //rateus------------------------------------------------------->
 const rateus = (req, res) => {
-  const errorMessage = req.flash("error")[0];
-  const successMessage = req.flash("success")[0];
+  const errorMessage5 = req.flash("error")[0];
+  const successMessage5 = req.flash("success")[0];
   res.render("./userprofile/rateus.ejs", {
     pageTitle: "Rate Us",
-    errorMessage,
-    successMessage,
+    errorMessage5,
+    successMessage5,
   });
 };
 const hasUserRated = async (userId) => {

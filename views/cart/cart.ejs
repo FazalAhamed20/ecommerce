@@ -3,7 +3,7 @@
   /* Global settings */
   body {
     font-family: "Roboto", sans-serif;
-    background-color: #f5f2eb;
+    background-color: #f5f2eb; 
     margin: 0;
     padding: 0;
     display: flex;
@@ -16,7 +16,7 @@
   h1 {
     text-align: center;
     padding: 20px 0;
-    color: #5c3d2e;
+    color: #5c3d2e; 
     animation: fadeIn 1s ease;
   }
 
@@ -31,11 +31,11 @@
 
   .cart-container {
     width: 80%;
-    background-color: #f9f5f2;
+    background-color: #f9f5f2; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
-    animation: slideIn 0.5s ease;
+    animation: slideIn 0.5s ease; 
   }
 
   @keyframes slideIn {
@@ -51,7 +51,7 @@
 
   .cart-item {
     display: flex;
-    border-bottom: 1px solid #e0dedc;
+    border-bottom: 1px solid #e0dedc; 
     padding: 15px;
     transition: background-color 0.3s ease;
   }
@@ -84,7 +84,7 @@
   .product-title {
     font-weight: bold;
     font-size: 18px;
-    color: #5c3d2e;
+    color: #5c3d2e; 
   }
 
   .product-price,
@@ -93,7 +93,7 @@
   .remove-product {
     font-size: 16px;
     color: #5c3d2e;
-    animation: fadeInText 0.5s ease;
+    animation: fadeInText 0.5s ease; 
   }
 
   @keyframes fadeInText {
@@ -106,7 +106,7 @@
   }
 
   .remove-product {
-    color: #96372e;
+    color: #96372e; 
     cursor: pointer;
     margin-left: auto;
     transition: color 0.3s ease;
@@ -119,12 +119,12 @@
   .totals {
     margin-top: 20px;
     padding: 20px;
-    background-color: #f9f5f2;
-    border-top: 1px solid #e0dedc;
+    background-color: #f9f5f2; 
+    border-top: 1px solid #e0dedc; 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    animation: fadeInTotals 1s ease;
+    animation: fadeInTotals 1s ease; 
   }
 
   @keyframes fadeInTotals {
@@ -142,16 +142,16 @@
   }
 
   .totals-label {
-    color: #5c3d2e;
+    color: #5c3d2e; 
   }
 
   .totals-value {
     font-weight: bold;
-    color: #5c3d2e;
+    color: #5c3d2e; 
   }
 
   .checkout:hover {
-    background-color: #3c271f;
+    background-color: #3c271f; 
   }
 
   @keyframes fadeInCheckout {
@@ -297,6 +297,8 @@
     overflow-y: scroll;
   }
 
+  
+
   .cart-container {
     width: 80%;
     background-color: #f9f5f2;
@@ -308,6 +310,7 @@
   }
 
   @media screen and (max-width: 768px) {
+   
     .cart-container {
       width: 90%;
     }
@@ -324,13 +327,15 @@
     transition: background-color 0.3s ease;
   }
 
+ 
+
   .totals {
     margin-top: 20px;
     padding: 20px;
     background-color: #f9f5f2;
     border-top: 1px solid #e0dedc;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     align-items: center;
     animation: fadeInTotals 1s ease;
   }
@@ -347,14 +352,14 @@
   .totals-item {
     font-size: 18px;
     margin-bottom: 10px;
-    display: flex;
+    display: flex; 
     justify-content: space-between;
-    width: 100%;
+    width: 100%; 
   }
 
   .totals-label {
     color: #5c3d2e;
-    flex-grow: 1;
+    flex-grow: 1; 
   }
 
   .totals-value {
@@ -367,8 +372,8 @@
   }
   @media screen and (max-width: 176px) {
     .product-remove {
-      text-align: center;
-      margin-top: 10px;
+      text-align: center; 
+      margin-top: 10px; 
     }
   }
   .product-remove {
@@ -403,24 +408,24 @@
           <%= item.productId && item.productId.name %>
         </div>
         <div class="product-price">
-          ₹<%= (item.productId && (item.productId.productOfferprice ||
-          item.productId.Offerprice || item.productId.price)).toFixed(2) %>
+          ₹<%= (item.productId && (item.productId.productOfferprice || item.productId.Offerprice ||
+          item.productId.price)).toFixed(2) %>
         </div>
         <div class="product-quantity">
           Quantity:
           <input
-            type="number"
-            value="<%= item.quantity %>"
-            min="1"
-            max="<%= item.productId.quantity %>"
-            data-product-id="<%= item.productId._id %>"
-            onchange="updateQuantity(this)"
-            oninput="validateQuantity(this)"
+              type="number"
+              value="<%= item.quantity %>"
+              min="1"
+              max="<%= item.productId.quantity %>"
+              data-product-id="<%= item.productId._id %>"
+              onchange="updateQuantity(this)"
+              oninput="validateQuantity(this)"
           />
           <% if (item.productId.quantity <= 1) { %>
-          <span class="out-of-stock">Out of Stock</span>
+              <span class="out-of-stock">Out of Stock</span>
           <% } %>
-        </div>
+      </div>
         <div class="product-remove">
           <a
             href="javascript:void(0);"
@@ -430,12 +435,12 @@
             Remove
           </a>
         </div>
+        
       </div>
 
       <div class="product-total">
-        ₹<%= (item.productId && (item.productId.productOfferprice ||
-        item.productId.Offerprice || item.productId.price) *
-        item.quantity).toFixed(2) %>
+        ₹<%= (item.productId && (item.productId.productOfferprice || item.productId.Offerprice ||
+        item.productId.price) * item.quantity).toFixed(2) %>
       </div>
     </div>
     <% }); %>
@@ -485,12 +490,12 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 <script>
-  function validateQuantity(input) {
-    // Ensure the value is not less than 1
-    if (input.value < 1) {
-      input.value = 1;
+   function validateQuantity(input) {
+        // Ensure the value is not less than 1
+        if (input.value < 1) {
+            input.value = 1;
+        }
     }
-  }
 </script>
 
 <script>
@@ -501,17 +506,19 @@
         headers: {
           "Content-Type": "application/json",
         },
+       
       });
 
       if (!response.ok) {
         console.error("Failed to update cart totals:", response.statusText);
-
+       
         return;
       }
 
       const result = await response.json();
       console.log("Cart totals updated successfully:", result.totals);
 
+      
       document.getElementById(
         "cart-subtotal"
       ).innerText = `₹${result.totals.subtotal.toFixed(2)}`;
@@ -526,6 +533,7 @@
       ).innerText = `₹${result.totals.grandTotal.toFixed(2)}`;
     } catch (error) {
       console.error("Error updating cart totals:", error);
+      
     }
   }
 </script>
@@ -545,25 +553,29 @@
 
       if (!response.ok) {
         console.error("Failed to update quantity:", response.statusText);
-
+       
         return;
       }
 
       const result = await response.json();
 
       if (result.success) {
+      
         updateUITotals(result.totals);
-
+        
         location.reload();
       } else {
         console.error("Failed to update quantity:", result.message);
+      
       }
     } catch (error) {
       console.error("Error updating quantity:", error);
+      
     }
   }
 
   function updateUITotals(totals) {
+ 
     document.getElementById(
       "cart-subtotal"
     ).textContent = `₹${totals.subtotal.toFixed(2)}`;
@@ -610,6 +622,7 @@
     function recalculateCart() {
       var subtotal = 0;
 
+      
       document.querySelectorAll(".cart-item").forEach(function (item) {
         var price = parseFloat(
           item.querySelector(".product-price").textContent.replace("₹", "")
@@ -625,10 +638,12 @@
           "₹" + total.toFixed(2);
       });
 
+     
       var tax = subtotal * taxRate;
       var shipping = subtotal > 0 ? shippingRate : 0;
       var total = subtotal + tax + shipping;
 
+    
       document.getElementById("cart-subtotal").textContent =
         "₹" + subtotal.toFixed(2);
       document.getElementById("cart-tax").textContent = "₹" + tax.toFixed(2);
@@ -637,7 +652,7 @@
       document.getElementById("cart-total").textContent =
         "₹" + total.toFixed(2);
 
-      updateCartBadge();
+      updateCartBadge(); 
     }
     function updateQuantity(quantityInput) {
       var item = quantityInput.closest(".cart-item");
@@ -649,7 +664,7 @@
 
       item.querySelector(".product-total").textContent = "₹" + total.toFixed(2);
 
-      recalculateCart();
+      recalculateCart(); 
     }
   });
 </script>
@@ -662,14 +677,13 @@
 </script>
 <script>
   function showConfirmationModal(productId) {
-    const isConfirmed = confirm(
-      "Are you sure you want to remove this item from your cart?"
-    );
+    const isConfirmed = confirm('Are you sure you want to remove this item from your cart?');
 
     if (isConfirmed) {
       window.location.href = `/removeItem/${productId}`;
     }
   }
 </script>
+
 
 <%- include('footer') -%>

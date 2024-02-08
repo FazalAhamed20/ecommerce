@@ -119,7 +119,7 @@
         <h4>Enter OTP Code</h4>
         <form action="/verify" method="post">
             <div class="loginDiv d-flex justify-content-center">
-                <%- msg -%>
+                <%- msg10 -%>
             </div>
             <div class="input-field">
                 <input type="text" name="otp" pattern="\d{4}" required>
@@ -135,6 +135,15 @@
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Add a script to remove the flash message after 3 seconds
+        setTimeout(function() {
+            var loginDiv = document.querySelector('.loginDiv');
+            if (loginDiv) {
+                loginDiv.style.display = 'none';
+            }
+        }, 3000);
+    </script>
     <script>
       let duration = 40; 
       const timerDisplay = $("#timer");
