@@ -30,7 +30,7 @@ orderDateTime.setMinutes(parseInt(orderTime.split(':')[1], 10));
 const deliveryDateTime = new Date(orderDateTime.getTime() + 40 * 60000);
 const deliveryDate = formatDate(deliveryDateTime);
 currentDate.setMinutes(currentDate.getMinutes() + 40);
-const formattedTime = currentDate.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false });
+const formattedTime = currentDate.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false,hour: 'numeric', minute: 'numeric' });
 
 const deliveryTime = formattedTime;
   const appliedCoupon = await Coupon.findOne({ couponCode });
