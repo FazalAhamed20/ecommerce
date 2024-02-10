@@ -207,6 +207,9 @@
     background-color: #3e2723;
     margin-left: 10px;
   }
+  .pagination a:hover{
+    background-color: #5D4037;;
+  }
   .search-container {
     margin-top: ayto;
     margin-left: 15%;
@@ -245,7 +248,7 @@
   >
     ✕
   </div>
-  <a href="/user/product" onclick="getAllProducts()">All Products</a>
+  <a href="/product" onclick="getAllProducts()">All Products</a>
   <% categories.forEach(category => { %>
   <a
     href="/products?category=<%= category._id %>"
@@ -271,7 +274,7 @@
     <div class="card-body">
       <h5 class="card-title"><%= product.name %></h5>
       <p class="card-text"><%= product.ingredients %></p>
-      <a href="/user/mainproduct/<%= product._id %>" class="btn btn-primary"
+      <a href="/mainproduct/<%= product._id %>" class="btn btn-primary"
         >Order Now</a
       >
     </div>
@@ -373,7 +376,7 @@
   }
   function searchProducts() {
     const searchQuery = document.getElementById("searchInput").value;
-    const url = `/user/product?page=1&search=${encodeURIComponent(
+    const url = `/product?page=1&search=${encodeURIComponent(
       searchQuery
     )}`;
     window.location.href = url;

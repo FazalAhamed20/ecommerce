@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
-    <title>Rewards</title>
-</head>
+<%- include('header') -%> 
+<%- include('nav', { user: user}) -%>
+
+
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 body{
@@ -47,6 +43,7 @@ body{
   justify-content: space-between;
   padding: 0 10px;
   align-items: center;
+  
 }
 .card::after {
   position: absolute;
@@ -106,7 +103,7 @@ body{
 }
 
 .copy-button {
-  margin: 12px 0 -5px 0;
+  margin: -5px 0 -5px 0;
   height: 45px;
   border-radius: 4px;
   padding: 0 5px;

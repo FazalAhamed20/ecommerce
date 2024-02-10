@@ -295,7 +295,7 @@ cartItemCount }) -%>
       <div class="btn-container">
         <% if (product.quantity > 0) { %>
         <a
-          href="/user/addtocart/<%= product._id %>"
+          href="/addtocart/<%= product._id %>"
           id="addToCartLink"
           class="btn btn-primary"
           onclick="showAddedToCartMessage()"
@@ -335,7 +335,7 @@ cartItemCount }) -%>
 
       // Redirect to the main product page after a delay (adjust the delay as needed)
       setTimeout(function () {
-        window.location.href = "/user/mainproduct/<%= product._id %>";
+        window.location.href = "/mainproduct/<%= product._id %>";
       }, 1000); // 3000 milliseconds (3 seconds) delay
 
       // Fetch and update the cart count after a delay

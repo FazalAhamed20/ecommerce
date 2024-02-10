@@ -46,7 +46,7 @@ const address = async (req, res) => {
       const addresses = await Address.find({ userId: user._id });
       res.render("userprofile/address", { addresses, user });
     } else {
-      return res.redirect("/user/login");
+      return res.redirect("/login");
     }
   } catch (error) {
     console.error(error);
@@ -96,7 +96,7 @@ const addaddressform = async (req, res) => {
       user.addresses.push(newAddress._id);
       await user.save();
       req.session.user = user;
-      return res.redirect("/user/address");
+      return res.redirect("/address");
     } else {
       return res.status(401).send("Unauthorized");
     }
@@ -124,7 +124,7 @@ const editaddressform = async (req, res) => {
       address.district = req.body.district;
       address.state = req.body.state;
       await address.save();
-      return res.redirect("/user/address");
+      return res.redirect("/address");
     }
     res.render("userprofile/editaddress", { address });
   } catch (error) {
@@ -139,7 +139,7 @@ const deleteAddress = async (req, res) => {
     await Address.findByIdAndDelete(addressId);
     const userId = req.session.user._id;
     await User.findByIdAndUpdate(userId, { $pull: { addresses: addressId } });
-    res.redirect("/user/address");
+    res.redirect("/address");
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -205,12 +205,14 @@ const rewards = async (req, res) => {
 };
 //rateus------------------------------------------------------->
 const rateus = (req, res) => {
+  const user = req.session.user || {};
   const errorMessage5 = req.flash("error")[0];
   const successMessage5 = req.flash("success")[0];
   res.render("./userprofile/rateus.ejs", {
     pageTitle: "Rate Us",
     errorMessage5,
     successMessage5,
+    user
   });
 };
 const hasUserRated = async (userId) => {
@@ -224,7 +226,7 @@ const submitRating = async (req, res) => {
 
     if (userHasRated) {
       req.flash("error", "you have already rated.");
-      return res.redirect("/user/rateus");
+      return res.redirect("/rateus");
     }
     const newRating = new RateUs({
       userId,
@@ -233,7 +235,7 @@ const submitRating = async (req, res) => {
     });
     await newRating.save();
     req.flash("success", "Thanks for rating!");
-    res.redirect("/user/rateus");
+    res.redirect("/rateus");
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

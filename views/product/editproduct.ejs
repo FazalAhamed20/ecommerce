@@ -196,20 +196,10 @@
       <label for="category">Product Category:</label>
       <select id="category" name="category" required>
         <% categories.forEach(category => { %>
-        <option
-          value="<%= category._id %>"
-          <%
-          if
-          (product.category
-          &&
-          product.category._id.equals(category._id))
-          {
-          %
-        >
-          selected<% } %>><%= category.name %>
-        </option>
+          <option value="<%= category._id %>" <% if (product.category && product.category._id.equals(category._id)) { %> selected <% } %>><%= category.name %></option>
         <% }); %>
       </select>
+      
 
       <button type="submit">Update Product</button>
     </form>

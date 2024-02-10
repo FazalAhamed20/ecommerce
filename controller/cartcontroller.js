@@ -19,7 +19,7 @@ const usercart = async (req, res) => {
         totals: { subtotal: 0, tax: 0, shipping: 0, grandTotal: 0 },
       });
       await newCart.save();
-      return res.redirect("/user/cart");
+      return res.redirect("/cart");
     }
     const cartItems = cart.products || [];
     const cartItemCount = cartItems.length;
@@ -105,7 +105,7 @@ const removeFromCart = async (req, res) => {
     await cart.save();
     const updatedCart = await cartModels.findOne({ userId });
     const cartItemCount = updatedCart ? updatedCart.products.length : 0;
-    res.redirect("/user/cart");
+    res.redirect("/cart");
   } catch (error) {
     console.error("Error removing product from cart:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -158,7 +158,7 @@ const updatequantity = async (req, res) => {
         .json({ success: false, message: "Product not found in the cart" });
     }
     await userCart.save();
-    res.redirect("/user/cart");
+    res.redirect("/cart");
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Internal server error" });

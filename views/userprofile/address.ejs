@@ -95,20 +95,20 @@
   }
 </style>
 
-<a href="/user/addaddress" class="center-button">Add Address</a>
+<a href="/addaddress" class="center-button">Add Address</a>
 
 <div class="address-container">
   <% addresses.forEach(function(address, index) { %>
   <div class="address-card">
     <div class="icons">
       <a
-        href="/user/editaddressform/<%= address._id %>"
+        href="/editaddressform/<%= address._id %>"
         class="edit-address-icon"
       >
         <i class="fas fa-pencil-alt"></i>
       </a>
       <a
-        href="/user/deleteaddress/<%= address._id %>"
+        href="/deleteaddress/<%= address._id %>"
         class="delete-address-icon"
       >
         <i class="fas fa-trash-alt"></i>

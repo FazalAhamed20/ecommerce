@@ -599,7 +599,7 @@
       <div class="row">
         <div class="content">
           <h3>fresh coffee in the morning</h3>
-          <a href="/user/reminder" class="btn">Remind Me</a>
+          <a href="/reminder" class="btn">Remind Me</a>
         </div>
 
         <div class="image">
@@ -631,7 +631,7 @@
             your visit extraordinary. Discover the magic in every cup. Welcome
             to your coffee escape. ✨
           </p>
-          <a href="/user/product" class="btn">Shop Now</a>
+          <a href="/product" class="btn">Shop Now</a>
           <div class="icons-container">
             <div class="icons">
               <img src="/assets/about-icon-1.png" alt="" />
@@ -659,7 +659,7 @@
       <% let displayedProducts = 0; %> <% for (let i = 0; i < products.length &&
       displayedProducts < 6; i++) { %> <% if (products[i].productOfferprice ||
       products[i].Offerprice) { %>
-      <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
+      <a href="/mainproduct/<%= products[i]._id %>" class="box">
         <img src="/assets/menu-<%= i + 1 %>.png" alt="" />
         <div class="content">
           <h3><%= products[i].name %></h3>
@@ -684,7 +684,7 @@
       </a>
       <% displayedProducts++; %> <% } else if (displayedProducts < 6) { %>
       <!-- Display products with regular price if no offer exists -->
-      <a href="/user/mainproduct/<%= products[i]._id %>" class="box">
+      <a href="/mainproduct/<%= products[i]._id %>" class="box">
         <img src="/assets/menu-<%= i + 1 %>.png" alt="" />
         <div class="content">
           <h3><%= products[i].name %></h3>
@@ -785,7 +785,7 @@
 
         // Try to navigate
         try {
-          window.location.href = "/user/product";
+          window.location.href = "/product";
         } catch (error) {
           console.error("Error navigating:", error.message);
         }

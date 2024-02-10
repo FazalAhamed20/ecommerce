@@ -38,19 +38,18 @@ router.get('/product/deleteproduct/:id',verifyAdmin,productcontroller.deleteprod
 router.get("/admin/userorder",verifyAdmin,controller2.userOrder);
 router.post("/updateOrderStatus",verifyAdmin,controller2.updateOrderstatus);
 router.get('/download-sales-report', verifyAdmin, controller2.generateSalesReport);
-
+//category offers------------------------------------------------------->
 router.get('/admin/categoryoffer',verifyAdmin,categoryoffercontroller.CategoryOffers)
 router.post('/admin/edit-offer/:category/:startDate/:expiryDate/:percentage',verifyAdmin,categoryoffercontroller.editOffer);
 router.delete('/admin/delete-offer/:categoryId', verifyAdmin, categoryoffercontroller.deleteOffer);
-
+//coupon------------------------------------------------------->
 router.get('/admin/coupon',verifyAdmin,couponcontroller.showCreateCouponForm)
 router.post('/admin/create-coupon',verifyAdmin,couponcontroller.createCoupon)
 router.get('/coupons/create',verifyAdmin,couponcontroller.createcouponform)
 router.get('/edit-coupon/:couponId',verifyAdmin, couponcontroller.showEditCouponForm);
 router.put('/admin/edit-coupon/:couponId',verifyAdmin, couponcontroller.editCoupon);
 router.delete('/delete-coupons/:couponId',verifyAdmin,couponcontroller.deletecoupon)
-
-
+//product offers------------------------------------------------------->
 router.get('/admin/productoffer',verifyAdmin,productoffercontroller.ProductOffers)
 router.put('/admin/edit-product-offer/:productId/:startDate/:expiryDate/:percentage',verifyAdmin,productoffercontroller.editProductOffer);
 router.delete('/admin/delete-product-offer/:productId',verifyAdmin,productoffercontroller.deleteProductOffer)

@@ -226,11 +226,11 @@ const setreminder = async (req, res) => {
     });
     await reminder.save();
     req.flash("success", "Reminder set successfully!");
-    return res.redirect("/user/reminder");
+    return res.redirect("/reminder");
   } catch (error) {
     console.error("Error setting reminder:", error.message);
     req.flash("error", "Oops! Something went wrong. Please try again later.");
-    return res.redirect("/user/reminder");
+    return res.redirect("/reminder");
   }
 };
 
@@ -243,11 +243,11 @@ const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
-      res.redirect("/user/login");
+      res.redirect("/login");
     } else {
       const logoutMessage = "Successfully logged out.";
       res.redirect(
-        "/user/login?logoutMessage=" + encodeURIComponent(logoutMessage)
+        "/login?logoutMessage=" + encodeURIComponent(logoutMessage)
       );
     }
   });

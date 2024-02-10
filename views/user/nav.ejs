@@ -74,6 +74,34 @@
           transform: none;
         }
       }
+      nav {
+  background-color: #3e2723;
+  padding: 10px;
+  text-align: center;
+}
+
+.input-div i {
+  color: black;
+}
+
+.input-div {
+  border-bottom: 2px solid white;
+  margin-bottom: 15px;
+}
+
+.input {
+  color: black;
+  outline: none;
+  background: transparent;
+  width: 90%;
+}
+.navbar-nav .nav-link i {
+  transition: transform 0.7s ease;
+}
+.navbar-nav .nav-item:hover .nav-link {
+  transform: scale(1.5);
+}
+
     </style>
   </head>
   <body>
@@ -97,7 +125,7 @@
 
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="/user/coffeemix"
+              <a class="nav-link" href="/coffeemix"
                 ><i class="fa-solid fa-mug-saucer">Coffee</i></a
               >
             </li>
@@ -109,12 +137,12 @@
               <a class="nav-link" href="/"><i class="fas fa-house"></i></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/user/product"
+              <a class="nav-link" href="/product"
                 ><i class="fas fa-mug-hot"></i
               ></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/user/cart">
+              <a class="nav-link" href="/cart">
                 <i class="fas fa-cart-shopping"></i>
                 <% if (cartCount >=0) { %>
                 <span id="cart-count" class="badge bg-danger">
@@ -141,12 +169,12 @@
                 aria-labelledby="navbarDropdown"
               >
                 <% if (user) { %>
-                <a class="dropdown-item" href="/user/profile">Profile</a>
-                <a class="dropdown-item" href="/user/logout"
+                <a class="dropdown-item" href="/profile">Profile</a>
+                <a class="dropdown-item" href="/logout"
                   ><i class="fas fa-sign-out"></i> Logout</a
                 >
                 <% } else { %>
-                <a class="dropdown-item" href="/user/login"
+                <a class="dropdown-item" href="/login"
                   ><i class="fas fa-user"></i> Log In</a
                 >
                 <% } %>

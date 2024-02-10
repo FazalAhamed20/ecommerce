@@ -245,15 +245,11 @@ footer {
   }
 }
 
-nav {
-  background-color: #3e2723;
-  padding: 10px;
-  text-align: center;
-}
-
 .input-div i {
   color: black;
 }
+
+
 
 .input-div {
   border-bottom: 2px solid white;
@@ -266,9 +262,4 @@ nav {
   background: transparent;
   width: 90%;
 }
-.navbar-nav .nav-link i {
-  transition: transform 0.7s ease;
-}
-.navbar-nav .nav-item:hover .nav-link {
-  transform: scale(1.5);
-}
+

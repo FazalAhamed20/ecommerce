@@ -3,13 +3,13 @@ const verifyUser = (req, res, next) => {
   if (req.session.logged) {
     next();
   } else {
-    res.redirect("/user/login");
+    res.redirect("/login");
   }
 };
 
 const userExist = (req, res, next) => {
   if (req.session.logged) {
-    res.redirect("/user/home");
+    res.redirect("/");
   } else {
     next();
   }

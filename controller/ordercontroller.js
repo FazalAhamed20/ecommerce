@@ -29,7 +29,10 @@ const createOrderData = async (userId, paymentMethod, selectedAddress, couponCod
 orderDateTime.setMinutes(parseInt(orderTime.split(':')[1], 10));
 const deliveryDateTime = new Date(orderDateTime.getTime() + 40 * 60000);
 const deliveryDate = formatDate(deliveryDateTime);
-const deliveryTime = getCurrentTime();
+currentDate.setMinutes(currentDate.getMinutes() + 40);
+const formattedTime = currentDate.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false });
+
+const deliveryTime = formattedTime;
   const appliedCoupon = await Coupon.findOne({ couponCode });
   const cart = await cartModels.findOne({ userId });
   if (cart) {
@@ -92,7 +95,7 @@ const checkout = async (req, res) => {
         const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image');
         if (!cart || cart.products.length === 0) {
             req.flash('error', 'Your cart is empty. Cannot create an order.');
-            return res.redirect('/user/cart');
+            return res.redirect('/cart');
         }
         if (!cart) {
             return res.status(404).json({ success: false, message: 'Cart not found' });
@@ -153,7 +156,7 @@ const createOrder = async (req, res) => {
 
     if (!paymentMethod || !selectedAddressIndex || !selectedAddressIndex.length) {
       req.flash('error', 'Address or Payment is not selected');
-      return res.redirect('/user/checkout');
+      return res.redirect('/checkout');
     }
     if (!userId) {
       return res.status(401).json({ error: 'User not authenticated' });
@@ -165,6 +168,7 @@ const createOrder = async (req, res) => {
       return res.status(404).json({ error: 'Selected address not found' });
     }
     const orderData = await createOrderData(userId, paymentMethod, selectedAddress, couponCode);
+    console.log(orderData)
     if (paymentMethod === 'Cash on Delivery') {
       const newOrder = new orderModels(orderData);
       const savedOrder = await newOrder.save();
@@ -178,12 +182,12 @@ const createOrder = async (req, res) => {
         const userWallet = await Wallet.findById(walletId);
       if (!userWallet) {
         req.flash('error', 'User wallet not found');
-        return res.redirect('/user/checkout');
+        return res.redirect('/checkout');
       }
       const orderTotal = orderData.totals.grandTotal;
       if (userWallet.balance < orderTotal) {
         req.flash('error', 'Insufficient funds in the wallet');
-        return res.redirect('/user/checkout');
+        return res.redirect('/checkout');
       }
       userWallet.balance -= orderTotal;
       await userWallet.save();

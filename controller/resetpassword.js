@@ -72,9 +72,9 @@ const resetPassword = async (req, res) => {
     await user.save();
     if (req.session.logged == true) {
       req.session.user = user;
-      return res.redirect("/user/profile");
+      return res.redirect("/profile");
     } else {
-      return res.redirect("/user/login");
+      return res.redirect("/login");
     }
   } catch (error) {
     console.error("Error resetting password:", error);

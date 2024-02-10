@@ -47,6 +47,16 @@ app.use(cartCountMiddleware);
 app.use("/", router);
 app.use("/", router1);
 
+app.use((req, res, next) => {
+  res.status(404).render('./user/404.ejs');
+});
+
+// Error handler middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
 const PORT = process.env.PORT || 8990;
 app.listen(PORT, () => {
   console.log(`server is running on  ${PORT}`);

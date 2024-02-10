@@ -1,6 +1,7 @@
 <!-- views/userprofile/userprofile.ejs -->
 
-<%- include('header') -%> <%- include('nav', { user: user}) -%>
+<%- include('header') -%> 
+<%- include('nav', { user: user}) -%>
 
 <style>
   body {
@@ -171,7 +172,7 @@
   <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
   <p class="error-message"><%= errorMessage %></p>
   <% } %>
-  <a href="/user/forgot-password" class="forgot-password-button"
+  <a href="/forgot-password" class="forgot-password-button"
     >Forgot Password?</a
   >
 
@@ -179,7 +180,7 @@
 
   <div class="form-container" id="editForm">
     <h2>Edit Profile</h2>
-    <form action="/user/edituser" method="post" onsubmit="prepareFormData();">
+    <form action="/edituser" method="post" onsubmit="prepareFormData();">
       <!-- Hidden input to store JSON representation of the user -->
       <input
         type="hidden"
@@ -214,7 +215,7 @@
         required
       />
 
-      <a href="/user/profile"
+      <a href="/profile"
         ><button type="submit" class="update-button">Update Profile</button></a
       >
     </form>
@@ -258,7 +259,7 @@
     if (updatedUser.successMessage) {
       openCustomModal(updatedUser.successMessage);
     }
-    window.location.href = "/user/profile";
+    window.location.href = "/profile";
     // Hide the form
     toggleForm();
   }

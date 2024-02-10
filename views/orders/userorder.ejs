@@ -1,3 +1,6 @@
+<%- include('header') -%> <%- include('nav', { user, cartCount: cartCount }) -%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +12,7 @@
     <title>User Orders</title>
 </head>
 <style>
+    
 
   .list-group-item.active {
     background: #ffc107;
@@ -113,25 +117,29 @@ ul.timeline > li.active:before {
         margin: 0 5px 3px 3px;
         margin-bottom: -5px;  
         padding: 8px 16px;
-        background-color: #007bff;
+        background-color: #3E2723;
         color: white;
         text-decoration: none;
         border-radius: 5px;
     }
 
     .pagination a:hover {
-        background-color: #0056b3;  
+        background-color: #5D4037;
+        color: white; 
     }
 
     .pagination span {
-        background-color: #0056b3;
+        background-color: #3E2723;
         margin-bottom: -5px;  
     }
+    .my-5 {
+    border-bottom: 2px solid #ccc;
+}
 
 </style>
 <body>
     <% orders.forEach(function(order) { %>
-        <section class="my-5" data-order-id="<%= order.orderID %>" data-order-status="<%= order.status %>">
+        <section class="my-5" data-order-id="<%= order.orderID %>" data-order-status="<%= order.status %>" style="border-bottom: 2px solid #ccc;">
             <div id="cancelledOrderAlert-<%= order.orderID %>"></div>
 <div class="modal fade" id="cancelProductConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="cancelProductConfirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -347,11 +355,11 @@ ul.timeline > li.active:before {
     <% if (totalPages > 1) { %>
         <div class="pagination">
             <% if (page > 1) { %>
-                <a href="?page=<%= page - 1 %>&limit=<%= limit %>" class="btn btn-primary">Previous</a>
+                <a href="?page=<%= page - 1 %>&limit=<%= limit %>" class="btn">Previous</a>
             <% } %>
             <span>Page <%= page %></span>
             <% if (page < totalPages) { %>
-                <a href="?page=<%= page + 1 %>&limit=<%= limit %>" class="btn btn-primary">Next</a>
+                <a href="?page=<%= page + 1 %>&limit=<%= limit %>" class="btn ">Next</a>
             <% } %>
         </div>
     <% } %>
