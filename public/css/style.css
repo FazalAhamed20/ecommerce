@@ -36,7 +36,7 @@ body {
 
 .step-box {
   padding: 16px;
-  background:  #F5F5F5;
+  background:  #F5F2EB;
 }
 
 .summary-box {
@@ -54,6 +54,26 @@ body {
   margin-top: 5%;
   min-height: 0px;
   min-width: 0px;
+}
+@media only screen and (max-width: 768px) {
+  /* Adjust margin-top for smaller screens */
+  .step-checkout_list {
+    margin-top: 22%; /* Adjust the value as needed for small screens */
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  /* Adjust margin-top for medium screens */
+  .step-checkout_list {
+    margin-top: 22%; /* Adjust the value as needed for medium screens */
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  /* Adjust margin-top for large screens */
+  .step-checkout_list {
+    margin-top: 5%; /* Adjust the value as needed for large screens */
+  }
 }
 .step-checkout_item {
   cursor: pointer;
@@ -194,7 +214,7 @@ body {
   }
 }
 .step-checkout_item.active ~ .step-checkout_item span {
-  background: #f5f7fa;
+  background: #F5F2EB;
   color: #434a54;
   border-bottom: 4px solid rgba(67, 74, 84, 0);
 }

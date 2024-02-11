@@ -2,6 +2,10 @@
 <%- include('nav', { user: user}) -%>
 
   <style>
+    body{
+      background-color: #F5F2EB;
+    }
+    
     .summary-box {
       /* Add your styles for the summary box if needed */
       display: flex;
@@ -193,6 +197,7 @@
       margin: 0;
     }
     .flash-message.error {
+      margin-top: 25px;
       color: red;
     }
     .coupon {
@@ -601,70 +606,59 @@
 
                   <div class="step-checkout_summary" id="stepCheckoutSummary3">
                     <div class="summary-box">
-                      <h2>Summary - Shipping Address</h2>
-                      <% if (addresses && addresses.length > 0) { %> <%
-                      addresses.forEach(function(address, index) { %>
-                      <div class="address-box">
-                        <input
-                          type="radio"
-                          name="selectedAddressIndex"
-                          id="hiddenSelectedAddressIndex_<%= index %>"
-                          value="<%= index %>"
-                        />
-                        <label
-                          style="font-size: large; font-weight: bold"
-                          for="addressRadio_<%= index %>"
-                        >
-                          Address <%= index + 1 %></label
-                        >
-                        <p>
-                          <span class="field-label">Mobile:</span> <%=
-                          address.mobile %>
-                        </p>
-                        <p>
-                          <span class="field-label">Email:</span> <%=
-                          address.email %>
-                        </p>
-                        <p>
-                          <span class="field-label">Pincode:</span> <%=
-                          address.pincode %>
-                        </p>
-                        <p>
-                          <span class="field-label">House Name:</span> <%=
-                          address.houseName %>
-                        </p>
-                        <p>
-                          <span class="field-label">Locality:</span> <%=
-                          address.locality %>
-                        </p>
-                        <p>
-                          <span class="field-label">City:</span> <%=
-                          address.city %>
-                        </p>
-                        <p>
-                          <span class="field-label">District:</span> <%=
-                          address.district %>
-                        </p>
-                        <p>
-                          <span class="field-label">State:</span> <%=
-                          address.state %>
-                        </p>
-                      </div>
-                      <% }); %> <% } else { %>
-                      <!-- Display plus icon or any other indication for no addresses available -->
-                      <div class="no-address">
-                        <p><strong>Add Address</strong></p>
-                        <button
-                          class="add-address-button"
-                          onclick="return addAddress()"
-                        >
-                          <strong>+</strong>
-                        </button>
-                      </div>
-
-                      <% } %>
+                        <h2>Summary - Shipping Address</h2>
+                        <div class="no-address">
+                            <p><strong>Add Address</strong></p>
+                            <button class="add-address-button" onclick="return addAddress()">
+                                <strong>+</strong>
+                            </button>
+                        </div>
+                
+                        <% addresses.forEach(function(address, index) { %>
+                        <div class="address-box">
+                            <input
+                                type="radio"
+                                name="selectedAddressIndex"
+                                id="hiddenSelectedAddressIndex_<%= index %>"
+                                value="<%= index %>"
+                            />
+                            <label
+                                style="font-size: large; font-weight: bold"
+                                for="addressRadio_<%= index %>"
+                            >
+                                Address <%= index + 1 %></label
+                            >
+                            <p>
+                                <span class="field-label">Mobile:</span> <%= address.mobile %>
+                            </p>
+                            <p>
+                                <span class="field-label">Email:</span> <%= address.email %>
+                            </p>
+                            <p>
+                                <span class="field-label">Pincode:</span> <%= address.pincode %>
+                            </p>
+                            <p>
+                                <span class="field-label">House Name:</span> <%= address.houseName %>
+                            </p>
+                            <p>
+                                <span class="field-label">Locality:</span> <%= address.locality %>
+                            </p>
+                            <p>
+                                <span class="field-label">City:</span> <%= address.city %>
+                            </p>
+                            <p>
+                                <span class="field-label">District:</span> <%= address.district %>
+                            </p>
+                            <p>
+                                <span class="field-label">State:</span> <%= address.state %>
+                            </p>
+                        </div>
+                        <% }); %>
+                
+                        
                     </div>
-                  </div>
+                </div>
+                
 
                   <div class="step-checkout_summary" id="stepCheckoutSummary4">
                     <div class="summary-box">
