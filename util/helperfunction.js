@@ -84,5 +84,5 @@ module.exports = {
   getCurrentTime,
   generateReferralCode,
   generateOTP,
-  formatDate
+  formatDated
 };
