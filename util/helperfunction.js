@@ -79,7 +79,7 @@ function formatDate(date) {
 
 module.exports = {
   calculateTotals,
-  formatDated,
+  formatDate,
   generateOrderID,
   getCurrentTime,
   generateReferralCode,

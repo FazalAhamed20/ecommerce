@@ -4,6 +4,7 @@ const Category = require("../models/categoryModel");
 const mongoose = require("mongoose");
 const { formatDated } = require("../util/helperfunction");
 const cron = require("node-cron");
+
 //function to remove expired offers------------------------------------------------------->
 const removeExpiredOffers = async () => {
   try {
@@ -50,6 +51,9 @@ const CategoryOffers = async (req, res) => {
       const offerPercentage = offer ? offer.discountPercentage : 0;
       const expiryDate = offer ? formatDated(offer.expiryDate) : null;
       const startDate = offer ? formatDated(offer.startDate) : null;
+      
+      
+
       if (
         searchQuery &&
         category.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -78,11 +82,13 @@ const CategoryOffers = async (req, res) => {
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedCategoryData = categoryData.slice(startIndex, endIndex);
+    console.log("category",categoryData);
     res.render("./categoryOffer/categoryOffer", {
       categoryData: paginatedCategoryData,
       currentPage: page,
       totalPages,
       searchQuery,
+      
     });
   } catch (error) {
     console.error("Error fetching category offers data:", error);
