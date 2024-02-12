@@ -31,7 +31,7 @@ const calculateTotals = (cartItems) => {
   return updatedTotals;
 };
 
-function formatDate(date) {
+function formatDated(date) {
   if (!date) return null;
 
   const year = date.getFullYear();
@@ -79,7 +79,7 @@ function formatDate(date) {
 
 module.exports = {
   calculateTotals,
-  formatDate,
+  formatDated,
   generateOrderID,
   getCurrentTime,
   generateReferralCode,

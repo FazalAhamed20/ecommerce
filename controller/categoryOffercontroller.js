@@ -2,7 +2,7 @@ const Offer = require("../models/offerModel");
 const Product = require("../models/productModel");
 const Category = require("../models/categoryModel");
 const mongoose = require("mongoose");
-const { formatDate } = require("../util/helperfunction");
+const { formatDated } = require("../util/helperfunction");
 const cron = require("node-cron");
 //function to remove expired offers------------------------------------------------------->
 const removeExpiredOffers = async () => {
@@ -48,8 +48,8 @@ const CategoryOffers = async (req, res) => {
         "category"
       );
       const offerPercentage = offer ? offer.discountPercentage : 0;
-      const expiryDate = offer ? formatDate(offer.expiryDate) : null;
-      const startDate = offer ? formatDate(offer.startDate) : null;
+      const expiryDate = offer ? formatDated(offer.expiryDate) : null;
+      const startDate = offer ? formatDated(offer.startDate) : null;
       if (
         searchQuery &&
         category.name.toLowerCase().includes(searchQuery.toLowerCase())
