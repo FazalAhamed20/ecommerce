@@ -31,15 +31,7 @@ const calculateTotals = (cartItems) => {
   return updatedTotals;
 };
 
-function formatDate(date) {
-  if (!date) return null;
 
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
 function generateOrderID() {
   const safeIndex = Math.floor(Math.random() * 1000000);
   const sixDigitID = String(safeIndex + 1).padStart(6, "0");
@@ -76,6 +68,15 @@ function formatDate(date) {
 
   return `${dayOfWeek} ${month} ${day} ${year}`;
 }
+function formatDated(date) {
+  if (!date) return null;
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
 
 module.exports = {
   calculateTotals,
@@ -84,5 +85,6 @@ module.exports = {
   getCurrentTime,
   generateReferralCode,
   generateOTP,
-  formatDate
+  formatDated
+
 };

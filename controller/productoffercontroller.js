@@ -1,6 +1,6 @@
 const Product = require("../models/productModel");
 const ProductOffer = require("../models/productofferModel");
-const { formatDate } = require("../util/helperfunction");
+const { formatDated } = require("../util/helperfunction");
 
 const ProductOffers = async (req, res) => {
   try {
@@ -19,10 +19,10 @@ const ProductOffers = async (req, res) => {
         ? productOffer.discountPercentage
         : 0;
       const expiryDate = productOffer
-        ? formatDate(productOffer.expiryDate)
+        ? formatDated(productOffer.expiryDate)
         : null;
       const startDate = productOffer
-        ? formatDate(productOffer.startDate)
+        ? formatDated(productOffer.startDate)
         : null;
 
       if (
