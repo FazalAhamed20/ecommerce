@@ -92,7 +92,8 @@ const checkout = async (req, res) => {
       const orderID=generateOrderID();
         const userId = req.session.user._id;
         const addresses = await Address.find({ userId });
-        const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image');
+        const cart = await cartModels.findOne({ userId }).populate('products.productId', 'name price description image quantity');
+        console.log('cart order',cart)
         if (!cart || cart.products.length === 0) {
             req.flash('error', 'Your cart is empty. Cannot create an order.');
             return res.redirect('/cart');

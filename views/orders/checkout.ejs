@@ -7,7 +7,7 @@
     }
     
     .summary-box {
-      /* Add your styles for the summary box if needed */
+      width: 100%;
       display: flex;
       flex-wrap: wrap;
     }
@@ -342,6 +342,38 @@
       display: flex;
       flex-direction: column;
     }
+    .product-container {
+  border-bottom: 1px solid #000; /* Adjust the color as needed */
+  padding-bottom: 10px; /* Adjust the padding as needed */
+  margin-bottom: 10px; /* Adjust the margin as needed */
+}
+.step-checkout_summary {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .summary-box {
+    width: 100%;
+  }
+
+  .order_summary {
+    text-align: center;
+  }
+
+  .order_price {
+    margin: 10px;
+  }
+
+  .product-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .coupon-input {
+    display: flex;
+    flex-direction: column;
+  }
    
   </style>
   <body>
@@ -556,8 +588,23 @@
                           <div class="order_price">
                             <hr />
                             <strong>
+                              <% cart.forEach(product => { %>
+                                <div class="product-container">
+                                  <div class="price">
+                                    <p>Product Name:</p>
+                                    <p><%= product.productId.name %></p>
+                                  </div>
+                                 
+                  
+                                  <div class="price">
+                                    <p>Product Quantity:</p>
+                                    <p><%= product.quantity %></p>
+                                  </div>
+                                </div>
+                              <% }) %>
+                  
                               <div class="price">
-                                <p>Price:</p>
+                                <p>Total Price:</p>
                                 <p>₹<%= totals.subtotal %></p>
                               </div>
                               <div class="price">
@@ -592,9 +639,7 @@
                               <div class="total_price">
                                 <p class="dark">Total:</p>
                                 <p class="dark">
-                                  ₹<span id="grandTotal"
-                                    ><%= totals.grandTotal.toFixed(2) %></span
-                                  >
+                                  ₹<span id="grandTotal"><%= totals.grandTotal.toFixed(2) %></span>
                                 </p>
                               </div>
                             </strong>
@@ -603,7 +648,6 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="step-checkout_summary" id="stepCheckoutSummary3">
                     <div class="summary-box">
                         <h2>Summary - Shipping Address</h2>
