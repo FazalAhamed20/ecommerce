@@ -1,16 +1,4 @@
 <%- include('header') -%> <%- include('nav', { user, cartCount: cartCount }) -%>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" type="image/x-icon" href="https://image.ibb.co/n5gUtm/icon_1.png"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>User Orders</title>
-</head>
 <style>
     
 
@@ -135,9 +123,19 @@ ul.timeline > li.active:before {
     .my-5 {
     border-bottom: 2px solid #ccc;
 }
+.no-address-message {
+  text-align: center;
+  margin-top: 100px; /* Adjust as needed */
+  font-size: 18px;
+  color: #3E2723;
+  width: 100%;
+}
 
 </style>
 <body>
+    <% if (orders.length === 0) { %>
+        <p class="no-address-message">No Orders found.</p>
+      <% } else { %>
     <% orders.forEach(function(order) { %>
         <section class="my-5" data-order-id="<%= order.orderID %>" data-order-status="<%= order.status %>" style="border-bottom: 2px solid #ccc;">
             <div id="cancelledOrderAlert-<%= order.orderID %>"></div>
@@ -352,6 +350,7 @@ ul.timeline > li.active:before {
         </div>
     </section>
     <% }); %>
+    <% } %>
     <% if (totalPages > 1) { %>
         <div class="pagination">
             <% if (page > 1) { %>
