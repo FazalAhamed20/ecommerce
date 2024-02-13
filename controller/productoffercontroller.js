@@ -44,6 +44,7 @@ const ProductOffers = async (req, res) => {
         });
       }
     }
+    
     const totalItems = productData.length;
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
