@@ -81,7 +81,7 @@ const addproduct = async function (req, res) {
   newProduct
     .save()
     .then(() => {
-      res.redirect("/product");
+      res.redirect("/admin/product");
     })
     .catch((err) => {
       console.error(err);
@@ -102,8 +102,6 @@ const editform = function (req, res) {
 };
 //updateproduct in the admin side------------------------------------------------------->
 const updateproduct = async function (req, res) {
-  console.log("File:", req.file);
-  console.log("Content-Type:", req.headers["content-type"]);
   const productId = req.params.id;
   const {
     name,
@@ -153,8 +151,7 @@ const updateproduct = async function (req, res) {
     currentProduct.ingredients = ingredients;
     currentProduct.quantity = quantity;
     await currentProduct.save();
-    console.log("Updated Product:", currentProduct);
-    res.redirect("/product");
+    res.redirect("/admin/product");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -181,7 +178,7 @@ const deleteproduct = async function (req, res) {
       }
     }
     await Product.findByIdAndDelete(productId);
-    res.redirect("/product");
+    res.redirect("/admin/product");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");

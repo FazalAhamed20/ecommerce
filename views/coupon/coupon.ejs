@@ -22,7 +22,7 @@
       }
 
       header {
-        background-color: #3c271f;
+        background-color: green;
         color: #ffffff;
         padding: 10px;
         text-align: center;
@@ -43,8 +43,8 @@
       }
 
       th {
-        background-color: #3c271f;
-        color: #ffffff;
+       
+        color: black;
       }
 
       tr:nth-child(even) {
@@ -53,34 +53,34 @@
 
       a {
         text-decoration: none;
-        color: #3c271f;
+        color: white;
         margin-top: 10px;
         display: inline-block;
         padding: 8px 16px;
-        background-color: #ffffff;
-        border: 1px solid #3c271f;
+        background-color: #45a049;
+        border: 1px solid white;
         border-radius: 4px;
         transition: background-color 0.3s, color 0.3s;
       }
       button {
         text-decoration: none;
-        color: #3c271f;
+        color: white;
         margin-top: 10px;
         display: inline-block;
         padding: 8px 16px;
-        background-color: #ffffff;
-        border: 1px solid #3c271f;
+        background-color: #45a049;
+        border: 1px solid white;
         border-radius: 4px;
         transition: background-color 0.3s, color 0.3s;
       }
       button:hover {
         color: #ffffff;
-        background-color: #3c271f;
+        background-color: #388e3c;;
       }
 
       a:hover {
         color: #ffffff;
-        background-color: #3c271f;
+        background-color:  #388e3c;;
       }
       .home {
         padding: 10px;
@@ -88,15 +88,31 @@
         border-radius: 5px;
         cursor: pointer;
         margin-bottom: 20px;
-        border: 1px solid #3c271f;
+        border: 1px solid white;
         border-radius: 4px;
         transition: background-color 0.3s, color 0.3s;
-        color: #3c271f;
-        background-color: #ffff;
+        color: white;
+        background-color:  #45a049;
       }
       .home:hover {
         color: #ffffff;
-        background-color: #3c271f;
+        background-color: #388e3c;
+      }
+      #delete{
+        text-decoration: none;
+        color: white;
+        margin-top: 10px;
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: red;
+        border: 1px solid white;
+        border-radius: 4px;
+        transition: background-color 0.3s, color 0.3s;
+
+      }
+      #delete:hover {
+        color: #ffffff;
+        background-color:  #ff5555;;
       }
     </style>
   </head>
@@ -137,7 +153,7 @@
           <td>
             <a href="/edit-coupon/<%= coupon._id %>">Edit</a>
 
-            <button onclick="deletecoupon(`<%= coupon._id %>`)" type="submit">
+            <button id="delete" onclick="deletecoupon(`<%= coupon._id %>`)" type="submit">
               Delete
             </button>
           </td>

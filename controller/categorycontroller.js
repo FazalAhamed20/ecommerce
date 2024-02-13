@@ -4,7 +4,6 @@ const categoryList = async (req, res) => {
   const itemsPerPage = 3; //pagination
   const page = parseInt(req.query.page) || 1;
   const searchQuery = req.query.search || "";
-  console.log("Search Query:", searchQuery);
   try {
     let query = {};
     if (searchQuery) {

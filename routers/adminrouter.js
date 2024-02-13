@@ -28,7 +28,7 @@ router.get('/editform/:id',verifyAdmin,catagorycontroller.editform)
 router.get('/confirmdel/:id',verifyAdmin,catagorycontroller.confirmdel)
 router.post('/deletecat/:id',verifyAdmin,catagorycontroller.deletecat)
 //product side------------------------------------------------------->
-router.get('/product',verifyAdmin,productcontroller.productList)
+router.get('/admin/product',verifyAdmin,productcontroller.productList)
 router.get('/addform',verifyAdmin,productcontroller.addform)
 router.post('/addproduct',verifyAdmin,upload.single('image'),productcontroller.addproduct)
 router.get('/product/editform/:id',verifyAdmin,upload.single('image'),productcontroller.editform)
