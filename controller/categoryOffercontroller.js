@@ -21,8 +21,6 @@ const removeExpiredOffers = async () => {
 
       await Offer.findOneAndDelete({ category: categoryId });
     }
-
-    console.log("Expired offers removed successfully");
   } catch (error) {
     console.error("Error removing expired offers:", error);
   }
@@ -38,9 +36,7 @@ const CategoryOffers = async (req, res) => {
     const categoryData = [];
     const ITEMS_PER_PAGE = 4;
     const page = parseInt(req.query.page) || 1;
-    console.log(page);
     const searchQuery = req.query.search || "";
-    console.log(searchQuery);
     for (const category of categories) {
       const productCount = await Product.countDocuments({
         category: category._id,
@@ -82,7 +78,6 @@ const CategoryOffers = async (req, res) => {
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedCategoryData = categoryData.slice(startIndex, endIndex);
-    console.log("category",categoryData);
     res.render("./categoryOffer/categoryOffer", {
       categoryData: paginatedCategoryData,
       currentPage: page,

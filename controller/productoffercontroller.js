@@ -8,9 +8,7 @@ const ProductOffers = async (req, res) => {
     const productData = [];
     const ITEMS_PER_PAGE = 4;
     const page = parseInt(req.query.page) || 1;
-    console.log(page);
     const searchQuery = req.query.search || "";
-    console.log(searchQuery);
     for (const product of products) {
       const productOffer = await ProductOffer.findOne({
         product: product._id,
@@ -46,7 +44,6 @@ const ProductOffers = async (req, res) => {
         });
       }
     }
-    console.log(productData);
     const totalItems = productData.length;
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
