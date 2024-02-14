@@ -605,7 +605,9 @@
 <script>
   function delayedRedirect() {
     
-      window.location.href = "/checkout";
+    setTimeout(function() {
+        window.location.href = "/checkout";
+    }, 1000);
     
   }
 </script>
