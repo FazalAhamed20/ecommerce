@@ -135,7 +135,7 @@ const resend = function (req, res) {
     }
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    res.render("./admin/otp", { msg: "OTP has been sent" });
+    res.render("./admin/otp", { msg10: "OTP has been sent" });
   });
 };
 //verify Refferal------------------------------------------------------->
