@@ -43,7 +43,7 @@ const otp1 = async function (req, res) {
       console.log("Message sent: %s", info.messageId);
       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
-      res.render("./admin/otp", { msg: [] });
+      res.render("./admin/otp", { msg10: [] });
     });
   } catch (error) {
     console.error("Error sending OTP:", error);
