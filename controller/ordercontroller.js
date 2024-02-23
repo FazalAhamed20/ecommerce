@@ -199,12 +199,13 @@ const createOrder = async (req, res) => {
         return res.render('./orders/confirm', { pageTitle: 'success', user: req.session.user, paymentMethod });
       }, 1800);
     } else {
+      const amountInPaise = Math.round(orderData.totals.grandTotal * 100);
       const razorpayOptions = {
-        amount: orderData.totals.grandTotal * 100,
+        amount: amountInPaise,
         currency: 'INR',
         receipt: orderData.orderID,
       };
-      console.log(razorpayOptions);
+      console.log("razorpay",razorpayOptions);
       instance.orders.create(razorpayOptions, function (err, razorpayOrder) {
         if (err) {
           console.error(err);
