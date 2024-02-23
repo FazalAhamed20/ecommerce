@@ -293,7 +293,8 @@ const processPayment = async (req, res) => {
 //cancellation of order-------------------------------------------------------> 
 const cancelorder = async (req, res) => {
   try {
-    const { orderID, cancellationReason } = req.body;
+    const { orderID, cancellationReason} = req.body;
+    console.log({orderID,cancellationReason});
     const canceledOrder = new CanceledOrder({
       orderID: orderID,
       reason: cancellationReason,
@@ -307,6 +308,34 @@ const cancelorder = async (req, res) => {
     if (!updatedOrder) {
       return res.status(404).json({ error: 'Order not found' });
     }
+    const orderPayment = updatedOrder.paymentMethod;
+    console.log("orderpayment",orderPayment);
+    if (orderPayment === 'RazorPay' || orderPayment === 'Wallet') {
+      const grandTotal = updatedOrder.totals.grandTotal; 
+      console.log("grandtotal",grandTotal)
+      
+
+      
+      const user = req.session.user._id; 
+
+      console.log("userId",user);
+
+     
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      const updateWallet = await Wallet.findOne({ user });
+      console.log(updateWallet);
+
+      
+      updateWallet.balance = (updateWallet.balance || 0) + grandTotal;
+      console.log(updateWallet.balance);
+
+     
+      await updateWallet.save();
+    }
+    console.log(orderPayment);
     res.status(200).json({
       message: 'Order canceled, reason saved, and main order status updated',
       canceledOrder: savedOrder,

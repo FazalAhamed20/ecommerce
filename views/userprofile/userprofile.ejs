@@ -147,7 +147,7 @@
     <p id="userName"><strong>Name:</strong> <%= user.name %></p>
     <p><strong>Email:</strong> <%= user.email %></p>
     <% if (walletBalance !== undefined) { %>
-    <p><strong>Wallet Balance:</strong> <%= walletBalance %></p>
+    <p><strong>Wallet Balance:</strong> <%= walletBalance.toFixed(2) %></p>
     <% } %> <% } else { %>
     <p>User not found</p>
     <% } %>
