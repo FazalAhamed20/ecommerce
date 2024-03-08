@@ -325,8 +325,11 @@ const cancelorder = async (req, res) => {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      const updateWallet = await Wallet.findOne({ user });
+      let updateWallet = await Wallet.findOne({ user });
       console.log(updateWallet);
+      if (!updateWallet) {
+        updateWallet = new Wallet({ user, balance: 0 });
+      }
 
       
       updateWallet.balance = (updateWallet.balance || 0) + grandTotal;
