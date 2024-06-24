@@ -57,7 +57,7 @@ app.use((err, req, res, next) => {
   res.status(500).render('./user/500.ejs');
 });
 
-const PORT = process.env.PORT || 8990;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`server is running on  ${PORT}`);
 });
